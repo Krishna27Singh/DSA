@@ -19,8 +19,8 @@ int main(){
             }
         }
         s = new_s;
-        cout<<s<<endl;
-        cout<<new_s<<endl;
+        // cout<<s<<endl;
+        // cout<<new_s<<endl;
     }
     cout<<s.size();
     return 0;
