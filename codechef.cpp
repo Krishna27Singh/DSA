@@ -51,6 +51,6 @@ using namespace std;
 int main() {
     string s = "ABCD";
     char ch = s[0];
-    if(ch=="A") cout<<"D";
+    if(ch=='A') cout<<"D";
     cout<<s[0];
 }

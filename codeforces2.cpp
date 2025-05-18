@@ -1,48 +1,27 @@
 #include<iostream>
 using namespace std;
+using ll = long long;
+using ld = long double;
+#define INF(t) numeric_limits<t>::max()
 
-int main() {
-
-    int t;
-    cin>>t;
-    for(int z = 0; z<t; z++){
-        int n;
-        cin>>n;
-        cout<<"digit"<<endl;
-        cout.flush();
-        int res;
-        cin>>res;
-        if(res){
-            cout<<"add -9"<<endl;
-            cout.flush();
-            int res;
-            cin>>res;
-            if(res){
-                cout<<"add 4"<<endl;
-                cout.flush();
-                int res;
-                cin>>res;
-                if(res){
-                    cout<<"!"<<endl;
-                }
-            }
-            else{
-                cout<<"add 1"<<endl;
-                cout.flush();
-                int res;
-                cin>>res;
-                if(res){
-                    cout<<"mul 10"<<endl;
-                    cout.flush();
-                    int res;
-                    cin>>res;
-                    if(res){
-                        cout<<"!"<<endl;
-                    }
-                }
-            }
-        }
+ll ans(ll n){
+    ll cnt = 0;
+    while(n>1){
+        n=(n+1)/2;
+        cnt++;
     }
+    return cnt;
+}
 
+int main(){
+    int tc; cin>>tc;
+    while(tc--){
+        ll n,m,a,b; cin>>n>>m>>a>>b;
+        if((n+1-a)<a) a = n+1-a;
+        if((m+1-b)<b) b = m+1-b;
+
+        cout<<min(1+ans(n)+ans(b), 1+ans(a)+ans(m))<<endl;
+
+    }
     return 0;
 }
