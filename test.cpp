@@ -267,74 +267,139 @@
 // //         // and i-j_max is the index of max in B[0..i]
 // //         // So, we can for each i, try both Amax[i] + B[0] and A[0] + Bmax[i], and the max among them
 // //         // But actually, for each i, the max is Amax[j] + Bmax[i-j] for j = 0 to i
-// //         // But as both arrays are permutations, the largest two numbers will always be at the ends
+// // //         // But as both arrays are permutations, the largest two numbers will always be at the ends
 
-// //         // Instead, use two pointers to track max in A and B as i increases
-// //         int idxA = 0, idxB = 0;
-// //         int curMaxA = A[0], curMaxB = B[0];
-// //         for (int i = 0; i < n; ++i) {
-// //             if (A[i] > curMaxA) curMaxA = A[i];
-// //             if (B[i] > curMaxB) curMaxB = B[i];
-// //             res[i] = (curMaxA + curMaxB) % MOD;
+// // //         // Instead, use two pointers to track max in A and B as i increases
+// // //         int idxA = 0, idxB = 0;
+// // //         int curMaxA = A[0], curMaxB = B[0];
+// // //         for (int i = 0; i < n; ++i) {
+// // //             if (A[i] > curMaxA) curMaxA = A[i];
+// // //             if (B[i] > curMaxB) curMaxB = B[i];
+// // //             res[i] = (curMaxA + curMaxB) % MOD;
+// // //         }
+
+// // //         for (int i = 0; i < n; ++i) {
+// // //             cout << res[i] << " \n"[i == n-1];
+// // //         }
+// // //     }
+// // //     return 0;
+// // // }
+
+// // #include <iostream>
+// // using namespace std;
+
+// // string solve(long long a, long long b, long long c, long long d) {
+// //     while (a > 0 && b > 0) {
+// //         // Optimization: detect stable direct-attack phase
+// //         if (a > 1 && b > 1 && (c <= 0 || c > a) && (d <= 0 || d > b)) {
+// //             if (c <= 0 && d > 0) return "Flower";
+// //             if (d <= 0 && c > 0) return "Gellyfish"; 
+// //             return (b <= a) ? "Gellyfish" : "Flower";
 // //         }
-
-// //         for (int i = 0; i < n; ++i) {
-// //             cout << res[i] << " \n"[i == n-1];
-// //         }
-// //     }
-// //     return 0;
-// // }
-
-// #include <iostream>
-// using namespace std;
-
-// string solve(long long a, long long b, long long c, long long d) {
-//     while (a > 0 && b > 0) {
-//         // Optimization: detect stable direct-attack phase
-//         if (a > 1 && b > 1 && (c <= 0 || c > a) && (d <= 0 || d > b)) {
-//             if (c <= 0 && d > 0) return "Flower";
-//             if (d <= 0 && c > 0) return "Gellyfish"; 
-//             return (b <= a) ? "Gellyfish" : "Flower";
-//         }
         
-//         // Gellyfish's turn
-//         if (c > 0) {
-//             if (b == 1) {
-//                 return "Gellyfish"; // Win immediately
-//             }
-// //             if (a == 1 && d > 0) {
-// //                 d--; // Must defend by killing Flower's knight
-// //             } else if (d == 1) {
-// //                 d--; // Kill vulnerable knight
-// //             } else {
-// //                 b--; // Attack Flower directly
+// //         // Gellyfish's turn
+// //         if (c > 0) {
+// //             if (b == 1) {
+// //                 return "Gellyfish"; // Win immediately
 // //             }
+// // //             if (a == 1 && d > 0) {
+// // //                 d--; // Must defend by killing Flower's knight
+// // //             } else if (d == 1) {
+// // //                 d--; // Kill vulnerable knight
+// // //             } else {
+// // //                 b--; // Attack Flower directly
+// // //             }
+// // //         }
+        
+// // //         if (b <= 0) return "Gellyfish";
+        
+// // //         // Flower's turn  
+// // //         if (d > 0) {
+// // //             if (a == 1) {
+// // //                 return "Flower"; // Win immediately
+// // //             }
+// // //             if (b == 1 && c > 0) {
+// // //                 c--; // Must defend by killing Gellyfish's knight
+// // //             } else if (c == 1) {
+// // //                 c--; // Kill vulnerable knight
+// // //             } else {
+// // //                 a--; // Attack Gellyfish directly
+// // //             }
+// // //         }
+        
+// // //         if (a <= 0) return "Flower";
+        
+// // //         // Check for knight eliminations
+// // //         if (c <= 0 && d > 0) return "Flower";
+// // //         if (d <= 0 && c > 0) return "Gellyfish";
+// // //     }
+    
+// // //     return a > 0 ? "Gellyfish" : "Flower";
+// // // }
+
+// // // int main() {
+// // //     ios_base::sync_with_stdio(false);
+// // //     cin.tie(NULL);
+    
+// // //     int t;
+// // //     cin >> t;
+// // //     while (t--) {
+// // //         long long a, b, c, d;
+// // //         cin >> a >> b >> c >> d;
+// // //         cout << solve(a, b, c, d) << "\n";
+// // //     }
+// // //     return 0;
+// // // }
+
+
+// // #include <iostream>
+// // using namespace std;
+
+// // string solve(long long a, long long b, long long c, long long d) {
+// //     while (a > 0 && b > 0 && c > 0 && d > 0) {
+// //         // Optimization: if both will attack directly from now on
+// //         if (d > b && c > a && a > 1 && b > 1) {
+// //             return (b <= a) ? "Gellyfish" : "Flower";
+// //         }
+        
+// //         // Gellyfish's turn
+// //         if (b == 1) {
+// //             return "Gellyfish"; // Immediate win
+// //         }
+        
+// //         // Attack the target with lower HP
+// //         if (d <= b) {
+// //             d--; // Attack Flower's knight
+// //         } else {
+// //             b--; // Attack Flower directly
 // //         }
         
 // //         if (b <= 0) return "Gellyfish";
+// //         if (d <= 0) return "Gellyfish";
         
-// //         // Flower's turn  
-// //         if (d > 0) {
-// //             if (a == 1) {
-// //                 return "Flower"; // Win immediately
-// //             }
-// //             if (b == 1 && c > 0) {
-// //                 c--; // Must defend by killing Gellyfish's knight
-// //             } else if (c == 1) {
-// //                 c--; // Kill vulnerable knight
-// //             } else {
-// //                 a--; // Attack Gellyfish directly
-// //             }
+// //         // Flower's turn
+// //         if (a == 1) {
+// //             return "Flower"; // Immediate win
+// //         }
+        
+// //         // Attack the target with lower HP
+// //         if (c <= a) {
+// //             c--; // Attack Gellyfish's knight
+// //         } else {
+// //             a--; // Attack Gellyfish directly
 // //         }
         
 // //         if (a <= 0) return "Flower";
-        
-// //         // Check for knight eliminations
-// //         if (c <= 0 && d > 0) return "Flower";
-// //         if (d <= 0 && c > 0) return "Gellyfish";
+// //         if (c <= 0) return "Flower";
 // //     }
     
-// //     return a > 0 ? "Gellyfish" : "Flower";
+// //     // Handle end cases where someone lost their knight
+// //     if (c <= 0 && d > 0) return "Flower";
+// //     if (d <= 0 && c > 0) return "Gellyfish";
+// //     if (a <= 0) return "Flower";
+// //     if (b <= 0) return "Gellyfish";
+    
+// //     return "Draw";
 // // }
 
 // // int main() {
@@ -350,119 +415,56 @@
 // //     }
 // //     return 0;
 // // }
-
-
 // #include <iostream>
 // using namespace std;
-
-// string solve(long long a, long long b, long long c, long long d) {
-//     while (a > 0 && b > 0 && c > 0 && d > 0) {
-//         // Optimization: if both will attack directly from now on
-//         if (d > b && c > a && a > 1 && b > 1) {
-//             return (b <= a) ? "Gellyfish" : "Flower";
-//         }
-        
-//         // Gellyfish's turn
-//         if (b == 1) {
-//             return "Gellyfish"; // Immediate win
-//         }
-        
-//         // Attack the target with lower HP
-//         if (d <= b) {
-//             d--; // Attack Flower's knight
-//         } else {
-//             b--; // Attack Flower directly
-//         }
-        
-//         if (b <= 0) return "Gellyfish";
-//         if (d <= 0) return "Gellyfish";
-        
-//         // Flower's turn
-//         if (a == 1) {
-//             return "Flower"; // Immediate win
-//         }
-        
-//         // Attack the target with lower HP
-//         if (c <= a) {
-//             c--; // Attack Gellyfish's knight
-//         } else {
-//             a--; // Attack Gellyfish directly
-//         }
-        
-//         if (a <= 0) return "Flower";
-//         if (c <= 0) return "Flower";
-//     }
-    
-//     // Handle end cases where someone lost their knight
-//     if (c <= 0 && d > 0) return "Flower";
-//     if (d <= 0 && c > 0) return "Gellyfish";
-//     if (a <= 0) return "Flower";
-//     if (b <= 0) return "Gellyfish";
-    
-//     return "Draw";
-// }
 
 // int main() {
 //     ios_base::sync_with_stdio(false);
 //     cin.tie(NULL);
-    
+
 //     int t;
 //     cin >> t;
+
 //     while (t--) {
-//         long long a, b, c, d;
-//         cin >> a >> b >> c >> d;
-//         cout << solve(a, b, c, d) << "\n";
+//         int n, q;
+//         cin >> n >> q;
+
+//         vector<int> b(n + 1);
+//         for (int i = 1; i <= n; i++) {
+//             cin >> b[i];
+//         }
+
+//         vector<pair<int, int> > modifications(q);
+//         for (int i = 0; i < q; i++) {
+//             int x, y, z;
+//             cin >> x >> y >> z;
+//             modifications[i] = make_pair(x, y); // Fixed assignment
+//         }
+
+//         bool possible = true;
+
+//         // Check constraints in reverse
+//         for (int i = q - 1; i >= 0; i--) {
+//             int x = modifications[i].first;
+//             int y = modifications[i].second;
+//             if (b[x] > b[y]) {
+//                 possible = false;
+//                 break;
+//             }
+//         }
+
+//         if (!possible) {
+//             cout << -1 << '\n';
+//         } else {
+//             for (int i = 1; i <= n; i++) {
+//                 cout << b[i];
+//                 if (i < n) cout << " ";
+//             }
+//             cout << '\n';
+//         }
 //     }
+
 //     return 0;
 // }
-#include <iostream>
-using namespace std;
 
-int main() {
-    ios_base::sync_with_stdio(false);
-    cin.tie(NULL);
 
-    int t;
-    cin >> t;
-
-    while (t--) {
-        int n, q;
-        cin >> n >> q;
-
-        vector<int> b(n + 1);
-        for (int i = 1; i <= n; i++) {
-            cin >> b[i];
-        }
-
-        vector<pair<int, int> > modifications(q);
-        for (int i = 0; i < q; i++) {
-            int x, y, z;
-            cin >> x >> y >> z;
-            modifications[i] = make_pair(x, y); // Fixed assignment
-        }
-
-        bool possible = true;
-
-        // Check constraints in reverse
-        for (int i = q - 1; i >= 0; i--) {
-            int x = modifications[i].first;
-            int y = modifications[i].second;
-            if (b[x] > b[y]) {
-                possible = false;
-                break;
-            }
-        }
-
-        if (!possible) {
-            cout << -1 << '\n';
-        } else {
-            for (int i = 1; i <= n; i++) {
-                cout << b[i];
-                if (i < n) cout << " ";
-            }
-            cout << '\n';
-        }
-    }
-
-    return 0;
-}
