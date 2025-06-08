@@ -5,6 +5,7 @@
         "ostream": "cpp",
         "vector": "cpp",
         "complex": "cpp",
-        "chrono": "cpp"
+        "chrono": "cpp",
+        "unordered_map": "cpp"
     }
 }
