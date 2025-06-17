@@ -221,56 +221,111 @@
 // }
 
 
+// #include <iostream>
+// #include <vector>
+// #include <algorithm>
+// using namespace std;
+
+// int solve(const vector<vector<int> >& a, int n, int m) {
+//     vector<int> row_max(n, 0), col_max(m, 0);
+//     // Find max in each row and column
+//     for (int i = 0; i < n; ++i)
+//         for (int j = 0; j < m; ++j) {
+//             row_max[i] = max(row_max[i], a[i][j]);
+//             col_max[j] = max(col_max[j], a[i][j]);
+//         }
+//     // Find top two max values in rows and columns
+//     vector<pair<int, int> > row_vals, col_vals;
+//     for (int i = 0; i < n; ++i) row_vals.push_back({row_max[i], i});
+//     for (int j = 0; j < m; ++j) col_vals.push_back({col_max[j], j});
+//     sort(row_vals.rbegin(), row_vals.rend());
+//     sort(col_vals.rbegin(), col_vals.rend());
+
+//     int answer = 1e9;
+//     // Try all combinations of top two max rows and columns
+//     for (int x = 0; x < min(2, n); ++x) {
+//         for (int y = 0; y < min(2, m); ++y) {
+//             int r = row_vals[x].second;
+//             int c = col_vals[y].second;
+//             int local_max = 0;
+//             for (int i = 0; i < n; ++i)
+//                 for (int j = 0; j < m; ++j) {
+//                     int val = a[i][j];
+//                     if (i == r || j == c) val--;
+//                     local_max = max(local_max, val);
+//                 }
+//             answer = min(answer, local_max);
+//         }
+//     }
+//     return answer;
+// }
+
+// int main() {
+//     int t;
+//     cin >> t;
+//     while (t--) {
+//         int n, m;
+//         cin >> n >> m;
+//         vector<vector<int> > a(n, vector<int>(m));
+//         for (int i = 0; i < n; ++i)
+//             for (int j = 0; j < m; ++j)
+//                 cin >> a[i][j];
+//         cout << solve(a, n, m) << endl;
+//     }
+//     return 0;
+// }
+
+
 #include <iostream>
-#include <vector>
-#include <algorithm>
 using namespace std;
 
-int solve(const vector<vector<int> >& a, int n, int m) {
-    vector<int> row_max(n, 0), col_max(m, 0);
-    // Find max in each row and column
-    for (int i = 0; i < n; ++i)
-        for (int j = 0; j < m; ++j) {
-            row_max[i] = max(row_max[i], a[i][j]);
-            col_max[j] = max(col_max[j], a[i][j]);
-        }
-    // Find top two max values in rows and columns
-    vector<pair<int, int> > row_vals, col_vals;
-    for (int i = 0; i < n; ++i) row_vals.push_back({row_max[i], i});
-    for (int j = 0; j < m; ++j) col_vals.push_back({col_max[j], j});
-    sort(row_vals.rbegin(), row_vals.rend());
-    sort(col_vals.rbegin(), col_vals.rend());
-
-    int answer = 1e9;
-    // Try all combinations of top two max rows and columns
-    for (int x = 0; x < min(2, n); ++x) {
-        for (int y = 0; y < min(2, m); ++y) {
-            int r = row_vals[x].second;
-            int c = col_vals[y].second;
-            int local_max = 0;
-            for (int i = 0; i < n; ++i)
-                for (int j = 0; j < m; ++j) {
-                    int val = a[i][j];
-                    if (i == r || j == c) val--;
-                    local_max = max(local_max, val);
-                }
-            answer = min(answer, local_max);
-        }
-    }
-    return answer;
-}
-
 int main() {
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    
     int t;
     cin >> t;
+    
     while (t--) {
-        int n, m;
-        cin >> n >> m;
-        vector<vector<int> > a(n, vector<int>(m));
-        for (int i = 0; i < n; ++i)
-            for (int j = 0; j < m; ++j)
-                cin >> a[i][j];
-        cout << solve(a, n, m) << endl;
+        string l, r;
+        cin >> l >> r;
+        
+        int n = l.length();
+        
+        // dp[pos][tight_l][tight_r] = minimum cost from position pos onwards
+        int dp[20][2][2];
+        memset(dp, 0, sizeof(dp));
+        
+        // Fill DP table backwards
+        for (int pos = n - 1; pos >= 0; pos--) {
+            for (int tight_l = 0; tight_l < 2; tight_l++) {
+                for (int tight_r = 0; tight_r < 2; tight_r++) {
+                    int l_digit = l[pos] - '0';
+                    int r_digit = r[pos] - '0';
+                    
+                    int min_digit = tight_l ? l_digit : 0;
+                    int max_digit = tight_r ? r_digit : 9;
+                    
+                    int result = INT_MAX;
+                    
+                    for (int digit = min_digit; digit <= max_digit; digit++) {
+                        int cost = 0;
+                        if (digit == l_digit) cost++;
+                        if (digit == r_digit) cost++;
+                        
+                        int new_tight_l = tight_l && (digit == l_digit);
+                        int new_tight_r = tight_r && (digit == r_digit);
+                        
+                        result = min(result, cost + dp[pos + 1][new_tight_l][new_tight_r]);
+                    }
+                    
+                    dp[pos][tight_l][tight_r] = result;
+                }
+            }
+        }
+        
+        cout << dp[0][1][1] << "\n";
     }
+    
     return 0;
 }
