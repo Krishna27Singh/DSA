@@ -469,14 +469,349 @@
 
 
 
-#include<iostream>
+// #include<iostream>
+// using namespace std;
+
+// int main(){
+
+//     char a = 'a';
+//     char b = 'b';
+//     if(a<b) cout<<"hlo";
+
+//     return 0;
+// }
+
+// #include <iostream>
+// #include<vector>
+// #include<cmath>
+// #include<algorithm>
+// using namespace std;
+
+// int main() {
+//     ios_base::sync_with_stdio(false);
+//     cin.tie(NULL);
+    
+//     int t;
+//     cin >> t;
+    
+//     while (t--) {
+//         int n;
+//         cin >> n;
+//         vector<int> a(n);
+//         for (int i = 0; i < n; i++) {
+//             cin >> a[i];
+//         }
+        
+//         // Check if already beautiful
+//         for (int i = 0; i < n - 1; i++) {
+//             if (abs(a[i] - a[i + 1]) <= 1) {
+//                 cout << 0 << "\n";
+//                 goto next_test_case;
+//             }
+//         }
+        
+//         int ops = 0;
+//         bool possible = false;
+        
+//         // Iterate and merge until either array is beautiful or impossible
+//         while (n > 1) {
+//             bool merged = false;
+//             for (int i = 0; i < n - 1; i++) {
+//                 if (abs(a[i] - a[i + 1]) <= 1) {
+//                     // Merge a[i] and a[i+1]
+//                     a[i] = (a[i] + a[i + 1]) / 2; // New value
+//                     a.erase(a.begin() + i + 1);   // Remove merged element
+//                     n--;                          // Reduce array size
+//                     ops++;                         // Increment operations
+//                     merged = true;
+//                     break;
+//                 }
+//             }
+//             if (merged) {
+//                 for (int i = 0; i < n - 1; i++) {
+//                     if (abs(a[i] - a[i + 1]) <= 1) {
+//                         possible = true;
+//                         break;
+//                     }
+//                 }
+//             }
+//             if (!merged) break; // If no merge occurred, break the loop
+//         }
+        
+//         // If possible to make the array beautiful
+//         if (possible) {
+//             cout << ops << "\n";
+//         } else {
+//             cout << -1 << "\n";
+//         }
+        
+//     next_test_case:;
+//     }
+    
+//     return 0;
+// }?
+
+
+// #include <iostream>
+// #include<vector>
+// #include<cmath>
+// #include<algorithm>
+// using namespace std;
+
+// int main() {
+//     ios_base::sync_with_stdio(false);
+//     cin.tie(NULL);
+    
+//     int t;
+//     cin >> t;
+    
+//     while (t--) {
+//         int n;
+//         cin >> n;
+//         vector<int> a(n);
+//         for (int i = 0; i < n; i++) {
+//             cin >> a[i];
+//         }
+        
+//         // Check if already beautiful
+//         bool beautiful = false;
+//         for (int i = 0; i < n - 1; i++) {
+//             if (abs(a[i] - a[i + 1]) <= 1) {
+//                 beautiful = true;
+//                 break;
+//             }
+//         }
+        
+//         if (beautiful) {
+//             cout << "0\n";
+//             continue;
+//         }
+        
+//         // Major Optimization 1: Precompute all range min/max queries
+//         vector<vector<int> > range_min(n, vector<int>(n));
+//         vector<vector<int> > range_max(n, vector<int>(n));
+        
+//         for (int i = 0; i < n; i++) {
+//             range_min[i][i] = range_max[i][i] = a[i];
+//             for (int j = i + 1; j < n; j++) {
+//                 range_min[i][j] = min(range_min[i][j-1], a[j]);
+//                 range_max[i][j] = max(range_max[i][j-1], a[j]);
+//             }
+//         }
+        
+//         // Major Optimization 2: Early termination check
+//         int global_min = range_min[0][n-1];
+//         int global_max = range_max[0][n-1];
+        
+//         if (global_max - global_min > 1) {
+//             cout << "-1\n";
+//             continue;
+//         }
+        
+//         const int INF = 1e9;
+//         vector<vector<int> > dp(n, vector<int>(n, INF));
+        
+//         // Base case: subarrays of length 2
+//         for (int i = 0; i < n - 1; i++) {
+//             if (abs(a[i] - a[i + 1]) <= 1) {
+//                 dp[i][i + 1] = 0;
+//             }
+//         }
+        
+//         // Fill DP table for larger lengths
+//         for (int len = 3; len <= n; len++) {
+//             for (int i = 0; i <= n - len; i++) {
+//                 int j = i + len - 1;
+                
+//                 // Major Optimization 3: Early pruning
+//                 int upper_bound = n - 2; // Worst case: reduce everything to 2 elements
+                
+//                 for (int k = i; k < j; k++) {
+//                     // Case 1: Make left part beautiful, reduce right part
+//                     if (dp[i][k] != INF) {
+//                         int ops = dp[i][k] + (j - k - 1);
+//                         if (ops < upper_bound) {
+//                             dp[i][j] = min(dp[i][j], ops);
+//                         }
+//                     }
+                    
+//                     // Case 2: Reduce left part, make right part beautiful
+//                     if (dp[k + 1][j] != INF) {
+//                         int ops = (k - i) + dp[k + 1][j];
+//                         if (ops < upper_bound) {
+//                             dp[i][j] = min(dp[i][j], ops);
+//                         }
+//                     }
+                    
+//                     // Case 3: Reduce both parts to single elements
+//                     int ops = (k - i) + (j - k - 1);
+//                     if (ops < upper_bound) {
+//                         // Use precomputed values instead of recalculating
+//                         int min_left = range_min[i][k];
+//                         int max_left = range_max[i][k];
+//                         int min_right = range_min[k + 1][j];
+//                         int max_right = range_max[k + 1][j];
+                        
+//                         // Check if we can choose values such that their difference is ≤ 1
+//                         if (max(min_left, min_right) <= min(max_left, max_right) + 1) {
+//                             dp[i][j] = min(dp[i][j], ops);
+//                         }
+//                     }
+//                 }
+//             }
+//         }
+        
+//         cout << dp[0][n - 1] << "\n";
+//     }
+    
+//     return 0;
+// }
+
+
+// #include <iostream>
+// #include <vector>
+// using namespace std;
+
+// int main() {
+//     ios_base::sync_with_stdio(false);
+//     cin.tie(NULL);
+    
+//     int t;
+//     cin >> t;
+
+//     while (t--) {
+//         int n;
+//         cin >> n;
+//         vector<int> a(n);
+//         for (int i = 0; i < n; i++) {
+//             cin >> a[i];
+//         }
+
+//         int count = 0;
+
+//         // Iterate over k (the largest red element in Alice's selection)
+//         for (int k = 2; k < n; k++) {
+//             int i = 0, j = k - 1;
+
+//             // Use two-pointer approach to find pairs (i, j)
+//             while (i < j) {
+//                 if (a[i] + a[j] > a[k]) {
+//                     // Ensure the sum of red elements is strictly greater than the largest element
+//                     if (a[i] + a[j] + a[k] > a[n - 1]) {
+//                         count += (j - i);
+//                     }
+//                     j--; // Move the right pointer to the left
+//                 } else {
+//                     i++; // Move the left pointer to the right
+//                 }
+//             }
+//         }
+
+//         cout << count << "\n";
+//     }
+
+//     return 0;
+// }
+
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <cmath>
+
 using namespace std;
 
-int main(){
+const int MAX_VAL = 1e9;
 
-    char a = 'a';
-    char b = 'b';
-    if(a<b) cout<<"hlo";
+void process() {
+    int len;
+    cin >> len;
+    vector<int> nums(len);
+
+    for (int idx = 0; idx < len; ++idx) {
+        cin >> nums[idx];
+    }
+
+    if (len < 2) {
+        cout << -1 << "\n";
+        return;
+    }
+
+    bool is_beautiful = false;
+    for (int i = 0; i < len - 1; ++i) {
+        if (abs(nums[i] - nums[i + 1]) <= 1) {
+            is_beautiful = true;
+            break;
+        }
+    }
+
+    if (is_beautiful) {
+        cout << 0 << "\n";
+        return;
+    }
+
+    int min_operations = MAX_VAL;
+
+    for (int mid = 0; mid < len - 1; ++mid) {
+        vector<int> suffix_min(len, MAX_VAL);
+        vector<int> suffix_max(len, -MAX_VAL);
+
+        if (mid + 1 < len) {
+            suffix_min[mid + 1] = nums[mid + 1];
+            suffix_max[mid + 1] = nums[mid + 1];
+            for (int j = mid + 2; j < len; ++j) {
+                suffix_min[j] = min(suffix_min[j - 1], nums[j]);
+                suffix_max[j] = max(suffix_max[j - 1], nums[j]);
+            }
+        }
+
+        int left_min = nums[mid];
+        int left_max = nums[mid];
+        int ptr1 = len - 1;
+        int ptr2 = len - 1;
+
+        for (int i = mid; i >= 0; --i) {
+            left_min = min(left_min, nums[i]);
+            left_max = max(left_max, nums[i]);
+
+            while (ptr1 > mid + 1 && suffix_max[ptr1 - 1] >= left_min - 1) {
+                ptr1--;
+            }
+            while (ptr2 > mid + 1 && suffix_min[ptr2 - 1] <= left_max + 1) {
+                ptr2--;
+            }
+
+            int first_valid = len;
+            if (ptr1 >= mid + 1 && suffix_max[ptr1] >= left_min - 1) {
+                first_valid = ptr1;
+            }
+
+            int second_valid = len;
+            if (ptr2 >= mid + 1 && suffix_min[ptr2] <= left_max + 1) {
+                second_valid = ptr2;
+            }
+
+            int best_k = max(first_valid, second_valid);
+
+            if (best_k < len) {
+                int cost = (mid - i) + (best_k - (mid + 1));
+                min_operations = min(min_operations, cost);
+            }
+        }
+    }
+
+    cout << (min_operations == MAX_VAL ? -1 : min_operations) << "\n";
+}
+
+int main() {
+    ios_base::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int test_cases;
+    cin >> test_cases;
+
+    while (test_cases--) {
+        process();
+    }
 
     return 0;
 }
