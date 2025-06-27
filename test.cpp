@@ -713,105 +713,105 @@
 //     return 0;
 // }
 
-#include <iostream>
-#include <vector>
-#include <algorithm>
-#include <cmath>
+// #include <iostream>
+// #include <vector>
+// #include <algorithm>
+// #include <cmath>
 
-using namespace std;
+// using namespace std;
 
-const int MAX_VAL = 1e9;
+// const int MAX_VAL = 1e9;
 
-void process() {
-    int len;
-    cin >> len;
-    vector<int> nums(len);
+// void process() {
+//     int len;
+//     cin >> len;
+//     vector<int> nums(len);
 
-    for (int idx = 0; idx < len; ++idx) {
-        cin >> nums[idx];
-    }
+//     for (int idx = 0; idx < len; ++idx) {
+//         cin >> nums[idx];
+//     }
 
-    if (len < 2) {
-        cout << -1 << "\n";
-        return;
-    }
+//     if (len < 2) {
+//         cout << -1 << "\n";
+//         return;
+//     }
 
-    bool is_beautiful = false;
-    for (int i = 0; i < len - 1; ++i) {
-        if (abs(nums[i] - nums[i + 1]) <= 1) {
-            is_beautiful = true;
-            break;
-        }
-    }
+//     bool is_beautiful = false;
+//     for (int i = 0; i < len - 1; ++i) {
+//         if (abs(nums[i] - nums[i + 1]) <= 1) {
+//             is_beautiful = true;
+//             break;
+//         }
+//     }
 
-    if (is_beautiful) {
-        cout << 0 << "\n";
-        return;
-    }
+//     if (is_beautiful) {
+//         cout << 0 << "\n";
+//         return;
+//     }
 
-    int min_operations = MAX_VAL;
+//     int min_operations = MAX_VAL;
 
-    for (int mid = 0; mid < len - 1; ++mid) {
-        vector<int> suffix_min(len, MAX_VAL);
-        vector<int> suffix_max(len, -MAX_VAL);
+//     for (int mid = 0; mid < len - 1; ++mid) {
+//         vector<int> suffix_min(len, MAX_VAL);
+//         vector<int> suffix_max(len, -MAX_VAL);
 
-        if (mid + 1 < len) {
-            suffix_min[mid + 1] = nums[mid + 1];
-            suffix_max[mid + 1] = nums[mid + 1];
-            for (int j = mid + 2; j < len; ++j) {
-                suffix_min[j] = min(suffix_min[j - 1], nums[j]);
-                suffix_max[j] = max(suffix_max[j - 1], nums[j]);
-            }
-        }
+//         if (mid + 1 < len) {
+//             suffix_min[mid + 1] = nums[mid + 1];
+//             suffix_max[mid + 1] = nums[mid + 1];
+//             for (int j = mid + 2; j < len; ++j) {
+//                 suffix_min[j] = min(suffix_min[j - 1], nums[j]);
+//                 suffix_max[j] = max(suffix_max[j - 1], nums[j]);
+//             }
+//         }
 
-        int left_min = nums[mid];
-        int left_max = nums[mid];
-        int ptr1 = len - 1;
-        int ptr2 = len - 1;
+//         int left_min = nums[mid];
+//         int left_max = nums[mid];
+//         int ptr1 = len - 1;
+//         int ptr2 = len - 1;
 
-        for (int i = mid; i >= 0; --i) {
-            left_min = min(left_min, nums[i]);
-            left_max = max(left_max, nums[i]);
+//         for (int i = mid; i >= 0; --i) {
+//             left_min = min(left_min, nums[i]);
+//             left_max = max(left_max, nums[i]);
 
-            while (ptr1 > mid + 1 && suffix_max[ptr1 - 1] >= left_min - 1) {
-                ptr1--;
-            }
-            while (ptr2 > mid + 1 && suffix_min[ptr2 - 1] <= left_max + 1) {
-                ptr2--;
-            }
+//             while (ptr1 > mid + 1 && suffix_max[ptr1 - 1] >= left_min - 1) {
+//                 ptr1--;
+//             }
+//             while (ptr2 > mid + 1 && suffix_min[ptr2 - 1] <= left_max + 1) {
+//                 ptr2--;
+//             }
 
-            int first_valid = len;
-            if (ptr1 >= mid + 1 && suffix_max[ptr1] >= left_min - 1) {
-                first_valid = ptr1;
-            }
+//             int first_valid = len;
+//             if (ptr1 >= mid + 1 && suffix_max[ptr1] >= left_min - 1) {
+//                 first_valid = ptr1;
+//             }
 
-            int second_valid = len;
-            if (ptr2 >= mid + 1 && suffix_min[ptr2] <= left_max + 1) {
-                second_valid = ptr2;
-            }
+//             int second_valid = len;
+//             if (ptr2 >= mid + 1 && suffix_min[ptr2] <= left_max + 1) {
+//                 second_valid = ptr2;
+//             }
 
-            int best_k = max(first_valid, second_valid);
+//             int best_k = max(first_valid, second_valid);
 
-            if (best_k < len) {
-                int cost = (mid - i) + (best_k - (mid + 1));
-                min_operations = min(min_operations, cost);
-            }
-        }
-    }
+//             if (best_k < len) {
+//                 int cost = (mid - i) + (best_k - (mid + 1));
+//                 min_operations = min(min_operations, cost);
+//             }
+//         }
+//     }
 
-    cout << (min_operations == MAX_VAL ? -1 : min_operations) << "\n";
-}
+//     cout << (min_operations == MAX_VAL ? -1 : min_operations) << "\n";
+// }
 
-int main() {
-    ios_base::sync_with_stdio(false);
-    cin.tie(nullptr);
+// int main() {
+//     ios_base::sync_with_stdio(false);
+//     cin.tie(nullptr);
 
-    int test_cases;
-    cin >> test_cases;
+//     int test_cases;
+//     cin >> test_cases;
 
-    while (test_cases--) {
-        process();
-    }
+//     while (test_cases--) {
+//         process();
+//     }
 
-    return 0;
-}
+//     return 0;
+// }
