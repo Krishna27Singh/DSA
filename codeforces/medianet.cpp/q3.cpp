@@ -82,7 +82,7 @@ int main() {
 
     // Step 4: For each (value, component), sum sed-values efficiently
     long long total = 0;
-    for (int v : unique_vals_vec) {
+    for (int v : unique_vals_vec) { 
         for (const auto& [cid, cnt_sum] : value_comp_info[v]) {
             int count = cnt_sum.first;
             // For each multiple of v present in the matrix
