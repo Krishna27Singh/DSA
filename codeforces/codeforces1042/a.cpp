@@ -25,8 +25,6 @@ int main(){
             }
         }
 
-        cout<<neg<<" "<<pos<<endl;
-
         if(neg<=pos) cout<<neg<<endl;
         else cout<<neg<<endl;
     }

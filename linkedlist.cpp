@@ -28,7 +28,7 @@ void insertAtHead(Node* &head, int d){
     //create new node
     Node* temp = new Node(d);
     temp -> next = head;
-    head = temp;
+    head = temp; 
 }
 
 //How to print a linked list

@@ -21,7 +21,6 @@ int main() {
         for (int i = 0; i < n; ++i) { cin >> S[i]; fS[S[i]]++; }
         for (int i = 0; i < n; ++i) { cin >> T[i]; fT[T[i]]++; }
 
-        // Remove exact matches (intersection)
         for (auto &p : fS) {
             ll val = p.first;
             auto it = fT.find(val);
@@ -32,18 +31,15 @@ int main() {
             }
         }
 
-        // Remainder counts for leftover elements
         unordered_map<ll,ll> remS, remT;
         remS.reserve(fS.size()*2); remT.reserve(fT.size()*2);
         for (auto &p : fS) if (p.second > 0) remS[p.first % k] += p.second;
         for (auto &p : fT) if (p.second > 0) remT[p.first % k] += p.second;
 
-        // Check pairwise equality for {r, k-r}
-        bool ok = true;
+        bool ok = true;                             
         unordered_set<ll> checked;
         checked.reserve(remS.size()*2 + remT.size()*2);
 
-        // iterate union of keys
         for (auto &p : remS) {
             ll r = p.first;
             if (checked.count(r)) continue;
