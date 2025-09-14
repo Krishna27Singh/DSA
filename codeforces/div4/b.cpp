@@ -29,11 +29,6 @@ int main(){
 
         sort(odd.begin(), odd.end());
 
-        // If number of odd fields is even, remove the smallest odd
-        // if(odd.size() % 2 == 0 && !odd.empty()) {
-        //     long long min_odd = *min_element(odd.begin(), odd.end());
-        //     total_sum -= min_odd;
-        // }
 
         int it = (odd.size())/2;
         for(int i = 0; i<it; i++){
