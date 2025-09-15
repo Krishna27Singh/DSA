@@ -815,3 +815,42 @@
 
 //     return 0;
 // }
+
+
+#include<iostream>
+using namespace std;
+
+int main(){
+
+    string text = "leet code";
+    string brokenLetters = "lt";
+
+    vector<string> words;
+        int n = text.size();
+        string word = "";
+        for(int i = 0; i<n; i++){
+            word += text[i];
+            if(text[i]==' ' || i==n-1){
+                words.push_back(word);
+                word = "";
+            }
+        }
+
+        int answer = words.size();
+        for(auto i: words){
+            unordered_map<char, int> mpp;
+            for(auto j: i){
+                mpp[j]++;
+            }
+
+            for(auto brokenLetter : brokenLetters){
+                if(mpp.find(brokenLetter)!=mpp.end()){
+                    answer--;
+                    break;
+                }
+            }
+        }
+
+        cout<<answer;
+    return 0;
+}
