@@ -33,7 +33,7 @@ int main() {
             ll sum = 0;
 
             for (int i = 0; i < n; ++i) {
-                int new_price = (c[i] + x - 1) / x; // ceil(c[i]/x)
+                int new_price = (c[i] + x - 1) / x; 
                 sum += new_price;
                 new_price_freq[new_price]++;
             }
@@ -49,7 +49,7 @@ int main() {
             max_profit = max(max_profit, profit);
         }
 
-        cout << max_profit << '\n';
+        cout << max_profit <<endl;
     }
 
     return 0;
