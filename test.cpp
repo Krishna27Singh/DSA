@@ -31,3 +31,48 @@
 
 //     return 0;
 // }
+
+
+#include<iostream>
+using namespace std;
+
+int main(){
+
+    int tc; cin>>tc;
+    while(tc--){
+        string s; cin>>s;
+        int n = s.size();
+
+        int zeros = 0;
+        int ones = 0;
+
+        for(auto charr : s){
+            if(charr == '0') zeros++;
+            else ones++;
+        }
+
+        string t = "";
+
+        for(int i = 0; i<n; i++){
+
+            if((!ones && s[i]=='0') || (!zeros && s[i]=='1')){
+                break;
+            }
+
+            if(s[i]=='0' && ones>0){
+                t += '1';
+                ones--;
+            }
+            else if(s[i]=='1' && zeros>0){
+                t += '0';
+                zeros--;
+            }
+        }
+
+
+        cout<<s.size() - t.size()<<endl;
+
+    }
+
+    return 0;
+}
