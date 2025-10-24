@@ -1,0 +1,21 @@
+{
+    "configurations": [
+        {
+            "name": "Mac",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "/usr/local/include",
+                "/Library/Developer/CommandLineTools/usr/include/c++/v1",
+                "/usr/include",
+                "/Library/Developer/CommandLineTools/usr/lib/clang/15/include",
+                "/usr/local/Cellar/gcc/14.2.0/include/c++/14.2.0",
+                "/usr/local/Cellar/gcc/14.2.0/include/c++/14.2.0/x86_64-apple-darwin23" 
+            ],
+            "compilerPath": "/usr/local/bin/g++-14",
+            "cStandard": "c17",
+            "cppStandard": "c++17",
+            "intelliSenseMode": "macos-gcc-x64"
+        }
+    ],
+    "version": 4
+}

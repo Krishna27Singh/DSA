@@ -33,9 +33,9 @@ int main(){
         sort(activity3max.begin(), activity3max.end(), greater<pair<int,int>>());
 
         int ans = 0;
-        for(int i = 0; i<2; i++){
-            for(int j = 0; j<2; j++){
-                for(int k = 0; k<2; k++){
+        for(int i = 0; i<3; i++){
+            for(int j = 0; j<3; j++){
+                for(int k = 0; k<3; k++){
                     if(activity1max[i].second != activity2max[j].second && activity2max[j].second != activity3max[k].second && activity1max[i].second != activity3max[k].second){
                         ans = max(ans, activity1max[i].first + activity2max[j].first + activity3max[k].first);
                 }

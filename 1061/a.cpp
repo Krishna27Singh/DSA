@@ -10,11 +10,11 @@ int main(){
     while(tc--){
         int n; cin>>n;
 
-        if(n%2!=0){
-            cout<<n/2<<endl;
+        if(n%2==0){
+            cout<<(n/2)-1<<endl;
         }
         else{
-            cout<<(n/2)-1<<endl;
+            cout<<n/2<<endl;
         }
     }
 

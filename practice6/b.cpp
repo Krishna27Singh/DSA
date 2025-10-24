@@ -25,6 +25,9 @@ int main(){
 
             mpp1[s[i]]++;
             mpp2[s[i]]--;
+            if(mpp2[s[i]]==0){
+                mpp2.erase(s[i]);
+            }
         }
 
         cout<<ans<<endl;

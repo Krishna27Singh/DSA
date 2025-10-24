@@ -9,14 +9,14 @@ int main(){
         vector<int> a(n);
         for(int i = 0; i<n; i++) cin>>a[i];
 
-        bool check = false;
+        // bool check = false;
 
-        for(int i = 0; i<n; i++){
-            int hamming = abs(a[i]-(i+1));
-            if(hamming>1) check = true;
-        }
+        // for(int i = 0; i<n; i++){
+        //     int hamming = abs(a[i]-(i+1));
+        //     if(hamming>1) check = true;
+        // }
 
-        if (check) cout<<"NO"<<endl;
+        if (a[0]!=1) cout<<"NO"<<endl;
         else cout<<"YES"<<endl;
     }
 

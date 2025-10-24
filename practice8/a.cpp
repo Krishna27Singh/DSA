@@ -6,7 +6,7 @@ int main(){
 
     int tc; cin>>tc;
     while(tc--){
-        vector<vector<int>> grid(10, vector<int>(10, 0));
+        vector<vector<char>> grid(10, vector<char>(10, 0));
         for(int i = 0; i<10; i++){
             for(int j = 0; j<10; j++){
                 cin>>grid[i][j];

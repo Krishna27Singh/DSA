@@ -10,40 +10,21 @@ int main(){
     while(tc--){
         int n, c; cin>>n>>c;
         string s; cin>>s;
-        int maxi = INT_MIN;
-        cout<<s;
+        
+        s += s;
 
-        for(int i = 0; i<n; i++){
-            if(s[i]==c){
-                int count = 0;
-                int found = false;
-                for(int j = i+1; j<n; j++){
-                    if(s[j]=='g'){
-                        cout<<s[j]<<" ";
-                        found = true;
-                        break;
-                    }
-                    count++;
-                }
-                if(found){
-                    maxi = max(maxi, count);
-                }
-                else{
-                    for(int j = 0; j<i; j++){
-                        if(s[j]=='g'){
-                            found = true;
-                            break;
-                        }
-                        count++;
-                    }
+        int last_green = -1;
+        int ans = INT_MIN;
 
-                    if(found){
-                        maxi = max(maxi, count);
-                        continue;
-                    }
-                }
+        for(int i = 2*n-1; i>=0; i--){
+            if(s[i]=='g') last_green = i;
+            if(s[i]==c && last_green != -1 && last_green < n){
+                ans = max(ans, last_green - i);
             }
         }
+
+        cout<<ans<<endl;
+
 
     }
 
