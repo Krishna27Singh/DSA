@@ -25,11 +25,10 @@ void solve() {
         int len = j - i;
         if (len == 1) {
             cout << -1 << '\n';
-            return; // stop processing this test case
+            return; 
         }
-        // fill permutation: left-rotate block [i, j)
-        for (int k = i; k < j - 1; ++k) p[k] = k + 2; // 1-based
-        p[j - 1] = i + 1; // last in block gets first's shoes (1-based)
+        for (int k = i; k < j - 1; ++k) p[k] = k + 2; 
+        p[j - 1] = i + 1; 
         i = j;
     }
 
