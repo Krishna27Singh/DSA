@@ -8,6 +8,7 @@
         "chrono": "cpp",
         "unordered_map": "cpp",
         "string": "cpp",
-        "set": "cpp"
+        "set": "cpp",
+        "ios": "cpp"
     }
 }

@@ -2,20 +2,20 @@
 using namespace std;
 using ll = long long;
 
-struct FenwickMax {
+struct solve {
     int n;
     vector<ll> bit;
-    FenwickMax(int _n=0){ init(_n); }
+    solve(int _n=0){ init(_n); }
     void init(int _n){
         n = _n;
-        bit.assign(n+1, 0); // 0 is safe baseline since costs are positive
+        bit.assign(n+1, 0); 
     }
-    // set bit[idx] = max(bit[idx], val) (1-indexed)
+
     void update(int idx, ll val){
         for(; idx <= n; idx += idx & -idx)
             bit[idx] = max(bit[idx], val);
     }
-    // query max on prefix [1..idx]
+    
     ll query(int idx){
         ll res = 0;
         for(; idx > 0; idx -= idx & -idx)
@@ -37,26 +37,28 @@ int main(){
         ll sumC = 0;
         for(int i=0;i<n;++i){ cin >> c[i]; sumC += c[i]; }
 
-        // coordinate compress a
+        
         vector<ll> vals = a;
         sort(vals.begin(), vals.end());
         vals.erase(unique(vals.begin(), vals.end()), vals.end());
         int m = (int)vals.size();
 
         auto pos = [&](ll x){
-            return int(lower_bound(vals.begin(), vals.end(), x) - vals.begin()) + 1; // 1-indexed
+            return int(lower_bound(vals.begin(), vals.end(), x) - vals.begin()) + 1; 
         };
 
-        FenwickMax fw(m);
+        solve fw(m);
         for(int i=0;i<n;++i){
             int p = pos(a[i]);
-            ll bestPrev = fw.query(p); // non-decreasing allows <= a[i]
-            ll dp = bestPrev + c[i];
+            ll best_prev = fw.query(p); 
+            
+            ll dp = best_prev + c[i];
             fw.update(p, dp);
         }
         ll maxKeep = fw.query(m);
         ll answer = sumC - maxKeep;
-        cout << answer << '\n';
+        cout << answer <<endl;
     }
     return 0;
 }
+
