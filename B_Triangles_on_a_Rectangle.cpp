@@ -10,7 +10,7 @@
 #include <string>
 using namespace std;
 
-int calculateArea( int x1, int y1, int x2, int y2, int x3, int y3) {
+long long calculateArea( int x1, int y1, int x2, int y2, int x3, int y3) {
     long long area = abs((x1*1LL*(y2 - y3) + x2*1LL*(y3 - y1) + x3*1LL*(y1 - y2)));
     return area;
 }
