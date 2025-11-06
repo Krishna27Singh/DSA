@@ -11,20 +11,14 @@
 using namespace std;
 
 void solve(){
-    int MEX, XOR; cin>>MEX>>XOR;
+    int n; cin>>n;
+    vector<int> a(n);
+    for(int i = 0; i<n; i++) cin>>a[i];
+    int x; cin>>x;
 
-    int currXor;
-    int rem = (MEX-1)%4;
-    if(rem == 0) currXor = MEX-1;
-    else if(rem == 1) currXor = 1;
-    else if(rem == 2) currXor = MEX;
-    else if(rem == 3) currXor = 0;
-
-    if(currXor == XOR) cout<<MEX<<endl;
-    else{
-        if((currXor ^ XOR) == MEX) cout<<MEX+2<<endl;
-        else cout<<MEX+1<<endl;
-    }
+    sort(a.begin(), a.end());
+    if(x>=a[0] && x<=a[n-1]) cout<<"YES"<<endl;
+    else cout<<"NO"<<endl;
 }
 
 int main(){

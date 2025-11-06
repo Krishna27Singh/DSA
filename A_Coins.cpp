@@ -11,20 +11,16 @@
 using namespace std;
 
 void solve(){
-    int MEX, XOR; cin>>MEX>>XOR;
+    long long n, k; cin>>n>>k;
 
-    int currXor;
-    int rem = (MEX-1)%4;
-    if(rem == 0) currXor = MEX-1;
-    else if(rem == 1) currXor = 1;
-    else if(rem == 2) currXor = MEX;
-    else if(rem == 3) currXor = 0;
-
-    if(currXor == XOR) cout<<MEX<<endl;
+    if (n % 2 == 0) {
+            cout << "YES"<<endl;
+    } 
     else{
-        if((currXor ^ XOR) == MEX) cout<<MEX+2<<endl;
-        else cout<<MEX+1<<endl;
+            if (k % 2 == 1 && n >= k) cout << "YES"<<endl;
+            else cout << "NO"<<endl;
     }
+    return;
 }
 
 int main(){

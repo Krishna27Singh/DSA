@@ -9,7 +9,9 @@
         "unordered_map": "cpp",
         "string": "cpp",
         "set": "cpp",
-        "ios": "cpp"
+        "ios": "cpp",
+        "unordered_set": "cpp",
+        "climits": "cpp"
     },
     "C_Cpp.default.compilerPath": "/usr/bin/g++"
 }

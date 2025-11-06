@@ -11,20 +11,26 @@
 using namespace std;
 
 void solve(){
-    int MEX, XOR; cin>>MEX>>XOR;
+    int a, b; cin>>a>>b;
 
-    int currXor;
-    int rem = (MEX-1)%4;
-    if(rem == 0) currXor = MEX-1;
-    else if(rem == 1) currXor = 1;
-    else if(rem == 2) currXor = MEX;
-    else if(rem == 3) currXor = 0;
+    int ans = 0;
+    bool check = false;
+    int i = 0;
+    while(true){
+        int count = 1 + i;
+        int value = b + i;
+        while(value*value <= a){
+            value *= value;
+            count++;
+        }
 
-    if(currXor == XOR) cout<<MEX<<endl;
-    else{
-        if((currXor ^ XOR) == MEX) cout<<MEX+2<<endl;
-        else cout<<MEX+1<<endl;
+        if(count>ans) break;
+
+        ans = min(ans, count);
+        i++;
     }
+
+    cout<<ans<<endl;
 }
 
 int main(){
