@@ -78,23 +78,17 @@ void solve(){
     //     }
     // }
 
-    bool check = false;
-    int xi = -1, yj = -1;
-        for (int i = 0; i < n && !check; i++) {
-            for (int j = i +1; j <n && j<= i + 100; j++) {
-                long long r = a[j] % a[i];
-                if ((r%2) == 0) {
-                    xi = i; yj = j;
-                    check = true;
-                    break;
+    // bool check = false;
+    // int xi = -1, yj = -1;
+        for (int i = 0; i < n; i++) {
+            for (int j = i +1; j <n ; j++) {
+                if (((a[j] % a[i])%2) == 0) {
+                    cout<<a[i]<<" "<<a[j]<<endl;
+                    return;
                 }
             }
         }   
     
-    if(check){
-        cout<<a[xi]<<" "<<a[yj]<<endl;
-        return;
-    }
 
     cout<<-1<<endl;
 }

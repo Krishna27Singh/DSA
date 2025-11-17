@@ -12,25 +12,41 @@ using namespace std;
 
 void solve(){
     int a, b; cin>>a>>b;
+    
 
-    int ans = 0;
-    bool check = false;
+    int ops = 0;
+    int currMiniOps = 0;
     int i = 0;
-    while(true){
-        int count = 1 + i;
-        int value = b + i;
-        while(value*value <= a){
-            value *= value;
-            count++;
-        }
-
-        if(count>ans) break;
-
-        ans = min(ans, count);
+    if(b==1) {
+        b++;
+        currMiniOps++;
         i++;
     }
+    int tempa = a;
+    int tempb = b;
+    while(tempa){
+        tempa = tempa/tempb;
+        currMiniOps++;
+    }
+    ops = currMiniOps;
 
-    cout<<ans<<endl;
+    while(ops <= currMiniOps){
+        i++;
+        // if(b>60) break;
+        int tempMiniOps = 0;
+        tempMiniOps+=i;
+        b++;
+        int tempa = a;
+        while(tempa){
+            tempa = tempa/b;
+            tempMiniOps++;
+        }
+        if(tempMiniOps<currMiniOps) currMiniOps = tempMiniOps;
+        ops = tempMiniOps;
+    }
+
+    cout<<currMiniOps<<endl;
+    
 }
 
 int main(){

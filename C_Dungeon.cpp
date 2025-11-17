@@ -26,13 +26,12 @@ void solve() {
         else zeroMonsters.push_back({b[i], c[i]});
     }
 
-    sort(rewardMonsters.begin(), rewardMonsters.end()); // by life
-    sort(zeroMonsters.begin(), zeroMonsters.end());     // by life
+    sort(rewardMonsters.begin(), rewardMonsters.end()); 
+    sort(zeroMonsters.begin(), zeroMonsters.end());     
 
     multiset<int> swords(a.begin(), a.end());
     int kills = 0;
 
-    // Phase 1: Kill all rewarding monsters
     for (auto [life, reward] : rewardMonsters) {
         auto it = swords.lower_bound(life);
         if (it == swords.end()) continue;
@@ -42,7 +41,6 @@ void solve() {
         swords.insert(max(used, reward));
     }
 
-    // Phase 2: Kill as many zero-reward monsters as possible
     for (auto [life, reward] : zeroMonsters) {
         auto it = swords.lower_bound(life);
         if (it == swords.end()) continue;
@@ -50,7 +48,7 @@ void solve() {
         kills++;
     }
 
-    cout << kills << "\n";
+    cout << kills <<endl;
 }
 
 int main() {
