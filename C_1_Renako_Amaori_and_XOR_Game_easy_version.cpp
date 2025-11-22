@@ -29,7 +29,26 @@ using ull = unsigned long long;
 #define all(x) (x).begin(),(x).end()
 
 void solve(){
-    
+    int n; cin>>n;
+    vector<int> a(n+1);
+    for(int i = 1; i<=n; i++) cin>>a[i];
+    vector<int> b(n+1);
+    for(int i = 1; i<=n; i++) cin>>b[i];
+
+    int net = 0;
+    int lastImp = 0;
+    for (int i = 1; i <= n; ++i) {
+        int d = a[i] ^ b[i];
+        net ^= d;
+        if(d) lastImp = i;
+    }
+
+    if (net == 0) {
+        cout<<"Tie"<<endl;
+    } else {
+        if (lastImp %2 == 1) cout<< "Ajisai"<<endl;
+        else cout << "Mai"<<endl;
+    }
 }
 
 int main(){

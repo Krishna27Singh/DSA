@@ -61,7 +61,7 @@ void solve(){
                     break;
                 }
             }
-            if(!false){
+            if(!check){
                 cout<<"YES"<<endl;
                 return;
             }

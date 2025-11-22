@@ -29,16 +29,59 @@ using ull = unsigned long long;
 #define all(x) (x).begin(),(x).end()
 
 void solve(){
-    int n; cin >> n;
-		vector<int> a(n);
-		ll sum = 0, ans = 0;
-		ll mx_val = 0;
-		for(int i = 1; i <= n; i++) {
-			mx_val = max(mx_val, -(ll)i*i + i + sum);
-			cin >> a[i-1]; sum += a[i-1];
-			ans = max(ans, (ll)i*i + i - sum + mx_val);
-		}
-		cout << ans + sum << "\n";
+    int n; cin>>n;
+    vector<int> a(n);
+    for(int i = 0; i<n; i++) cin>>a[i];
+
+    vector<int> prefix(n+1);
+    prefix[0] = 0;
+    prefix[1] = a[0];
+
+    for(int i = 1; i<n; i++){
+        prefix[i+1] = prefix[i] + a[i];
+    }
+
+    for(auto i : prefix) cout<<i<<" ";
+    cout<<endl;
+
+    int left = 0; int right = n-1;
+    int ans = prefix[n];
+    while(left<=right){
+        int curr_sum = prefix[right+1]-prefix[left];
+        int new_sum = (right-left+1)*((left+1) + (right+1));
+        cout<<curr_sum<<" "<<new_sum<<endl;
+        if(new_sum > curr_sum){
+            int temp = new_sum;
+            if(left>0) temp += prefix[left-1];
+            if(right<n-1) temp += prefix[right+1];
+            ans = max(ans, temp);
+        }
+
+        left++;
+        curr_sum = prefix[right+1]-prefix[left];
+        new_sum = (right-left+1)*((left+1) + (right+1));
+        cout<<curr_sum<<" "<<new_sum<<endl;
+        if(new_sum > curr_sum) ans = max(ans, new_sum);
+        left--;
+
+        right--;
+        curr_sum = prefix[right+1]-prefix[left];
+        new_sum = (right-left+1)*((left+1) + (right+1));
+        cout<<curr_sum<<" "<<new_sum<<endl;
+        if(new_sum > curr_sum){
+            int temp = new_sum;
+            if(left>0) temp += prefix[left-1];
+            if(right<n-1) temp += prefix[right+1];
+            ans = max(ans, temp);
+        }
+
+        right++;
+        left++;
+        right--;
+    }
+
+    cout<<ans<<endl;
+    return;
 }
 
 int main(){

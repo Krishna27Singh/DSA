@@ -29,6 +29,36 @@ using ull = unsigned long long;
 #define all(x) (x).begin(),(x).end()
 
 void solve(){
+    int n; cin>>n;
+    if(n==0){
+        cout<<0<<endl;
+        return;
+    }
+    vector<int> a(n);
+    for(int i = 0; i<n; i++) cin>>a[i];
+
+    if(a[n-1]==-1 && a[0]==-1){
+        a[n-1]=0;
+        a[0]=0;
+    }
+    else if(a[n-1]==-1 && a[0]!=-1){
+        a[n-1] = a[0];
+    }
+    else if(a[n-1]!=-1 && a[0]==-1){
+        a[0] = a[n-1];
+    }
+
+    cout<<abs(a[n-1]-a[0])<<endl;
+
+    for(auto i: a){
+        if(i!=-1) cout<<i<<" ";
+        else cout<<0<<" ";
+    }
+
+    
+
+    cout<<endl;
+    return;
     
 }
 

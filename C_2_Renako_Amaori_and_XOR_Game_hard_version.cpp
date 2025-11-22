@@ -29,6 +29,35 @@ using ull = unsigned long long;
 #define all(x) (x).begin(),(x).end()
 
 void solve(){
+    int n; cin>>n;
+    vector<long long> a(n+1);
+    for(int i = 1; i<=n; i++) cin>>a[i];
+    vector<long long> b(n+1);
+    for(int i = 1; i<=n; i++) cin>>b[i];
+
+    long long currScoreA = 0, currScoreM = 0;
+    
+    for(int i = 1; i<=n; i++){
+        currScoreA ^= a[i];
+        currScoreM ^= b[i];
+    }
+
+    if((currScoreA^currScoreM) == 0){
+        cout<<"Tie"<<endl;
+        return;
+    }
+
+    int msb = 63 - __builtin_clzll(currScoreA^currScoreM);
+    int lastImp = -1;
+
+    for(int i = 1; i<=n; i++){
+        bool containsMsbAsOne = ((a[i]^b[i])>>msb)&1;
+        if(containsMsbAsOne) lastImp = i;
+    }
+
+    if(lastImp%2!=0) cout<<"Ajisai"<<endl;
+    else if(lastImp%2==0) cout<<"Mai"<<endl;
+    else cout<<"Tie"<<endl;
     
 }
 

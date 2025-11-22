@@ -30,12 +30,10 @@ using ull = unsigned long long;
 
 void solve(){
     long long c;
-    cin >> c;
-
+    cin >> c;  
     long long b = c;
-    long long a = c*(1<<30);
-
-    cout<<a<<" "<<b<<endl;
+    long long a = c*(1<<30); 
+    cout<<a<<" "<<b<<endl; 
 }
 
 int main(){

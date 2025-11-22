@@ -32,7 +32,7 @@ void solve(){
 
     while(ops <= currMiniOps){
         i++;
-        // if(b>60) break;
+        if(b>60) break;
         int tempMiniOps = 0;
         tempMiniOps+=i;
         b++;

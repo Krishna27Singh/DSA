@@ -29,7 +29,17 @@ using ull = unsigned long long;
 #define all(x) (x).begin(),(x).end()
 
 void solve(){
-    
+    int n; cin>>n;
+    if(n%2!=0){
+        cout<<0<<endl;
+        return;
+    }
+    int count = 1;
+    for(int x = 0; x<n/2; x++){
+        if((n-2*x)%4 == 0) count++;
+    }
+
+    cout<<count<<endl;
 }
 
 int main(){

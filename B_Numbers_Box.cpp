@@ -11,31 +11,65 @@
 using namespace std;
 
 void solve(){
-    long long n, m;
-		cin >> n >> m; 
-		vector<vector<long long>> a(n, vector<long long>(m));
-		for (long long i = 0; i < n; i++)
-			for (long long j = 0; j < m; j++)
-				cin >> a[i][j]; 
+    int n;
+		cin >> n; 
+		vector<vector<char>> mat(n, vector<char>(n));
 
-		long long negatives = 0; 
-		long long minimum = INT_MAX; 
-		long long sum = 0; 
-		for (long long i = 0; i < n; i++)
+		for (int i = 0; i < n; i++)
 		{
-			for (long long j = 0; j < m; j++)
+			for (int j = 0; j < n; j++)
+				cin >> mat[i][j];
+		} 
+
+		int ans = 0; 
+		for (int i = 0; i < n; i++)
+		{
+			for (int j = 0; j < n; j++)
 			{
-				if (a[i][j] < 0)
-					negatives++; 
-				minimum = min(minimum, abs(a[i][j])); 
-				sum += abs(a[i][j]); 
+				int c0 = 0, c1 = 0; 
+				if (mat[i][j] == '0')
+					c0++;
+				else
+					c1++;
+
+				if (mat[j][n - i - 1] == '0')
+					c0++;
+				else
+					c1++;
+
+				if (mat[n - i - 1][n - j - 1] == '0')
+					c0++;
+				else
+					c1++;
+
+				if (mat[n - j - 1][i] == '0')
+					c0++;
+				else
+					c1++;
+
+				if ((c0 == 0) or (c1 == 0))
+					continue;
+
+				if (c0 >= c1)
+				{
+					ans += c1;
+					mat[i][j] = '0';
+					mat[j][n - i - 1] = '0';
+					mat[n - i - 1][n - j - 1] = '0';
+					mat[n - j - 1][i] = '0';
+				}
+				else
+				{
+					ans += c0;
+					mat[i][j] = '1';
+					mat[j][n - i - 1] = '1';
+					mat[n - i - 1][n - j - 1] = '1';
+					mat[n - j - 1][i] = '1';
+				}
 			}
 		}
 
-		if (negatives % 2 == 0)
-			cout << sum << endl;
-		else
-			cout << sum - 2 * abs(minimum) << endl;
+		cout << ans <<endl;
 }
 
 int main(){
