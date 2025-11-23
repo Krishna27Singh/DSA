@@ -29,34 +29,27 @@ using ull = unsigned long long;
 #define all(x) (x).begin(),(x).end()
 
 void solve(){
-    long long n, x; cin>>n>>x;
+    int n; cin>>n;
     vector<long long> a(n);
     for(int i = 0; i<n; i++) cin>>a[i];
 
-    sort(a.begin(), a.end());
-    vector<long long> prefix(n+1);
-    prefix[0] = 0;
-    for(int i = 0; i<n; i++){
-        prefix[i+1] = a[i] + prefix[i];
+    if(a[n-1]<a[n-2]){
+        cout<<-1<<endl;
+        return;
     }
 
-    long long count = 0;
-    long long ans = 0;
-
-    for(int i = n-1; i>=0; i--){
-        long long l = 0;
-        long long r = i;
-
-        if((x - (prefix[r+1]-prefix[l] + (r+1)*count)) >=0 ){
-            long long temp = (x - (prefix[r+1]-prefix[l] + (r+1)*count))/(r+1) + 1;
-            count += temp;
-            ans += temp*(r+1);
-        }
+    if(a[n-1]<0 && a[n-2]<0){
+        if(is_sorted(a.begin(), a.end())) cout<<0<<endl;
+        else cout<<-1<<endl;
+        return;
     }
 
-    cout<<ans<<endl;
+    cout<<n-2<<endl;
+    for(int i = 0; i<n-2; i++){
+        cout<<i+1<<" "<<n-1<<" "<<n<<endl;
+    }
+
     return;
-
 }
 
 int main(){

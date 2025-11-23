@@ -29,34 +29,51 @@ using ull = unsigned long long;
 #define all(x) (x).begin(),(x).end()
 
 void solve(){
-    long long n, x; cin>>n>>x;
-    vector<long long> a(n);
-    for(int i = 0; i<n; i++) cin>>a[i];
+        int n; cin>>n; string s; cin>>s;
+        int ans = INT_MAX; 
 
-    sort(a.begin(), a.end());
-    vector<long long> prefix(n+1);
-    prefix[0] = 0;
-    for(int i = 0; i<n; i++){
-        prefix[i+1] = a[i] + prefix[i];
-    }
+		for (char c = 'a'; c <= 'z'; c++)
+		{
+			int tmp = 0; 
+			bool isPoss = true; 
 
-    long long count = 0;
-    long long ans = 0;
+			int i = 0, j = n - 1; 
+			while (i < j)
+			{
+				if (s[i] == s[j])
+				{
+					i++; 
+					j--; 
+					continue; 
+				}
 
-    for(int i = n-1; i>=0; i--){
-        long long l = 0;
-        long long r = i;
+				if (s[i] == c)
+				{
+					tmp++; 
+					i++; 
+				}
+				else if (s[j] == c)
+				{
+					tmp++; 
+					j--; 
+				}
+				else
+				{
+					isPoss = false; 
+					break; 
+				}
+			} 
 
-        if((x - (prefix[r+1]-prefix[l] + (r+1)*count)) >=0 ){
-            long long temp = (x - (prefix[r+1]-prefix[l] + (r+1)*count))/(r+1) + 1;
-            count += temp;
-            ans += temp*(r+1);
-        }
-    }
+			if (!isPoss)
+				tmp = INT_MAX; 
 
-    cout<<ans<<endl;
-    return;
+			ans = min(ans, tmp); 
+		} 
 
+		if (ans == INT_MAX)
+			ans = -1; 
+
+		cout << ans <<endl; 
 }
 
 int main(){

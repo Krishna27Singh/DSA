@@ -29,33 +29,36 @@ using ull = unsigned long long;
 #define all(x) (x).begin(),(x).end()
 
 void solve(){
-    long long n, x; cin>>n>>x;
-    vector<long long> a(n);
+    int n; cin>>n;
+    vector<int> a(n);
     for(int i = 0; i<n; i++) cin>>a[i];
 
-    sort(a.begin(), a.end());
-    vector<long long> prefix(n+1);
-    prefix[0] = 0;
+    int maxi = 2*n-1;
+
+    vector<pair<int, int> > aIdx;
     for(int i = 0; i<n; i++){
-        prefix[i+1] = a[i] + prefix[i];
+        auto myPair = make_pair(a[i], i+1);
+        aIdx.push_back(myPair);
     }
+    sort(aIdx.begin(), aIdx.end());
 
-    long long count = 0;
-    long long ans = 0;
+    int count = 0;
+    for(int i = 0; i<n-1; i++){
+        if(aIdx[i].first * aIdx[i+1].first > maxi) break;
+        int currVal = aIdx[i].first;
+        int currIdx = aIdx[i].second;
 
-    for(int i = n-1; i>=0; i--){
-        long long l = 0;
-        long long r = i;
+        for(int j = i+1; j<n; j++){
+            int tempVal = aIdx[j].first;
+            int tempIdx = aIdx[j].second;
 
-        if((x - (prefix[r+1]-prefix[l] + (r+1)*count)) >=0 ){
-            long long temp = (x - (prefix[r+1]-prefix[l] + (r+1)*count))/(r+1) + 1;
-            count += temp;
-            ans += temp*(r+1);
+            if(currVal*tempVal > maxi) break;
+
+            if(currVal*tempVal == currIdx + tempIdx) count++;
         }
     }
 
-    cout<<ans<<endl;
-    return;
+    cout<<count<<endl;
 
 }
 
