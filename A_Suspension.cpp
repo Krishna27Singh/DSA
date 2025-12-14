@@ -30,25 +30,10 @@ using ull = unsigned long long;
 
 void solve(){
     int n; cin>>n;
-    vector<long long> a(n+1);
-    for(int i = 1; i<=n; i++) cin>>a[i];
-    vector<long long> b(n+1);
-    for(int i = 1; i<=n; i++) cin>>b[i];
-
-    long long net = 0;
-    long long lastImp = 0;
-    for (int i = 1; i <= n; ++i) {
-        long long d = a[i] ^ b[i];
-        net ^= d;
-        if(d) lastImp = i;
-    }
-
-    if (net == 0) {
-        cout<<"Tie"<<endl;
-    } else {
-        if (lastImp %2 == 1) cout<< "Ajisai"<<endl;
-        else cout << "Mai"<<endl;
-    }
+    int y,r; cin>>y>>r;
+    if(r+(y/2) <= n) cout<<r+(y/2)<<endl;
+    else cout<<n<<endl;
+    
 }
 
 int main(){
