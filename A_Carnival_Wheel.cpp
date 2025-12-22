@@ -29,39 +29,15 @@ using ull = unsigned long long;
 #define all(x) (x).begin(),(x).end()
 
 void solve(){
-    int n; cin>>n;
-    vector<int> b(n);
-    for(int i = 0; i<n; i++) cin>>b[i];
+    int l, a, b; cin>>l>>a>>b;
+    int orgA = a;
 
-    int totalNonZeros = 0;
-    long long totalSum = 0;
-
-    for(auto i: b){
-        if(i!=0) totalNonZeros++;
-        totalSum += i;
+    while(a<=l-1){
+        a += b;
     }
 
-    if(totalSum - totalNonZeros >= n-1){
-        cout<<totalNonZeros<<endl;
-        return;
-    }
-
-    sort(b.begin(), b.end());
-    int ptr = 0;
-    while(b[ptr] == 0) ptr++;
-    int cnt = 0;
-
-    while(ptr<n){
-        if(totalSum - (n-ptr) + cnt >= n-1){
-            cout<<n-ptr<<endl;
-            return;
-        }
-        else{
-            totalSum -= b[ptr];
-            cnt += b[ptr];
-            ptr++;
-        }
-    }
+    if(orgA == a%l) cout<< a-b<<endl;
+    else cout<<l-1<<endl;
 
 }
 

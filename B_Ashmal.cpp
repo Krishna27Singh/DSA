@@ -30,39 +30,25 @@ using ull = unsigned long long;
 
 void solve(){
     int n; cin>>n;
-    vector<int> b(n);
-    for(int i = 0; i<n; i++) cin>>b[i];
+    vector<string> a(n);
+    for(int i=0;i<n;i++) cin>>a[i];
 
-    int totalNonZeros = 0;
-    long long totalSum = 0;
-
-    for(auto i: b){
-        if(i!=0) totalNonZeros++;
-        totalSum += i;
-    }
-
-    if(totalSum - totalNonZeros >= n-1){
-        cout<<totalNonZeros<<endl;
-        return;
-    }
-
-    sort(b.begin(), b.end());
-    int ptr = 0;
-    while(b[ptr] == 0) ptr++;
-    int cnt = 0;
-
-    while(ptr<n){
-        if(totalSum - (n-ptr) + cnt >= n-1){
-            cout<<n-ptr<<endl;
-            return;
+    string first = a[0];
+    string ans = "";
+    string last = first;
+    ans += first; 
+    for(int i = 1; i<n; i++){
+        string case1 = a[i] + ans;
+        string case2 = ans + a[i];
+        if(case1 < case2){
+            ans = case1;
         }
         else{
-            totalSum -= b[ptr];
-            cnt += b[ptr];
-            ptr++;
+            ans = case2;
         }
     }
 
+    cout<<ans<<endl;
 }
 
 int main(){
