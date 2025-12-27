@@ -29,36 +29,43 @@ using ull = unsigned long long;
 #define all(x) (x).begin(),(x).end()
 
 void solve(){
-    int n; cin>>n;
-    vector<int> a(n);
-    for(int i=0;i<n;i++) cin>>a[i];
+    string r; cin>>r;
+    int n = r.size();
+    int ans = 0;
+    if(r[0] == 'u'){
+        r[0] = 's';
+        ans++;
+    }
+    if(r[n-1] == 'u'){
+        r[n-1] = 's';
+        ans++;
+    }
+    int cnt = 0;
+    vector<int> us;
+    for(int i = 0; i<n; i++){
+        if(r[i] == 'u'){
+            cnt = 0;
+            while(i<n && r[i] == 'u'){
+                cnt++;
+                i++;
+            }
+            us.push_back(cnt);
+        }
+    }
 
-    map<int, int> mp; 
-		for (int i = 0; i < n; i++) { 
-			for (int j = 2; j * j <= a[i]; j++) {
-				while (a[i] % j == 0) { 
-					mp[j]++; 
-					a[i] /= j;
-				}
-			}
-			if (a[i] > 1) {
-				mp[a[i]]++;
-			}
-		}
 
-		int flag = 1; 
-		for (auto it : mp) { 
-			if (it.second % n != 0) { 
-				flag = 0; 
-				break;
-			}
-		}
+    for(auto i: us){
+        if(i%2 !=0) ans += i/2;
+        else{
+            int it = i/2;
+            ans += it;
+        }
+    }
 
-		if (flag) {
-			cout << "YES" << endl; 
-		} else {
-			cout << "NO" << endl; 
-		}
+
+    cout<<ans<<endl;
+    // for(auto i: us) cout<<i<<" ";
+    // cout<<endl;
 
     // Output
     

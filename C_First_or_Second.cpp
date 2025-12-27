@@ -28,40 +28,27 @@ using ull = unsigned long long;
 #define mp make_pair
 #define all(x) (x).begin(),(x).end()
 
-void solve(){
-    int n; cin>>n;
-    vector<int> a(n);
-    for(int i=0;i<n;i++) cin>>a[i];
+void solve() {
+    int n;
+    cin>>n;
+    vector<long long> a(n);
+    for(int i = 0; i < n; i++) cin >>a[i];
+        
+    vector<long long> suffix(n+1, 0);
+    for(int i=n - 1; i>=0; i--) {
+        suffix[i] = suffix[i + 1]+ a[i];
+    }
 
-    map<int, int> mp; 
-		for (int i = 0; i < n; i++) { 
-			for (int j = 2; j * j <= a[i]; j++) {
-				while (a[i] % j == 0) { 
-					mp[j]++; 
-					a[i] /= j;
-				}
-			}
-			if (a[i] > 1) {
-				mp[a[i]]++;
-			}
-		}
+    long long ans = -suffix[1];
 
-		int flag = 1; 
-		for (auto it : mp) { 
-			if (it.second % n != 0) { 
-				flag = 0; 
-				break;
-			}
-		}
+    long long prefix = a[0];
+    for (int rem = 1; rem<n; rem++) {
+        long long currentAns = prefix - suffix[rem + 1];
+        ans = max(ans, currentAns);
+        prefix += abs(a[rem]);
+    }
 
-		if (flag) {
-			cout << "YES" << endl; 
-		} else {
-			cout << "NO" << endl; 
-		}
-
-    // Output
-    
+    cout<<ans<<endl;
 }
 
 int main(){

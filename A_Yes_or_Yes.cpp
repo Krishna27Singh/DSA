@@ -29,36 +29,13 @@ using ull = unsigned long long;
 #define all(x) (x).begin(),(x).end()
 
 void solve(){
-    int n; cin>>n;
-    vector<int> a(n);
-    for(int i=0;i<n;i++) cin>>a[i];
+    string s; cin>>s;
 
-    map<int, int> mp; 
-		for (int i = 0; i < n; i++) { 
-			for (int j = 2; j * j <= a[i]; j++) {
-				while (a[i] % j == 0) { 
-					mp[j]++; 
-					a[i] /= j;
-				}
-			}
-			if (a[i] > 1) {
-				mp[a[i]]++;
-			}
-		}
+    unordered_map<char, int> freq;
+    for(auto c: s) freq[c]++;
 
-		int flag = 1; 
-		for (auto it : mp) { 
-			if (it.second % n != 0) { 
-				flag = 0; 
-				break;
-			}
-		}
-
-		if (flag) {
-			cout << "YES" << endl; 
-		} else {
-			cout << "NO" << endl; 
-		}
+    if(freq['Y']>1) cout<<"NO"<<endl;
+    else cout<<"YES"<<endl;
 
     // Output
     
