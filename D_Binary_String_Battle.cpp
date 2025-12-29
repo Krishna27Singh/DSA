@@ -30,7 +30,23 @@ using ull = unsigned long long;
 #define all(x) (x).begin(),(x).end()
 
 void solve(){
-    
+    int n, k; cin>>n>>k;
+    string s; cin>>s;
+
+    int totalOnes = 0;
+    for(auto c: s) if(c == '1') totalOnes++;
+
+    if(totalOnes <= k){
+        cout<<"Alice"<<endl;
+        return;
+    }
+
+    if(n<2*k){
+        cout<<"Alice"<<endl;
+        return;
+    }
+
+    cout<<"Bob"<<endl;
 
     // Output
 

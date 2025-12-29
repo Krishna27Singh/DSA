@@ -29,52 +29,29 @@ using ull = unsigned long long;
 #define all(x) (x).begin(),(x).end()
 
 void solve(){
-    int n, k, q; cin>>n>>k>>q;
-    vector<int> c(q);
-    vector<int> l(q);
-    vector<int> r(q);
-    for(int i = 0; i<q; i++){
-        cin>>c[i];
-        cin>>l[i];
-        cin>>r[i];
-        l[i]--; r[i]--;
-    }
-
-    vector<int> a(n, 1e9);
-
-    //query 1
-    for(int i = 0; i<q; i++){
-        if(c[i]==1){
-            for(int j = l[i]; j<=r[i]; j++) a[j]=k;
-        }
-    }
-    //query 2
-    for(int i = 0; i<q; i++){
-        if(c[i]==2){
-            vector<bool> have(k, false);
-            for (int j = l[i]; j <= r[i]; j++) {
-            if (0 <= a[j] && a[j] < k)
-                have[a[j]] = true;
-            }
-            vector<int> missing;
-            for (int v = 0; v < k; v++)
-            if (!have[v]) missing.push_back(v);
-
-            int ptr = 0;
-            for(int j = l[i]; j<=r[i]; j++){
-                if(a[j]==k){
-                    a[j] = 1e9;
-                    continue;
-                }
-                if(a[j]<k) continue;
-                if(ptr<missing.size()) a[j] = missing[ptr++];
-                else break;
+    ll n, k, q; cin >> n >> k >> q;
+        vector<ll> a(n + 1, 0);
+ 
+        vector<ll> mn(n + 1, 0), mx(n + 1, 0);
+        while (q--) {
+            ll c, l, r; cin >> c >> l >> r;
+            for (ll i = l; i <= r; i++) {
+                if (c == 1) mn[i] = 1;
+                else mx[i] = 1;
             }
         }
-    }
+ 
+        for (ll i = 1; i <= n; i++) {
+            if (mn[i] == 1 && mx[i] == 1) a[i] = k + 1;
+            else if (mx[i] == 1) a[i] = i % k;
+            else a[i] = k;
+        }
+ 
+        for (ll i = 1; i <= n; i++) cout << a[i] << ' ';
+        cout <<endl;
 
-    for(auto i: a) cout<<i<<" ";
-    cout<<endl;
+    // Output
+    
 }
 
 int main(){

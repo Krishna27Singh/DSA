@@ -19,7 +19,6 @@
 #include <bitset>
 #include <array>
 #include <climits>
-#include <numeric>
 using namespace std;
 
 using ll = long long;
@@ -30,10 +29,13 @@ using ull = unsigned long long;
 #define all(x) (x).begin(),(x).end()
 
 void solve(){
+    int n; cin>>n;
+    vector<int> a(n);
+    for(int i = 0; i<n; i++) cin>>a[i];
     
 
     // Output
-
+    
 }
 
 int main(){

@@ -18,8 +18,8 @@
 #include <random>
 #include <bitset>
 #include <array>
-#include <climits>
 #include <numeric>
+#include <climits>
 using namespace std;
 
 using ll = long long;
@@ -30,10 +30,20 @@ using ull = unsigned long long;
 #define all(x) (x).begin(),(x).end()
 
 void solve(){
-    
+    int n; cin>>n;
+    vector<int> b(n);
+    for(int i = 0; i<n; i++) cin>>b[i];
+
+    int ans = 1;
+    for(int i = 0; i<n-1; i++){
+        if(!b[i+1]%b[i]) continue;
+        ans = lcm(ans, b[i]/gcd(b[i+1], b[i]));
+    }
+
+    cout<<ans<<endl;
 
     // Output
-
+    
 }
 
 int main(){
