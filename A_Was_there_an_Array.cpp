@@ -23,37 +23,33 @@
 using namespace std;
 
 using ll = long long;
+using ld = long double;
 using uint = unsigned int;
 using ull = unsigned long long;
-using ld = long double;
-using pii = pair<int,int>;
-using pll = pair<ll,ll>;
-
-#define pb push_back
 #define mp make_pair
-#define all(x) (x).begin(), (x).end()
-#define rall(x) (x).rbegin(), (x).rend()
-#define sz(x) (int)(x).size()
-
-const int INF = 1e9;
-const ll LINF = 1e18;
-const ld EPS = 1e-9;
-const ll MOD = 1e9 + 7;
-
-/*
-****************************************** APPROACH **************************************************
-
-*/
+#define all(x) (x).begin(),(x).end()
 
 void solve(){
+    //    0 1 0 1 1 0 0 1
+    //  1 2 2 2 3
+
+    int n; cin>>n;
+    vector<int> b(n-2);
+    for(int i = 0; i<n-2; i++) cin>>b[i];
+
+    int len = b.size();
+    for(int i = 0; i<len-2; i++){
+        if(b[i]==1 && b[i+1]==0 && b[i+2]==1){
+            cout<<"NO"<<endl;
+            return;
+        }
+    }
+
+    cout<<"YES"<<endl;
+    // Output
     
 
-    // Output
-
-
 }
-
-/*************************************************************************************************** */
 
 int main(){
     ios::sync_with_stdio(false);

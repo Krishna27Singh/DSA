@@ -11,7 +11,18 @@
         "set": "cpp",
         "ios": "cpp",
         "unordered_set": "cpp",
-        "climits": "cpp"
+        "climits": "cpp",
+        "__hash_table": "cpp",
+        "__split_buffer": "cpp",
+        "__tree": "cpp",
+        "array": "cpp",
+        "bitset": "cpp",
+        "deque": "cpp",
+        "initializer_list": "cpp",
+        "map": "cpp",
+        "queue": "cpp",
+        "stack": "cpp",
+        "string_view": "cpp"
     },
     "C_Cpp.default.compilerPath": "/usr/bin/g++"
 }
