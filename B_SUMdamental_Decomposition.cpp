@@ -46,39 +46,35 @@ const ll MOD = 1e9 + 7;
 */
 
 void solve(){
-    int n; cin>>n;
-    vector<int> a(n);
-    for(int i = 0; i<n; i++) cin>>a[i];
+    int n, x; cin>>n>>x;
 
-    vector<pair<int, char>> order1;
-    vector<pair<int, char>> order2;
-    for(int i = 0; i<n; i++){
-        char ch;
-        if(i%2) ch = 'r';
-        else ch = 'b';
-        order1.push_back({a[i], ch});
-
-        if(ch == 'r') ch = 'b';
-        else ch = 'r';
-
-        order2.push_back({a[i], ch});
+    if(n==1 && x==0){
+        cout<<-1<<endl;
+        return;
     }
 
-    sort(order1.begin(), order1.end());
-    sort(order2.begin(), order2.end());
-
-    bool temp1 = true;
-    bool temp2 = true;
-
-    for(int i = 0; i<n-1; i++){
-        if(order1[i].second == order1[i+1].second) temp1 = false;
-        if(order2[i].second == order2[i+1].second) temp2 = false;
+    int setBits = 0;
+    int temp = x;
+    while(temp){
+        setBits += temp & 1;
+        temp >>= 1;
+    }
+    // cout<<"setbits: "<<setBits<<endl;
+    if(n <= setBits){
+        cout<<x<<endl;
+        return;
     }
 
-    if(temp1 || temp2) cout<<"YES"<<endl;
-    else cout<<"NO"<<endl;
+    int sum = x;
+    if((n-setBits)%2==0){
+        cout<<sum + (n-setBits)<<endl;
+        return;
+    }
+    else{
+        if(x>1) cout<<sum + n - setBits + 1<<endl;
+        else cout<<n+3<<endl;
+    }
 
-    return;
 
     // Output
 

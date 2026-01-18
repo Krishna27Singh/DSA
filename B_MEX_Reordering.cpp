@@ -50,36 +50,19 @@ void solve(){
     vector<int> a(n);
     for(int i = 0; i<n; i++) cin>>a[i];
 
-    vector<pair<int, char>> order1;
-    vector<pair<int, char>> order2;
-    for(int i = 0; i<n; i++){
-        char ch;
-        if(i%2) ch = 'r';
-        else ch = 'b';
-        order1.push_back({a[i], ch});
-
-        if(ch == 'r') ch = 'b';
-        else ch = 'r';
-
-        order2.push_back({a[i], ch});
+    int cnt0 = 0;
+    int cnt1 = 0;
+    for(auto i: a){
+        if(i==0) cnt0++;
+        if(i==1) cnt1++;
     }
 
-    sort(order1.begin(), order1.end());
-    sort(order2.begin(), order2.end());
-
-    bool temp1 = true;
-    bool temp2 = true;
-
-    for(int i = 0; i<n-1; i++){
-        if(order1[i].second == order1[i+1].second) temp1 = false;
-        if(order2[i].second == order2[i+1].second) temp2 = false;
+    if(cnt0==1 || (cnt0>=2 && cnt1>=1)){
+        cout<<"YES"<<endl;
+        return;
     }
 
-    if(temp1 || temp2) cout<<"YES"<<endl;
-    else cout<<"NO"<<endl;
-
-    return;
-
+    cout<<"NO"<<endl;
     // Output
 
 

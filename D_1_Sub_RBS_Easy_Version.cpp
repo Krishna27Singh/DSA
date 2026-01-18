@@ -47,37 +47,24 @@ const ll MOD = 1e9 + 7;
 
 void solve(){
     int n; cin>>n;
-    vector<int> a(n);
-    for(int i = 0; i<n; i++) cin>>a[i];
+    string s; cin>>s;
 
-    vector<pair<int, char>> order1;
-    vector<pair<int, char>> order2;
-    for(int i = 0; i<n; i++){
-        char ch;
-        if(i%2) ch = 'r';
-        else ch = 'b';
-        order1.push_back({a[i], ch});
+    int opening = n/2;
+    int closing = opening;
 
-        if(ch == 'r') ch = 'b';
-        else ch = 'r';
-
-        order2.push_back({a[i], ch});
+    int len = n-2;
+    while(len>0){
+        int checkUptil = len/2;
+        for(int i = 0; i<checkUptil; i++){
+            if(s[i]==')'){
+                cout<<2*checkUptil<<endl;
+                return;
+            }
+        }
+        len -= 2;
     }
 
-    sort(order1.begin(), order1.end());
-    sort(order2.begin(), order2.end());
-
-    bool temp1 = true;
-    bool temp2 = true;
-
-    for(int i = 0; i<n-1; i++){
-        if(order1[i].second == order1[i+1].second) temp1 = false;
-        if(order2[i].second == order2[i+1].second) temp2 = false;
-    }
-
-    if(temp1 || temp2) cout<<"YES"<<endl;
-    else cout<<"NO"<<endl;
-
+    cout<<-1<<endl;
     return;
 
     // Output

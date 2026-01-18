@@ -47,38 +47,50 @@ const ll MOD = 1e9 + 7;
 
 void solve(){
     int n; cin>>n;
-    vector<int> a(n);
-    for(int i = 0; i<n; i++) cin>>a[i];
+    string s; cin>>s;
 
-    vector<pair<int, char>> order1;
-    vector<pair<int, char>> order2;
-    for(int i = 0; i<n; i++){
-        char ch;
-        if(i%2) ch = 'r';
-        else ch = 'b';
-        order1.push_back({a[i], ch});
+    string sortedS = s;
+    sort(sortedS.begin(), sortedS.end());
 
-        if(ch == 'r') ch = 'b';
-        else ch = 'r';
-
-        order2.push_back({a[i], ch});
+    if(sortedS[0]==sortedS[n-1] || is_sorted(s.begin(), s.end())){
+        cout<<"Bob"<<endl;
+        return;
+    }
+    
+    int replace0s = 0;
+    int idx = n-1;
+    while(sortedS[idx]=='1'){
+        if(sortedS[idx] != s[idx]) replace0s++;
+        idx--;
     }
 
-    sort(order1.begin(), order1.end());
-    sort(order2.begin(), order2.end());
-
-    bool temp1 = true;
-    bool temp2 = true;
-
-    for(int i = 0; i<n-1; i++){
-        if(order1[i].second == order1[i+1].second) temp1 = false;
-        if(order2[i].second == order2[i+1].second) temp2 = false;
+    int sufficient1s = 0;
+    for(int i = 0; i<=idx; i++){
+        if(s[i]=='1') sufficient1s++;
     }
 
-    if(temp1 || temp2) cout<<"YES"<<endl;
-    else cout<<"NO"<<endl;
+    if(sufficient1s >= replace0s){
+        vector<int> ans;
+        vector<int> idx1s;
+        vector<int> idx0s;
+        for(int i = 0; i<n; i++) if(s[i]=='1') idx1s.push_back(i);
+        for(int i = 0; i<n; i++) if(s[i]=='0') idx0s.push_back(i);
+        reverse(idx0s.begin(), idx0s.end());
 
-    return;
+        for(int i = 0; i<replace0s; i++){
+            ans.push_back(idx1s[i]);
+            ans.push_back(idx0s[i]);
+        }
+
+        sort(ans.begin(), ans.end());
+        cout<<"Alice"<<endl;
+        cout<<ans.size()<<endl;
+        for(auto i: ans) cout<<i+1<<" ";
+        cout<<endl;
+        return;
+    }
+
+    cout<<"Bob"<<endl;
 
     // Output
 
@@ -95,3 +107,4 @@ int main(){
     while (tc--) solve();
     return 0;
 }
+
