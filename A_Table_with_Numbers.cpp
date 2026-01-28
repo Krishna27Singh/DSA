@@ -45,42 +45,35 @@ const ll MOD = 1e9 + 7;
 
 */
 
-long long nCr(int n, int r) {
-    if (r < 0 || r > n) return 0;
-    if (r == 0 || r == n) return 1;
-    if (r > n / 2) r = n - r; 
-
-    long long res = 1;
-    for (int i = 1; i <= r; ++i) {
-        res = res * (n - i + 1);
-        res /= i;
-    }
-    return res;
-}
-
 void solve(){
-    ll n, maxMoves; cin>>n>>maxMoves;
+    int n, h, l; cin>>n>>h>>l;
+    vector<int> a(n);
+    for(int i = 0; i<n; i++) cin>>a[i];
 
-    int d = 0;
-    ll temp = n;
-    while(temp>1){
-        temp = temp>>1;
-        d++;
+    int cnt = 0;
+    vector<int> valid;
+    for(int i = 0; i<n; i++){
+        if(a[i]<=max(h,l)) valid.pb(a[i]);
     }
 
-    ll ans = 0;
-    if(d+1>maxMoves) ans++;
-
-    for(int msb = 1; msb<=d; msb++){
-        int rem = msb-1;
-        int mini = maxMoves-msb+1;
-        if(mini<0) mini = 0;
-        for(int i = mini; i<=rem; i++){
-            ans += nCr(rem, i);
-        }
+    sort(valid.begin(), valid.end());
+    if(cnt%2){
+        valid.pop_back();
+        cnt--;
     }
 
-    cout<<ans<<endl;
+    if((cnt/2 - 1)>=0 && valid[cnt/2-1] <= min(h, l)){
+        cout<<cnt/2<<endl;
+        return;
+    }
+
+    cnt = 0;
+    for(auto it : valid) {
+        if(it <= min(h, l)) cnt++;
+    }
+
+    cout<<cnt*2<<endl;
+
     // Output
 
 

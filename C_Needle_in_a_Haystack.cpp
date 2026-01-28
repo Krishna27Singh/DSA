@@ -61,53 +61,9 @@ void solve(){
 
     sort(tWithoutS.begin(), tWithoutS.end());
 
-    // for(auto i: sFreq) cout<<i.first<<" "<<i.second<<endl;
-    // cout<<endl;
-    // for(auto i: tFreq) cout<<i.first<<" "<<i.second<<endl;
-    // cout<<endl;
-    // cout<<tWithoutS<<endl;
-
-    // for(auto i: tWithoutS) cout<<i;
-    // cout<<endl;
-
     string ans = "";
     int ptr1 = 0;
     int ptr2 = 0;
-    // for(int i = 0; i<tWithoutS.size(); i++){
-        // if(tWithoutS[i] < candidate || candidate == '\0'){
-        //     // cout<<candidate<<endl;
-        //     ans += tWithoutS[i];
-        // }
-        // else{
-        //     // cout<<candidate<<endl;
-        //     ans += candidate;
-        //     ptr++;
-        //     if(ptr < s.size()){
-        //         // cout<<ptr<<endl;
-        //         candidate = s[ptr];
-        //         i--;
-        //     }
-        //     else{
-        //         // cout<<"trigger"<<endl;
-        //         candidate = '\0'; 
-        //         i--;
-        //     }
-        // }
-
-        // if(s[ptr1] == tWithoutS[ptr2]){
-        //     ans += s[ptr1];
-        //     ptr1++;
-        // }
-        // else if(s[ptr1] < tWithoutS[ptr2]){
-        //     ans += s[ptr1];
-        //     ptr1++;
-        //     i--;
-        // }
-        // else{
-        //     ans += tWithoutS[ptr2];
-        //     ptr2++;
-        // }
-    // }
 
     while(ptr1 < s.size() && ptr2 < tWithoutS.size()){
         if(s[ptr1] <= tWithoutS[ptr2]){

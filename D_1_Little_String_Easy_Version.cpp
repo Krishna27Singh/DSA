@@ -23,37 +23,62 @@
 using namespace std;
 
 using ll = long long;
-using ld = long double;
 using uint = unsigned int;
 using ull = unsigned long long;
+using ld = long double;
+using pii = pair<int,int>;
+using pll = pair<ll,ll>;
+
+#define pb push_back
 #define mp make_pair
-#define all(x) (x).begin(),(x).end()
+#define all(x) (x).begin(), (x).end()
+#define rall(x) (x).rbegin(), (x).rend()
+#define sz(x) (int)(x).size()
+
+const int INF = 1e9;
+const ll LINF = 1e18;
+const ld EPS = 1e-9;
+const ll MOD = 1e9 + 7;
 
 /*
 ****************************************** APPROACH **************************************************
 
 */
 
+
 void solve(){
+    int n, c; cin>>n>>c;
+    string s; cin>>s;
     
 
-    int n; cin>>n;
-    vector<int> b(n-2);
-    for(int i = 0; i<n-2; i++) cin>>b[i];
+    if(s[0] == '0' || s[n-1] == '0'){
+        cout<<-1<<endl;
+        return;
+    }
 
-    int len = b.size();
-    for(int i = 0; i<len-2; i++){
-        if(b[i]==1 && b[i+1]==0 && b[i+2]==1){
-            cout<<"NO"<<endl;
-            return;
+    ll ans = 2;
+    ll temp = 2;
+    for(int i = 1; i<n-1; i++){
+        if(s[i] == '1'){
+            ans = (ans*2)%MOD;
+            temp = (temp*2)%c;
+        }
+        else{
+            ans = (ans*i)%MOD;
+            temp = (temp*i)%c;
         }
     }
 
-    cout<<"YES"<<endl;
-    // Output
     
+    if(temp) cout<<ans<<endl;
+    else cout<<-1<<endl;
+
+    // Output
+
 
 }
+
+/*************************************************************************************************** */
 
 int main(){
     ios::sync_with_stdio(false);

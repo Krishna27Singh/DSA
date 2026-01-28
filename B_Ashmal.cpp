@@ -38,14 +38,11 @@ void solve(){
     string last = first;
     ans += first; 
     for(int i = 1; i<n; i++){
-        string case1 = a[i] + ans;
-        string case2 = ans + a[i];
-        if(case1 < case2){
-            ans = case1;
+        if(a[i]<=first){
+            ans = a[i] + ans;
+            first = a[i];
         }
-        else{
-            ans = case2;
-        }
+        else ans += a[i];
     }
 
     cout<<ans<<endl;

@@ -30,12 +30,14 @@ using ull = unsigned long long;
 
 int Query1(int l, int r){
     cout<<1<<" "<<l<<" "<<r<<endl;
+    cout.flush();
     int originalSum; cin>>originalSum;
     return originalSum;
 }
 
 int Query2(int l, int r){
     cout<<2<<" "<<l<<" "<<r<<endl;
+    cout.flush();
     int modifiedSum; cin>>modifiedSum;
     return modifiedSum;
 }
@@ -49,16 +51,13 @@ void solve(){
     int l = -1;
 
     while(s<e){
-        //check if l is present in the left half
         int originalSum = Query1(s+1, mid+1);
         int modifiedSum = Query2(s+1, mid+1);
         int difference = originalSum - modifiedSum;
         if(difference == 0){
-            //l is not present in left half
             s = mid + 1;
         }
         else{
-            //l is present in left half
             e = mid;
         }
         mid = s + (e - s)/2;

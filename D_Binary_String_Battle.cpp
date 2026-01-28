@@ -42,7 +42,12 @@ void solve(){
     }
 
     if(n<2*k){
-        cout<<"Alice"<<endl;
+        int start = n-k;
+        int end = k;
+        int tempOnes = 0;
+        for(int i = start; i<end; i++) if(s[i] == '1') tempOnes++;
+        if(tempOnes >= totalOnes-k) cout<<"Alice"<<endl;
+        else cout<<"Bob"<<endl;
         return;
     }
 

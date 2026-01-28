@@ -80,7 +80,7 @@ int main(){
     ds2.unionBySize(5, 6);
     if(ds2.findUltimateParent(3) == ds2.findUltimateParent(7))
         cout<<"SAME"<<endl;
-    else    
+    else     
         cout<<"NOT SAME"<<endl;
     ds2.unionBySize(3, 7);
     if(ds2.findUltimateParent(3) == ds2.findUltimateParent(7))

@@ -86,8 +86,8 @@ void solve(){
 
     ll ans = 0;
     for (int k = 0; k <= min(r, needCnt); k++) {
-        if (k <= K) {
-            ll ways = nCr(needCnt, k);
+        if (k <= K) {  
+            ll ways = nCr(needCnt, k); 
             ways = (ways*nCr(n-needCnt, r-k))%MOD;
             ways = (ways*factorials[r])%MOD;
             ways = (ways*factorials[n-r])%MOD;

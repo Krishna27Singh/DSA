@@ -45,42 +45,35 @@ const ll MOD = 1e9 + 7;
 
 */
 
-long long nCr(int n, int r) {
-    if (r < 0 || r > n) return 0;
-    if (r == 0 || r == n) return 1;
-    if (r > n / 2) r = n - r; 
-
-    long long res = 1;
-    for (int i = 1; i <= r; ++i) {
-        res = res * (n - i + 1);
-        res /= i;
-    }
-    return res;
-}
-
 void solve(){
-    ll n, maxMoves; cin>>n>>maxMoves;
+    ll n, x; cin>>n>>x;
+    vector<ll> a(n), b(n), c(n);
+    for(int i = 0; i<n; i++) cin>>a[i]>>b[i]>>c[i];
 
-    int d = 0;
-    ll temp = n;
-    while(temp>1){
-        temp = temp>>1;
-        d++;
+    ll temp = 0;
+    for(int i = 0; i<n; i++){
+        temp += (b[i]-1)*a[i];
     }
 
-    ll ans = 0;
-    if(d+1>maxMoves) ans++;
-
-    for(int msb = 1; msb<=d; msb++){
-        int rem = msb-1;
-        int mini = maxMoves-msb+1;
-        if(mini<0) mini = 0;
-        for(int i = mini; i<=rem; i++){
-            ans += nCr(rem, i);
-        }
+    if(temp >= x){
+        cout<<0<<endl;
+        return;
     }
 
-    cout<<ans<<endl;
+    x -= temp;
+
+    ll maxi = -1e9;
+    for(int i = 0; i<n; i++){
+        maxi = max(maxi, a[i]*b[i] - c[i]);
+    }
+
+    if(maxi<=0){
+        cout<<-1<<endl;
+        return;
+    }
+
+    cout<<x/maxi<<endl;
+
     // Output
 
 

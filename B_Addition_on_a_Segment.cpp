@@ -46,23 +46,7 @@ void solve(){
         return;
     }
 
-    sort(b.begin(), b.end());
-    int ptr = 0;
-    while(b[ptr] == 0) ptr++;
-    int cnt = 0;
-
-    while(ptr<n){
-        if(totalSum - (n-ptr) + cnt >= n-1){
-            cout<<n-ptr<<endl;
-            return;
-        }
-        else{
-            totalSum -= b[ptr];
-            cnt += b[ptr];
-            ptr++;
-        }
-    }
-
+    cout<<totalNonZeros - ((n-1) - (totalSum - totalNonZeros))<<endl;
 }
 
 int main(){

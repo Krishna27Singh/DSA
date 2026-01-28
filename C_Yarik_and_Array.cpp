@@ -34,7 +34,7 @@ int kadane(int l, int r, vector<int> &a){
 
     for(int i = l+1; i<=r; i++){
         currMax = max(a[i], currMax + a[i]);
-        maxSoFar = max(maxSoFar, currMax);
+        maxSoFar = max(maxSoFar, currMax); 
     }
 
     return maxSoFar;

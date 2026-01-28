@@ -67,15 +67,20 @@ void solve(){
         cout<<"NO"<<endl;
         return;
     }
-    if(maxSum == k){
-        cout<<"YES"<<endl;
-        for(int i = 0; i<n; i++){
-            if(s[i]=='1') cout<<a[i]<<" ";
-            else cout<<-1e18<<" ";
+    else if (maxSum == k)
+        {
+            cout << "YES" << endl;
+            for (ll i = 0; i < n; i++)
+            {
+                if (s[i] == '0')
+                {
+                    a[i] = -1e18;
+                }
+            }
+            for(auto i: a) cout<<i<<" ";
+            cout<<endl;
+            return;
         }
-        cout<<endl;
-        return;
-    }
 
     int zer = -1;
     for(int i = 0; i<n; i++){
@@ -87,6 +92,7 @@ void solve(){
 
     if(zer == -1){
         cout<<"NO"<<endl;
+        return;
     }
     else{
         ll prefMax = 0;

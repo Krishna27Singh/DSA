@@ -30,14 +30,16 @@ using ull = unsigned long long;
 
 void solve(){
     int l, a, b; cin>>l>>a>>b;
-    int orgA = a;
-
-    while(a<=l-1){
-        a += b;
+    vector<int> done(l, 0);
+ 
+    int ans = a;
+ 
+    while (!done[a]){
+        ans = max(ans, a);
+        done[a] = 1;
+        a = (a + b) % l;
     }
-
-    if(orgA == a%l) cout<< a-b<<endl;
-    else cout<<l-1<<endl;
+    cout<<ans<<endl;
 
 }
 

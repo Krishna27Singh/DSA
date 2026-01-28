@@ -45,42 +45,55 @@ const ll MOD = 1e9 + 7;
 
 */
 
-long long nCr(int n, int r) {
-    if (r < 0 || r > n) return 0;
-    if (r == 0 || r == n) return 1;
-    if (r > n / 2) r = n - r; 
-
-    long long res = 1;
-    for (int i = 1; i <= r; ++i) {
-        res = res * (n - i + 1);
-        res /= i;
-    }
-    return res;
-}
-
 void solve(){
-    ll n, maxMoves; cin>>n>>maxMoves;
+    int n; cin>>n;
+    vector<int> p(n);
 
-    int d = 0;
-    ll temp = n;
-    while(temp>1){
-        temp = temp>>1;
-        d++;
-    }
-
-    ll ans = 0;
-    if(d+1>maxMoves) ans++;
-
-    for(int msb = 1; msb<=d; msb++){
-        int rem = msb-1;
-        int mini = maxMoves-msb+1;
-        if(mini<0) mini = 0;
-        for(int i = mini; i<=rem; i++){
-            ans += nCr(rem, i);
+    if(n%2 == 0){
+        int temp = 4;
+        int maxi = pow(2, 30);
+        while(temp <= maxi){
+            if(n == temp){
+                cout<<-1<<endl;
+                return;
+            }
+            if(temp>n) break;
+            temp *= 2;
         }
     }
 
-    cout<<ans<<endl;
+    if(n%2){
+        p[0] = n-1;
+        p[n-1] = 1;
+        for(int i = 1; i<n-1; i++){
+            if(i%2) p[i] = i+2;
+            else p[i] = i;
+        }
+    }
+    else{
+        p[0] = n;
+        p[n-1] = 1;
+        for(int i = 1; i<n-1; i++){
+            if(i%2) p[i] = i+2;
+            else p[i] = i;
+        }
+        // for(auto it : p) cout<<it<<" ";
+        // cout<<endl;
+        int temp = n;
+        int replace = 1;
+        while(((temp>>1) & 1) == 0){
+            temp = temp >> 1;
+            replace++;
+        }
+        // cout<<replace<<endl;
+        replace = pow(2, replace);
+        swap(p[0], p[replace-1]);
+
+    }
+
+    for(auto it: p) cout<<it<<" ";
+    cout<<endl;
+
     // Output
 
 

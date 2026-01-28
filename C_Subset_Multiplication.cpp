@@ -36,8 +36,8 @@ void solve(){
 
     int ans = 1;
     for(int i = 0; i<n-1; i++){
-        if(!b[i+1]%b[i]) continue;
-        ans = lcm(ans, b[i]/gcd(b[i+1], b[i]));
+        if(b[i+1]%b[i]) ans = lcm(ans, b[i]/gcd(b[i+1], b[i]));
+        
     }
 
     cout<<ans<<endl;

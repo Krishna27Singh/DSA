@@ -24,5 +24,5 @@
         "stack": "cpp",
         "string_view": "cpp"
     },
-    "C_Cpp.default.compilerPath": "/usr/bin/g++"
+    "C_Cpp.default.compilerPath": "/usr/bin/clang++"
 }

@@ -47,7 +47,7 @@ const ll MOD = 1e9 + 7;
 */
 
 void solve(){
-    int n, m; cin>>n>>m;
+    ll n, m; cin>>n>>m;
     ll maxSum = 1LL * n * (n + 1) / 2;
         if (m < n || m > maxSum) {
             cout << -1 <<endl;
