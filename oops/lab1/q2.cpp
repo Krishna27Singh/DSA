@@ -45,35 +45,16 @@ const ll MOD = 1e9 + 7;
 
 */
 
+inline int sum(int a, int b){
+    return a+b;
+}
+
 void solve(){
-    ll n, x; cin>>n>>x;
-    vector<ll> a(n), b(n), c(n);
-    for(int i = 0; i<n; i++) cin>>a[i]>>b[i]>>c[i];
-
-    ll temp = 0;
-    for(int i = 0; i<n; i++){
-        temp += (b[i]-1)*a[i];
-    }
-
-    if(temp >= x){
-        cout<<0<<endl;
-        return;
-    }
-
-    x -= temp;
-
-    ll maxi = -1e9;
-    for(int i = 0; i<n; i++){
-        maxi = max(maxi, a[i]*b[i] - c[i]);
-    }
-
-    if(maxi<=0){
-        cout<<-1<<endl;
-        return;
-    }
-
-    cout<<(x+ maxi-1)/maxi << endl;
-
+    int a = 2;
+    int b = 3;
+    int ans = sum(a, b);
+    cout<<"The sum of "<<a<<" and "<<b<<" is: ";
+    cout<<ans<<endl;
 
     // Output
 
@@ -86,7 +67,5 @@ int main(){
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
     cout.tie(nullptr);
-    int tc; cin >> tc;
-    while (tc--) solve();
-    return 0;
+    solve();
 }

@@ -46,34 +46,21 @@ const ll MOD = 1e9 + 7;
 */
 
 void solve(){
-    ll n, x; cin>>n>>x;
-    vector<ll> a(n), b(n), c(n);
-    for(int i = 0; i<n; i++) cin>>a[i]>>b[i]>>c[i];
-
-    ll temp = 0;
-    for(int i = 0; i<n; i++){
-        temp += (b[i]-1)*a[i];
+    int row, col; cin>>row>>col;
+    vector<vector<int>> grid(row, vector<int>(col));
+    for(int i = 0; i<row; i++){
+        for(int j = 0; j<col; j++){
+            cin>>grid[i][j];
+        }
     }
 
-    if(temp >= x){
-        cout<<0<<endl;
-        return;
+    cout<<"Printing the grid: "<<endl;
+    for(int i = 0; i<row; i++){
+        for(int j = 0; j<col; j++){
+            cout<<grid[i][j]<<" ";
+        }
+        cout<<endl;
     }
-
-    x -= temp;
-
-    ll maxi = -1e9;
-    for(int i = 0; i<n; i++){
-        maxi = max(maxi, a[i]*b[i] - c[i]);
-    }
-
-    if(maxi<=0){
-        cout<<-1<<endl;
-        return;
-    }
-
-    cout<<(x+ maxi-1)/maxi << endl;
-
 
     // Output
 
@@ -86,7 +73,5 @@ int main(){
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
     cout.tie(nullptr);
-    int tc; cin >> tc;
-    while (tc--) solve();
-    return 0;
+    solve();
 }

@@ -46,35 +46,33 @@ const ll MOD = 1e9 + 7;
 */
 
 void solve(){
-    ll n, x; cin>>n>>x;
-    vector<ll> a(n), b(n), c(n);
-    for(int i = 0; i<n; i++) cin>>a[i]>>b[i]>>c[i];
+    int n; cin>>n;
+    vector<int> a(n);
+    for(int i = 0; i<n; i++) cin>>a[i];
+    vector<int> sortedA(a.begin(), a.end());
+    sort(sortedA.begin(), sortedA.end());
 
-    ll temp = 0;
-    for(int i = 0; i<n; i++){
-        temp += (b[i]-1)*a[i];
-    }
-
-    if(temp >= x){
-        cout<<0<<endl;
-        return;
-    }
-
-    x -= temp;
-
-    ll maxi = -1e9;
-    for(int i = 0; i<n; i++){
-        maxi = max(maxi, a[i]*b[i] - c[i]);
-    }
-
-    if(maxi<=0){
+    if(is_sorted(a.begin(), a.end())){
         cout<<-1<<endl;
         return;
     }
 
-    cout<<(x+ maxi-1)/maxi << endl;
+    int maxi = sortedA[n-1];
+    int mini = sortedA[0];
+    int k = INT_MAX;
+    for(int i = 0; i<n; i++){
+        if(a[i] == sortedA[i]) continue;
+        k = min(k, max(abs(sortedA[i]-a[i]), 
+        max(max(min(abs(mini-a[i]), abs(mini-sortedA[i])), min(abs(maxi-a[i]), abs(maxi-sortedA[i]))),
+        max(min(abs(a[i]-mini), abs(sortedA[i]-maxi)), min(abs(a[i]-maxi), abs(sortedA[i]-mini))))));
+    }
 
+    // for(auto i: a) cout<<i<<" ";
+    // cout<<endl
+    // for(auto i: sortedA) cout<<i<<" ";
+    // cout<<endl;
 
+    cout<<k<<endl;
     // Output
 
 

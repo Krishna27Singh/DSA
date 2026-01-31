@@ -46,34 +46,34 @@ const ll MOD = 1e9 + 7;
 */
 
 void solve(){
-    ll n, x; cin>>n>>x;
-    vector<ll> a(n), b(n), c(n);
-    for(int i = 0; i<n; i++) cin>>a[i]>>b[i]>>c[i];
+    int x, y; cin>>x>>y;
 
-    ll temp = 0;
-    for(int i = 0; i<n; i++){
-        temp += (b[i]-1)*a[i];
+    int msb = max((31 - __builtin_clz(x)), (31 - __builtin_clz(y)));
+    int q = 0;
+
+    int q1 = 0;
+    // p = x
+    for(int i = 0; i <= msb; i++){
+        if(((x >> i) & 1) == 0 && ((y >> i) & 1) == 1){
+            q1 |= (1 << i);
+        }
     }
 
-    if(temp >= x){
-        cout<<0<<endl;
+    int q2 = 0;
+    // q = y
+    for(int i = 0; i <= msb; i++){
+        if(((y >> i) & 1) == 0 && ((x >> i) & 1) == 1){
+            q2 |= (1 << i);
+        }
+    }
+
+    if(q1 > q2){
+        cout<<x<<" "<<q1<<endl;
         return;
     }
+    cout<<q2<<" "<<y<<endl;
 
-    x -= temp;
-
-    ll maxi = -1e9;
-    for(int i = 0; i<n; i++){
-        maxi = max(maxi, a[i]*b[i] - c[i]);
-    }
-
-    if(maxi<=0){
-        cout<<-1<<endl;
-        return;
-    }
-
-    cout<<(x+ maxi-1)/maxi << endl;
-
+    // cout<<p<<" "<<q<<endl;
 
     // Output
 

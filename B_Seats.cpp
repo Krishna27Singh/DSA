@@ -46,35 +46,65 @@ const ll MOD = 1e9 + 7;
 */
 
 void solve(){
-    ll n, x; cin>>n>>x;
-    vector<ll> a(n), b(n), c(n);
-    for(int i = 0; i<n; i++) cin>>a[i]>>b[i]>>c[i];
+    int n; cin>>n;
+    string s; cin>>s;
 
-    ll temp = 0;
-    for(int i = 0; i<n; i++){
-        temp += (b[i]-1)*a[i];
-    }
-
-    if(temp >= x){
-        cout<<0<<endl;
+    int ans = 0;
+    for(auto i: s) if(i == '1') ans++;
+    if(ans == 0 && (n==1 || n==2 || n==3)){
+        cout<<1<<endl;
         return;
     }
-
-    x -= temp;
-
-    ll maxi = -1e9;
+    if(ans == 0){
+        ans++;
+        s[n-2] = '1';
+    }
+    vector<int> validGaps;
+    int currentGap = 0;
+    int beginGap = 0;
+    int startIdx;
     for(int i = 0; i<n; i++){
-        maxi = max(maxi, a[i]*b[i] - c[i]);
+        if(s[i] == '0') beginGap++;
+        else{
+            startIdx = i;
+            break;
+        }
+    }
+    if(beginGap > 0){
+        if(beginGap == 2) ans++;
+        else if(beginGap >= 3){
+            ans++;
+            validGaps.pb(beginGap-2);
+        }
+    }
+    for(int i = startIdx; i<n; i++){
+        if(s[i] == '0') currentGap++;
+        else{
+            if(currentGap > 0) validGaps.pb(currentGap);
+            currentGap = 0;
+        }
+    }
+    int endGap = 0;
+    for(int i = n-1; i>=0; i--){
+        if(s[i] == '0') endGap++;
+        else break;
+    }
+    
+    if(endGap > 0){
+        if(endGap == 2) ans++;
+        else if(endGap >= 3){
+            ans++;
+            validGaps.pb(endGap-2);
+        }
     }
 
-    if(maxi<=0){
-        cout<<-1<<endl;
-        return;
+    // for(auto i: validGaps) cout<<i<<" ";
+    // cout<<endl;
+
+    for(auto gap : validGaps){
+        ans += gap/3;
     }
-
-    cout<<(x+ maxi-1)/maxi << endl;
-
-
+    cout<<ans<<endl;
     // Output
 
 

@@ -46,34 +46,14 @@ const ll MOD = 1e9 + 7;
 */
 
 void solve(){
-    ll n, x; cin>>n>>x;
-    vector<ll> a(n), b(n), c(n);
-    for(int i = 0; i<n; i++) cin>>a[i]>>b[i]>>c[i];
-
-    ll temp = 0;
-    for(int i = 0; i<n; i++){
-        temp += (b[i]-1)*a[i];
+    int n; cin>>n;
+    int temp = 1;
+    cout<<temp<<" ";
+    for(int i = 1; i<=n-1; i++){
+        temp += i;
+        cout<<temp<<" ";
     }
-
-    if(temp >= x){
-        cout<<0<<endl;
-        return;
-    }
-
-    x -= temp;
-
-    ll maxi = -1e9;
-    for(int i = 0; i<n; i++){
-        maxi = max(maxi, a[i]*b[i] - c[i]);
-    }
-
-    if(maxi<=0){
-        cout<<-1<<endl;
-        return;
-    }
-
-    cout<<(x+ maxi-1)/maxi << endl;
-
+    cout<<endl;
 
     // Output
 

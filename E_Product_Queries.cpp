@@ -64,10 +64,14 @@ void solve(){
     for(ll product = 1; product<=n; product++){
         if(dp[product] == 1) continue;
         for(ll factor = 2; factor*factor <= product; factor++){
-            if(product&factor == 0){
+            if(product%factor == 0){
                 ll otherFactor = product/factor;
-                dp[product] = min(dp[product], 1 + dp[product/factor]);
-                dp[product] = min(dp[product], 1 + dp[product/otherFactor]);
+                if (s.count(factor)) {
+                    dp[product] = min(dp[product], 1 + dp[product / factor]);
+                }
+                if (s.count(otherFactor)) {
+                    dp[product] = min(dp[product], 1 + dp[product / otherFactor]);
+                }
             }
         }
     }
