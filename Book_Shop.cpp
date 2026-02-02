@@ -36,6 +36,7 @@ using pll = pair<ll,ll>;
 #define sz(x) (int)(x).size()
 
 const int INF = 1e9;
+const int NEGINF = -1e8;
 const ll LINF = 1e18;
 const ld EPS = 1e-9;
 const ll MOD = 1e9 + 7;
@@ -45,27 +46,40 @@ const ll MOD = 1e9 + 7;
 
 */
 
-int rec(int i, int j, vector<vector<char>> &grid){
-    if(i == grid[0].size()-1 && j == grid[0].size()-1) return 1;
-    if(i>=grid[0].size() || j>=grid[0].size()) return 0;
+int rec(int i, int x, vector<int> &price, vector<int> &pages, vector<vector<int>> &dp){
+    if(i == price.size()) return 0;
+    if(dp[i][x] != -1) return dp[i][x];
 
-    int ans = 0;
-    //move down
-    ans = (ans + (rec(i+1, j, grid))%MOD)%MOD;
-    //move right
-    ans = (ans + (rec(i, j+1, grid))%MOD)%MOD;
-
-    return ans;
+    //don't take this
+    int notTake = 0 + rec(i+1, x, price, pages, dp);
+    //take this
+    int take = 0;
+    if(x>=price[i]) take = pages[i] + rec(i+1, x - price[i], price, pages, dp);
+    return dp[i][x] = max(take, notTake);
 }
 
 void solve(){
-    int n; cin>>n;
-    vector<vector<char>> grid(n, vector<char>(n));
-    for(int i = 0; i<n; i++){
-        for(int j = 0; j<n; j++) cin>>grid[i][j];
+    int n, x; cin>>n>>x;
+    vector<int> price(n);
+    for(int i = 0; i<n; i++) cin>>price[i];
+    vector<int> pages(n);
+    for(int i = 0; i<n; i++) cin>>pages[i];
+    vector<vector<int>> dp(n+1, vector<int>(x+1, 0));
+
+    // cout<<rec(0, x, price, pages, dp)<<endl;
+
+    for(int i = n-1; i>=0; i--){
+        for(int w = 0; w<=x; w++){
+            //don't take this
+            int notTake = 0 + dp[i+1][w];
+            //take this
+            int take = 0;
+            if(w>=price[i]) take = pages[i] + dp[i+1][w - price[i]];
+            dp[i][w] = max(take, notTake);
+        }
     }
 
-    cout<<rec(0, 0, grid)<<endl;
+    cout<<dp[0][x]<<endl;
 
     // Output
 
@@ -78,7 +92,6 @@ int main(){
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
     cout.tie(nullptr);
-    int tc; cin >> tc;
-    while (tc--) solve();
+    solve();
     return 0;
 }

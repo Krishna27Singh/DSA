@@ -42,31 +42,28 @@ const ll MOD = 1e9 + 7;
 
 /*
 ****************************************** APPROACH **************************************************
-
 */
 
-int rec(int i, int j, vector<vector<char>> &grid){
-    if(i == grid[0].size()-1 && j == grid[0].size()-1) return 1;
-    if(i>=grid[0].size() || j>=grid[0].size()) return 0;
+int rec(int target, vector<int> &coins, vector<int> &dp){
+    if(target == 0) return 1;
+    if(target < 0) return 0;
+    if(dp[target] != -1) return dp[target];
 
-    int ans = 0;
-    //move down
-    ans = (ans + (rec(i+1, j, grid))%MOD)%MOD;
-    //move right
-    ans = (ans + (rec(i, j+1, grid))%MOD)%MOD;
+    int sum = 0;
+    for(auto c : coins){
+        sum = (sum + (rec(target - c, coins, dp))%MOD)%MOD;
+    }
 
-    return ans;
+    return dp[target] = sum;
 }
 
 void solve(){
-    int n; cin>>n;
-    vector<vector<char>> grid(n, vector<char>(n));
-    for(int i = 0; i<n; i++){
-        for(int j = 0; j<n; j++) cin>>grid[i][j];
-    }
+    int n, x; cin>>n>>x;
+    vector<int> coins(n);
+    for(int i = 0; i<n; i++) cin>>coins[i];
+    vector<int> dp(x+1, -1);
 
-    cout<<rec(0, 0, grid)<<endl;
-
+    cout<<rec(x, coins, dp)<<endl;
     // Output
 
 
@@ -78,7 +75,6 @@ int main(){
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
     cout.tie(nullptr);
-    int tc; cin >> tc;
-    while (tc--) solve();
+    solve();
     return 0;
 }

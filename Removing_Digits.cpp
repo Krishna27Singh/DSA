@@ -45,27 +45,41 @@ const ll MOD = 1e9 + 7;
 
 */
 
-int rec(int i, int j, vector<vector<char>> &grid){
-    if(i == grid[0].size()-1 && j == grid[0].size()-1) return 1;
-    if(i>=grid[0].size() || j>=grid[0].size()) return 0;
+int rec(int n, vector<int> &dp){
+    if(n/10 == 0) return 1;
+    if(dp[n] != -1) return dp[n];
 
-    int ans = 0;
-    //move down
-    ans = (ans + (rec(i+1, j, grid))%MOD)%MOD;
-    //move right
-    ans = (ans + (rec(i, j+1, grid))%MOD)%MOD;
-
-    return ans;
+    int num = n;
+    int ans = INF;
+    while(num){
+        int digit = num%10;
+        num /= 10;
+        if(digit == 0) continue;
+        ans = min(ans, 1 + rec(n-digit, dp));
+    }
+    return dp[n] = ans;
 }
 
 void solve(){
     int n; cin>>n;
-    vector<vector<char>> grid(n, vector<char>(n));
-    for(int i = 0; i<n; i++){
-        for(int j = 0; j<n; j++) cin>>grid[i][j];
+    vector<int> dp(n+1, 0);
+
+    // cout<<rec(n, dp)<<endl;
+
+    for(int i = 0; i<10; i++) dp[i] = 1;
+    for(int num = 10; num<=n; num++){
+        int temp = num;
+        int ans = INF;
+        while(temp){
+            int digit = temp%10;
+            temp /= 10;
+            if(digit == 0) continue;
+            ans = min(ans, 1 + dp[num-digit]);
+        }
+        dp[num] = ans;
     }
 
-    cout<<rec(0, 0, grid)<<endl;
+    cout<<dp[n]<<endl;
 
     // Output
 
@@ -78,7 +92,6 @@ int main(){
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
     cout.tie(nullptr);
-    int tc; cin >> tc;
-    while (tc--) solve();
+    solve();
     return 0;
 }

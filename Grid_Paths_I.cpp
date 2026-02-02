@@ -45,17 +45,18 @@ const ll MOD = 1e9 + 7;
 
 */
 
-int rec(int i, int j, vector<vector<char>> &grid){
-    if(i == grid[0].size()-1 && j == grid[0].size()-1) return 1;
-    if(i>=grid[0].size() || j>=grid[0].size()) return 0;
+int rec(int i, int j, vector<vector<char>> &grid, vector<vector<int>> &dp, int n){
+    if(i>=n || j>=n) return 0;
+    if(grid[i][j] == '*') return 0;
+    if(i == n-1 && j == n-1) return 1;
+    if(dp[i][j] != -1) return dp[i][j];
 
-    int ans = 0;
     //move down
-    ans = (ans + (rec(i+1, j, grid))%MOD)%MOD;
+    int down = (rec(i+1, j, grid, dp, n))%MOD;
     //move right
-    ans = (ans + (rec(i, j+1, grid))%MOD)%MOD;
+    int right = (rec(i, j+1, grid, dp, n))%MOD;
 
-    return ans;
+    return dp[i][j] = (down + right)%MOD;
 }
 
 void solve(){
@@ -64,8 +65,9 @@ void solve(){
     for(int i = 0; i<n; i++){
         for(int j = 0; j<n; j++) cin>>grid[i][j];
     }
+    vector<vector<int>> dp(n+1, vector<int>(n+1, -1));
 
-    cout<<rec(0, 0, grid)<<endl;
+    cout<<rec(0, 0, grid, dp, n)%MOD<<endl;
 
     // Output
 
@@ -78,7 +80,6 @@ int main(){
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
     cout.tie(nullptr);
-    int tc; cin >> tc;
-    while (tc--) solve();
+    solve();
     return 0;
 }

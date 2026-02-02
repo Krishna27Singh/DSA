@@ -45,27 +45,39 @@ const ll MOD = 1e9 + 7;
 
 */
 
-int rec(int i, int j, vector<vector<char>> &grid){
-    if(i == grid[0].size()-1 && j == grid[0].size()-1) return 1;
-    if(i>=grid[0].size() || j>=grid[0].size()) return 0;
+int rec(int idx, int len, vector<int> &a, vector<vector<int>> &dp){
+    if(idx == a.size()){
+        if(len == 0) return 0;
+        return INF;
+    } 
+    if(dp[idx][len] != -1) return dp[idx][len];
 
-    int ans = 0;
-    //move down
-    ans = (ans + (rec(i+1, j, grid))%MOD)%MOD;
-    //move right
-    ans = (ans + (rec(i, j+1, grid))%MOD)%MOD;
+    //not take this element
+    int notTake = 1 + rec(idx+1, len, a, dp);
 
-    return ans;
+    //take this element
+    int take = 0;
+    if(len == 0){
+        take = rec(idx+1, a[idx], a, dp);
+    }
+    else{
+        take = rec(idx+1, len-1, a, dp);
+    }
+    return dp[idx][len] = min(take, notTake);
 }
 
 void solve(){
-    int n; cin>>n;
-    vector<vector<char>> grid(n, vector<char>(n));
-    for(int i = 0; i<n; i++){
-        for(int j = 0; j<n; j++) cin>>grid[i][j];
-    }
-
-    cout<<rec(0, 0, grid)<<endl;
+        const int N = 200000 + 5;
+        int n, a[N], dp[N], buc[N];
+        cin >> n;
+        dp[0] = 0;
+        for (int i = 1; i <= n; i++) buc[i] = 0x3f3f3f3f;
+        for (int i = 1; i <= n; i++) {
+            cin >> a[i];
+            dp[i] = min(dp[i - 1] + 1, buc[a[i]]);
+            buc[a[i]] = min(buc[a[i]], dp[i - 1]);
+        }
+        cout << n - dp[n] << '\n';
 
     // Output
 
