@@ -45,50 +45,50 @@ const ll MOD = 1e9 + 7;
 
 */
 
-int f(int idx, int prev, vector<int> &a, vector<vector<int>> &dp){
-    if(idx == a.size()) return 0;
-    if(dp[idx][prev+1] != -1) return dp[idx][prev+1];
-
-    int notTake = 0 + f(idx+1, prev, a, dp);
-    int take = 0;
-    if(prev == -1 || a[idx] > a[prev]) take = 1 + f(idx+1, idx, a, dp);
-    return dp[idx][prev+1] = max(take, notTake);
-}
-
 void solve(){
-    int n; cin>>n;
-    vector<int> a(n); 
-    for(int i = 0; i<n; i++) cin>>a[i];
-    // vector<vector<int>> dp(n+1, vector<int>(n+1, -1));
+    int n, x, y; cin>>n>>x>>y;
 
-    // cout<<f(0, -1, a, dp)<<endl;
+    // vector<pair<int, int>> modu;
+    // for(int i = 0; i<n; i++){
+    //     int temp; cin>>temp;
+    //     int modulo = temp%x;
+    //     modu.pb(mp(modulo, temp));
+    // }
+    // sort(all(modu));
+    // // for(auto i: modu) cout<<i.first<<" "<<i.second<<endl;
+    // // cout<<endl;
 
-    vector<int> lis;
-    vector<int> insertedAt(n);
-    for(int i = 0; i<n; i++){
-        if(lis.empty() || lis.back() < a[i]){
-            lis.pb(a[i]);
-            insertedAt[i] = lis.size();
+    // int tax = x - y;
+    // int ans = 0;
+    // for(int i = 0; i<n-1; i++){
+    //     int temp = modu[i].second - modu[i].first;
+    //     ans += temp - (temp/x)*tax;
+    // }
+
+    // cout<<ans+modu[n-1].second<<endl;
+
+        vector<long long> a(n);
+        for (int i = 0; i < n; i++) {
+            cin >> a[i];
         }
-        else{
-            auto it = lower_bound(lis.begin(), lis.end(), a[i]);
-            *it = a[i];
-            insertedAt[i] = it-lis.begin()+1;
+
+        long long S_all = 0;
+        for (int i = 0; i < n; i++) {
+            S_all += a[i] / x;
         }
-    }
-    cout<<lis.size()<<endl;
-    vector<int> finalLis;
-    int len = lis.size();
-    for(int i = n-1; i>=0; i--){
-        if(insertedAt[i] == len){
-            finalLis.pb(a[i]);
-            len--;
+
+        long long ans = 0;
+
+        for (int i = 0; i < n; i++) {
+            long long Si = S_all - (a[i] / x);
+            long long final_amount = a[i] + Si * y;
+            ans = max(ans, final_amount);
         }
-    }
-    reverse(all(finalLis));
-    for(auto i: finalLis) cout<<i<<" ";
-    cout<<endl;
-    
+
+        cout << ans <<endl;
+
+
+
     // Output
 
 
@@ -100,6 +100,7 @@ int main(){
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
     cout.tie(nullptr);
-    solve();
+    int tc; cin >> tc;
+    while (tc--) solve();
     return 0;
 }

@@ -42,53 +42,39 @@ const ll MOD = 1e9 + 7;
 
 /*
 ****************************************** APPROACH **************************************************
+standing at an index, we can either take that person in the elevator or not take that person in the elevator
+I need to maintain the sum of the current people in that elevator and it should not exceed x
+
+maximum sum can be upto 2e10
+if i maintain dp states i, sum. the tc will go upto 4e11
+
+what the problem is? 
+we can't store sum as a state
 
 */
 
-int f(int idx, int prev, vector<int> &a, vector<vector<int>> &dp){
-    if(idx == a.size()) return 0;
-    if(dp[idx][prev+1] != -1) return dp[idx][prev+1];
-
-    int notTake = 0 + f(idx+1, prev, a, dp);
-    int take = 0;
-    if(prev == -1 || a[idx] > a[prev]) take = 1 + f(idx+1, idx, a, dp);
-    return dp[idx][prev+1] = max(take, notTake);
-}
-
 void solve(){
-    int n; cin>>n;
-    vector<int> a(n); 
-    for(int i = 0; i<n; i++) cin>>a[i];
-    // vector<vector<int>> dp(n+1, vector<int>(n+1, -1));
-
-    // cout<<f(0, -1, a, dp)<<endl;
-
-    vector<int> lis;
-    vector<int> insertedAt(n);
-    for(int i = 0; i<n; i++){
-        if(lis.empty() || lis.back() < a[i]){
-            lis.pb(a[i]);
-            insertedAt[i] = lis.size();
-        }
-        else{
-            auto it = lower_bound(lis.begin(), lis.end(), a[i]);
-            *it = a[i];
-            insertedAt[i] = it-lis.begin()+1;
-        }
-    }
-    cout<<lis.size()<<endl;
-    vector<int> finalLis;
-    int len = lis.size();
-    for(int i = n-1; i>=0; i--){
-        if(insertedAt[i] == len){
-            finalLis.pb(a[i]);
-            len--;
+    int n, x; cin >> n >> x;
+    int peopleWeights[n];
+    for (auto &x : peopleWeights) cin >> x;
+    vector <pair <int, int>> dp (1 << n);
+    dp[0] = {1, 0};
+    for (int subset = 1; subset < (1 << n); subset++) {
+        dp[subset] = {21, 0};
+        for (int person = 0; person < n; person++) {
+            if ((subset >> person) & 1) {
+                auto [rides, weight] = dp[subset ^ (1 << person)];
+                if (weight + peopleWeights[person] > x) {
+                    rides++;
+                    weight = min (peopleWeights[person], weight);
+                }
+                else weight += peopleWeights[person];
+                dp[subset] = min (dp[subset], {rides, weight});
+            }
         }
     }
-    reverse(all(finalLis));
-    for(auto i: finalLis) cout<<i<<" ";
-    cout<<endl;
-    
+    cout << dp[(1 << n) - 1].first;
+
     // Output
 
 
