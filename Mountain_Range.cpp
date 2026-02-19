@@ -1,93 +1,107 @@
 #include <iostream>
-#include <cstdio>
-#include <cstdlib>
-#include <algorithm>
-#include <cmath>
 #include <vector>
-#include <set>
-#include <map>
-#include <unordered_set>
-#include <unordered_map>
-#include <queue>
-#include <ctime>
-#include <cassert>
-#include <complex>
-#include <string>
-#include <cstring>
-#include <chrono>
-#include <random>
-#include <bitset>
-#include <array>
-#include <climits>
-#include <numeric>
+#include <algorithm>
+#include <stack>
+
 using namespace std;
 
-using ll = long long;
-using uint = unsigned int;
-using ull = unsigned long long;
-using ld = long double;
-using pii = pair<int,int>;
-using pll = pair<ll,ll>;
+const int MAXN = 200005;
 
-#define pb push_back
-#define mp make_pair
-#define all(x) (x).begin(), (x).end()
-#define rall(x) (x).rbegin(), (x).rend()
-#define sz(x) (int)(x).size()
+int n;
+int h[MAXN];
+int L[MAXN], R[MAXN];
+int dp[MAXN];
+int tree[4 * MAXN];
 
-const int INF = 1e9;
-const ll LINF = 1e18;
-const ld EPS = 1e-9;
-const ll MOD = 1e9 + 7;
-
-/*
-****************************************** APPROACH **************************************************
-h1 h2 h3 ... hn
-a -> b
-if h(a) > h(b) && h(a) > any mountain in between a and b
-
-maximum visit of mountains?
-start an any mountain
-
-two cases
-one from start to end
-ont form end to start
-
-landing at a mountain or not that is my choice and it will eventually decide the answer actually
-
-I can use the dp states [idx][current total mountains] but this is square complexity
-
-*/
-
-int f(int idx, vector<int> &h){
-
-    // land on this mountain
-    int land = 1 + f(idx + 1, h);
-    //not land on this mountian
-    int notLand = 
+// Segment Tree: Point Update
+void update(int node, int start, int end, int idx, int val) {
+    if (start == end) {
+        tree[node] = val;
+        return;
+    }
+    int mid = start + (end - start) / 2;
+    if (start <= idx && idx <= mid) {
+        update(2 * node, start, mid, idx, val);
+    } else {
+        update(2 * node + 1, mid + 1, end, idx, val);
+    }
+    tree[node] = max(tree[2 * node], tree[2 * node + 1]);
 }
 
-
-
-void solve(){
-    int n; cin>>n;
-    vector<int> h(n);
-    for(int i = 0; i<n; i++) cin>>h[i];
-
-
-
-    // Output
-
-
+// Segment Tree: Range Maximum Query
+int query(int node, int start, int end, int l, int r) {
+    // If query range is invalid or completely outside the node's range
+    if (r < start || end < l || l > r) {
+        return 0;
+    }
+    // If the node's range is completely inside the query range
+    if (l <= start && end <= r) {
+        return tree[node];
+    }
+    int mid = start + (end - start) / 2;
+    int p1 = query(2 * node, start, mid, l, r);
+    int p2 = query(2 * node + 1, mid + 1, end, l, r);
+    return max(p1, p2);
 }
 
-/*************************************************************************************************** */
+int main() {
+    // Optimize standard I/O operations for speed
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
 
-int main(){
-    ios::sync_with_stdio(false);
-    cin.tie(nullptr);
-    cout.tie(nullptr);
-    int tc; cin >> tc;
-    while (tc--) solve();
+    if (!(cin >> n)) return 0;
+
+    vector<pair<int, int>> mountains;
+    for (int i = 1; i <= n; i++) {
+        cin >> h[i];
+        mountains.push_back({h[i], i});
+    }
+
+    // 1. Calculate L[i]: Nearest mountain to the left that is >= h[i]
+    stack<int> st;
+    for (int i = 1; i <= n; i++) {
+        while (!st.empty() && h[st.top()] < h[i]) {
+            st.pop();
+        }
+        L[i] = st.empty() ? 0 : st.top();
+        st.push(i);
+    }
+
+    // Clear stack for reuse
+    while (!st.empty()) st.pop();
+
+    // 2. Calculate R[i]: Nearest mountain to the right that is >= h[i]
+    for (int i = n; i >= 1; i--) {
+        while (!st.empty() && h[st.top()] < h[i]) {
+            st.pop();
+        }
+        R[i] = st.empty() ? n + 1 : st.top();
+        st.push(i);
+    }
+
+    // 3. Sort mountains primarily by height ascending
+    sort(mountains.begin(), mountains.end());
+
+    int max_visited = 0;
+
+    // 4. Process mountains and calculate DP
+    for (auto& m : mountains) {
+        int u = m.second; // original index
+        
+        // Query the maximum DP value in the valid left and right ranges
+        int left_max = query(1, 1, n, L[u] + 1, u - 1);
+        int right_max = query(1, 1, n, u + 1, R[u] - 1);
+        
+        // DP transition
+        dp[u] = 1 + max(left_max, right_max);
+        
+        // Update the segment tree and track the global maximum
+        update(1, 1, n, u, dp[u]);
+        max_visited = max(max_visited, dp[u]);
+    }
+
+    // 5. Output the result
+    cout << max_visited << "\n";
+
     return 0;
 }

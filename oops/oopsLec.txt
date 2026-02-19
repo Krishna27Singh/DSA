@@ -1,0 +1,27 @@
+A local class cannot access the local variables of the enclosing function
+however it can access the static variables of the enclosing function and exteral variables/global variables and functions
+A global class can access the global/static varibales! 
+
+NESTED class
+class A{
+    class B{
+
+    }
+}
+# class B cannot access members of class access
+# scope of B is limited to A 
+# if you want to create objects of class B we need to proceed the name of class A 
+# A::B obj we can make object of B like this
+
+EMPTY CLASS 
+NO DATA MEMBERS NO MEMBER function
+class class_Name{
+
+};
+
+ANONYMOUS CLASS 
+# no name for the class
+class {
+
+} obj1, obj2;
+# we have to declare the objects just after the class declaration
