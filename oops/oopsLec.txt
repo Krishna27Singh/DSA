@@ -21,7 +21,45 @@ class class_Name{
 
 ANONYMOUS CLASS 
 # no name for the class
-class {
+class {'
 
 } obj1, obj2;
 # we have to declare the objects just after the class declaration
+
+COMPOSITION AND CONTAINERSHIP AND COMPLEX objects
+class B{
+
+};
+class C{
+
+};
+class A{
+    B objB;
+    C objC;
+};
+# class A contains objects of class B and CLASS CLASS C 
+# through object of class A we can call members and member function of class B and class C 
+# composition is a relationship wherer one clas sown another class completely
+# if the parent object is destroyed the child object is also destroyed
+
+FRIEND FUNCTION 
+# friend function can acces private, public or protected members of that class
+# in some cases it cannot
+# friend function does not have any object by default
+
+class Rectangle{
+float l, b;
+public: 
+    void Input();
+    friend void area(Rectangle &);
+};
+
+void Rectangle :: Input(){
+    cin>>l>>b;
+}
+
+void area(Rectangle &r){
+    float area = r.l * r.b;
+    cout<<area<<endl;
+    return;
+}
