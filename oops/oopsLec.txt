@@ -63,3 +63,52 @@ void area(Rectangle &r){
     cout<<area<<endl;
     return;
 }
+
+int main(){
+    Rectangle r1; 
+    r1.Input();
+    area(r);
+    return 0;
+}
+# not all the work which is done by member function should be done by the friend function becaause it violates the data hiding principal of cpp.
+# friend function do not has a "this" pointer.
+# if you want to work with the data members of two classes, there comes the need of friend function!
+# friend function can be declared in either private or public.
+
+class B {}; -> forward declaration so that it does not give error in class A 
+class A{
+int a;
+friend void sum( A&, B& );
+};
+
+class B{
+int b; 
+public:
+    friend void sum( A&, B&);
+};
+
+void sum( A& Aobj, B& Bobj){
+    cout<< Aobj.a + Bobj.b <<endl;
+}
+
+int main(){
+    A obj1;
+    B obj2;
+    obj1.Input();
+    obj2.Input();
+    sum(obj1, obj2);
+    return 0;
+}
+
+ft& addFeetAndInches(ft& f, in& i){
+    ft temp;
+    temp.feet = f.feet + (i.inches)/12.0 ;
+    return temp;
+}
+
+int main(){
+    ft f1, f2;
+    in i1;
+    f1.input();
+    f2 = addFeetAndInches(f1, i1);
+}
