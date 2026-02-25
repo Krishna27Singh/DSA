@@ -20,6 +20,7 @@
 #include <array>
 #include <climits>
 #include <numeric>
+#include<stack>
 using namespace std;
 
 using ll = long long;
@@ -50,22 +51,37 @@ void solve(){
     vector<int> a(n);
     for(int i = 0; i<n; i++) cin>>a[i];
 
-    int ans = 0;
-    for(int i = 0; i<n; i++){
-        // cout<<"i: "<<i<<endl;
-        if((i+1 < n) && (a[i] + 1 == a[i+1])){
-            ans++;
-            int left = a[i];
-            // cout<<"exe: "<<left<<" "<<right<<endl;
-            while(i+1 < n && (a[i+1] > left && a[i+1]<=a[i]+1)){
-                // cout<<"exe1: "<<left<<" "<<right<< endl;
-                i++;
-            }
-        }
-        else ans++;
+    // int ans = 0;
+    // for(int i = 0; i<n; i++){
+    //     if((i+1 < n) && (a[i] + 1 == a[i+1])){
+    //         ans++;
+    //         int left = a[i];
+    //         while(i+1 < n && (a[i+1] > left && a[i+1]<=a[i]+1)){
+    //             i++;
+    //         }
+    //     }
+    //     else ans++;
+    // }
+
+    // cout<<ans<<endl;
+
+    stack<int> st;
+    vector<int> sufPref(n);
+    for(int i = n-1; i>=0; i--){
+        while((!st.empty()) && st.top() == a[i] + 1) st.pop();
+        st.push(a[i]);
+        sufPref[i] = st.size();
     }
 
+    while(!st.empty()) st.pop();
+
+    
+    int ans = 0;
+    for(auto i: sufPref) ans += i;
     cout<<ans<<endl;
+
+
+    // cout<<st.size()<<endl;
 
     // Output
 

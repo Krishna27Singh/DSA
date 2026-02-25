@@ -56,16 +56,16 @@ K <= 1e9
 */
 
 void solve(){
-    int n, k; cin>>n>>k;
-    vector<int> a(n);
-    unordered_map<int, int> mpp;
+    ll n, k; cin>>n>>k;
+    vector<ll> a(n);
+    unordered_map<ll, ll> mpp;
     for(int i = 0; i<n; i++){
         cin>>a[i];
         mpp[a[i]]++;
     }
 
-    set<int> s(a.begin(), a.end());
-    int mex = 0;
+    set<ll> s(a.begin(), a.end());
+    ll mex = 0;
     for(auto i: s){
         if(i == mex) mex++;
         else break;
@@ -74,7 +74,8 @@ void solve(){
     sort(all(a));
 
     if(mex == n){
-        cout<< (mex*(mex-1))/2<<endl;
+        ll ans = (mex*(mex-1))/2;
+        cout<< ans<<endl;
         return;
     }
 
