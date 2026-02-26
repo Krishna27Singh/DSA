@@ -45,8 +45,27 @@ const ll MOD = 1e9 + 7;
 
 */
 
+int rec(int i, int j, vector<vector<char>> &grid){
+    if(i == grid[0].size()-1 && j == grid[0].size()-1) return 1;
+    if(i>=grid[0].size() || j>=grid[0].size()) return 0;
+
+    int ans = 0;
+    //move down
+    ans = (ans + (rec(i+1, j, grid))%MOD)%MOD;
+    //move right
+    ans = (ans + (rec(i, j+1, grid))%MOD)%MOD;
+
+    return ans;
+}
+
 void solve(){
-    
+    int n; cin>>n;
+    vector<vector<char>> grid(n, vector<char>(n));
+    for(int i = 0; i<n; i++){
+        for(int j = 0; j<n; j++) cin>>grid[i][j];
+    }
+
+    cout<<rec(0, 0, grid)<<endl;
 
     // Output
 

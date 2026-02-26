@@ -46,7 +46,19 @@ const ll MOD = 1e9 + 7;
 */
 
 void solve(){
-    
+    int n, m, d; cin>>n>>m>>d;
+
+    int t = 1;
+    int temp = m;
+    while(temp <= d){
+        temp +=m;
+        t++;
+    }
+
+    int ans = n/t;
+    if(n%t) ans++;
+    if(ans > n) ans--;
+    cout<<ans<<endl;
 
     // Output
 

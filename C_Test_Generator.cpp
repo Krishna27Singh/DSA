@@ -42,11 +42,56 @@ const ll MOD = 1e9 + 7;
 
 /*
 ****************************************** APPROACH **************************************************
+bit position which are not set in m should also be not set ai
+bit position can be set/not set at set bit positions of m
+
 
 */
 
 void solve(){
-    
+    int s, m; cin>>s>>m;
+
+    if(s <= m){
+        cout<<1<<endl;
+        return;
+    }
+
+    int ans = 0;
+    int bits = 0;
+    int n = m;
+    while (n > 0) {
+        bits++;
+        n >>= 1;
+    }
+    vector<int> positions;                                   
+    for(int bit = 0; bit<bits; bit++){
+        if((m>>bit)&1) positions.push_back(bit);
+    }
+    reverse(all(positions));
+    for(auto i: positions) cout<<i<<endl;
+
+    for(auto bit : positions){
+        cout<<"bit: "<<bit<<endl;
+        cout<<"S: "<<s<<endl;
+        while(s > 0){
+            cout<<s<<endl;
+            // cout<<(m-(1<<bit))<<endl;
+            // cout<<(1<<bit)<<endl;
+            // cout<<"exe1"<<endl;
+            s -= (1<<bit);
+            ans++;
+        }
+        if( s == 0){
+            cout<<ans<<endl;
+            return;
+        }
+        if(s < 0){
+            s += (1<<bit);
+            ans--;
+        }
+    }
+
+    cout<<-1<<endl;
 
     // Output
 
