@@ -55,7 +55,7 @@ void solve(){
     ll maxi = min(p/2, q/3);
 
     
-    if (q - p > maxi) {
+    if (q - p > maxi) { 
         cout << "Alice" << endl;
     } else {
         cout << "Bob" << endl;

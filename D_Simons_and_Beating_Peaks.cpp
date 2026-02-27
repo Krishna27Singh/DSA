@@ -43,10 +43,83 @@ const ll MOD = 1e9 + 7;
 /*
 ****************************************** APPROACH **************************************************
 
+array a should have no element ai such that ai = max({ai-1, ai, ai+1})
+operations we can perform :
+1) remove ai-1
+2) remove ai+1
+minimum operations such that the array becomes beautiful?
+
+can this be solved using dp?
+
+make use of the fact that the array is permuatation initially ***
+
+maintain two pointers i and j such that i <= j in the array a, initially i = 0 and j = n-1
+in the array ai, ai+1, ai+2.... aj -> lets call this array a*
+maxi1 -> maximum element in the array a*
+maxi2 -> seecond maximum element in the array a*
+maxi1 and maxi2 should not be terminal elements in the array a*
+
+we have to remove all the elements in between maxi1 and maxi 2 and 
+we have to remove all the elements from maxi1 to that end of the array where maxi2 is not present
+
 */
 
+
 void solve(){
-    
+    int n; cin>>n;
+    vector<int> a(n);
+    for(int i = 0; i<n; i++) cin>>a[i];
+
+    int ans = 0;
+
+    int maxi1 = INT_MIN, maxi2 = INT_MIN;
+    int maxi1Idx = -1, maxi2Idx = -1;
+    for(int i = 0; i<n; i++){
+        if(a[i] > maxi1){
+            maxi2 = maxi1;
+            maxi2Idx = maxi1Idx;
+            maxi1 = a[i];
+            maxi1Idx = i;
+        }
+        else if(a[i] > maxi2){
+            maxi2 = a[i];
+            maxi2Idx = i;
+        }
+    }
+
+    if(maxi2 < maxi1){
+        ans += (n-1)-maxi1Idx;
+        ans += (maxi1Idx-maxi2Idx-1);
+        while(true){
+            int i = maxi2Idx;
+            // we need to search for the maximum element till i (not including i)
+            int maxTillI = INT_MIN;
+            int maxTillIIdx = -1;
+            for(int j = 0; j<i; j++){
+                if(a[j] > maxTillI){
+                    maxTillI = a[j];
+                    maxTillIIdx = j;
+                }
+            }
+            if(maxTillI == i - 1){
+                maxi2Idx = maxTillIIdx;
+            }
+            else if(maxTillI == 0){
+                cout<<ans<<endl;
+                return;
+            }
+            else{
+                ans += i - maxTillI - 1;
+                maxi2Idx = maxTillIIdx;
+            }
+        }
+    }
+    else{
+        ans += maxi1Idx;
+        ans += (maxi2Idx-maxi1Idx-1);
+    }
+
+
 
     // Output
 

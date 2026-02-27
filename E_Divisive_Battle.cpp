@@ -42,44 +42,78 @@ const ll MOD = 1e9 + 7;
 
 /*
 ****************************************** APPROACH **************************************************
-n flowers are there with 
-ai -> beauty of ith flower
+if two numbers are prime and they are not in sorted order -> alice always wins
 
-choose m flowers
-iterater from left to right
-take / not take
-ai >= bi
-
-operation ->
-choose minimum integer k and place it anywhere
- 
 */
 
+const int MAXI = 1000005;
+vector<int> mini(MAXI); 
+vector<int> val(MAXI);
+
+void calc(){
+    for(int i = 2; i < MAXI; i++) {
+        mini[i] = i;
+    } 
+    for(int i=2; i*i<MAXI; i++) {
+        if(mini[i] == i) {
+            for(int j = i*i; j < MAXI; j += i) {
+                if(mini[j] == j) {
+                    mini[j] = i;
+                }
+            }
+        }
+    }
+    val[1] = 1; 
+    for(int i = 2; i < MAXI; i++) {
+        int temp = i;
+        int p = mini[temp];
+        bool flag = true;
+        while(temp > 1) {
+            if (mini[temp] != p) {
+                flag = false;
+                break;
+            }
+            temp /= mini[temp];
+        }
+        if(flag) val[i] = p;
+        else val[i] = -1;
+    }
+}
+
+
 void solve(){
-    int n, m; cin>>n>>m;
+    int n; cin>>n;
     vector<int> a(n);
     for(int i = 0; i<n; i++) cin>>a[i];
-    vector<int> b(m);
-    for(int i = 0; i<m; i++) cin>>b[i];
-
-    int ptr1 = 0;
-    int ptr2 = 0;
-    int cnt = 0;
-    while(ptr1 < n && ptr2 < m){
-        if(a[ptr1] >= b[ptr2]){
-            cnt++;
-            ptr1++;
-            ptr2++;
-        }
-        else ptr1++;
-    }
-
-    if(cnt >= m){
-        cout<<0<<endl;
+    
+    if(is_sorted(all(a))) {
+        cout<<"Bob"<<endl;
         return;
     }
-
-    // cout<<1<<endl;
+    
+    bool flag = true;
+    for(int i = 0; i < n; i++) {
+        if(val[a[i]] == -1) {
+            flag = false;
+            break;
+        }
+    }
+    
+    if(!flag) {
+        cout<<"Alice"<<endl;
+        return;
+    }
+    
+    bool ok = true;
+    for(int i = 1; i < n; i++) {
+        if(val[a[i]] < val[a[i-1]]) {
+            ok = false;
+            break;
+        }
+    }
+    
+    if(ok) cout<<"Bob"<<endl;
+    else cout<<"Alice"<<endl;
 
     
 
@@ -91,6 +125,7 @@ void solve(){
 /*************************************************************************************************** */
 
 int main(){
+    calc();
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
     cout.tie(nullptr);

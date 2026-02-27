@@ -79,7 +79,7 @@ void solve(){
         return;
     }
 
-    int newMex = -1;
+    ll newMex = -1;
     for(auto i: s){
         if(mpp[i] >= 2){
             newMex = i;
@@ -104,7 +104,7 @@ void solve(){
 
 
     if(k == 1){
-        int ans = 0;
+        ll ans = 0;
         for(int i = 0; i<n; i++){
             if(a[i] > mex){
                 ans += mex;

@@ -58,6 +58,13 @@ void solve(){
         return;
     }
 
+    if(k >= n){
+        cout<<n*3<<endl;
+        return;
+    }
+
+    
+
     // Output
 
 

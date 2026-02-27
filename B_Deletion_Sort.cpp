@@ -42,53 +42,18 @@ const ll MOD = 1e9 + 7;
 
 /*
 ****************************************** APPROACH **************************************************
-standing at the index there are few cases
-1) continue to extend the segment
-2) end the segment here in that case we need to check if a[i] = segment len, start a new segment
 
-2 cases in starting a new segment
-1) take the value of a[i] as segment len and continue till segment len
-2) take the value of segment len afterwards
 */
 
-bool f(int idx, int len, vector<int> &b) {
-    int n = b.size();
-    
-    if (idx == n) {
-        return len == 0; 
-    }
-    
-    bool possible = false;
-    if (f(idx + 1, len + 1, b)) return true;
-
-    if (len > 0 && b[idx] == len) {
-        if (f(idx + 1, 0, b)) return true;
-    }
-
-    if (len == 0) {
-        int jumpDist = b[idx] + 1;
-        if (idx + jumpDist <= n) {
-            if (f(idx + jumpDist, 0, b)) return true;
-        }
-    }
-
-    return false;
-}
-
 void solve(){
-    int n; cin >> n;
-    vector<int> a(n+1);
-    for (int i = 1; i <= n; ++i) {
-        cin >> a[i];
-    }
+    int n; cin>>n;
+    vector<int> a(n);
+    for(int i = 0; i<n; i++) cin>>a[i];
 
-    vector<bool> dp(n+1, false);
-    dp[0] = true;
-    for (int i = 1; i <= n; ++i) {
-        if (i + a[i] <= n && dp[i-1]) dp[i + a[i]] = true;
-        if (i - a[i] - 1 >= 0 && dp[i - a[i] - 1]) dp[i] = true;
+    if(is_sorted(a.begin(), a.end())){
+        cout<<a.size()<<endl;
     }
-    cout << (dp[n] ? "YES" : "NO") << '\n';
+    else cout<<1<<endl;
 
     // Output
 

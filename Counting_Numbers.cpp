@@ -51,17 +51,21 @@ long long dp[20][11][2][2];
 ll rec(int index, int lastDigit, bool leadingZeros, bool tight, string s){
     if(index == s.size()) return 1;
     if(dp[index][lastDigit][leadingZeros][tight] != -1) return dp[index][lastDigit][leadingZeros][tight];
+
     ll ans = 0;
     int limit;
     if(tight) limit = s[index] - '0';
     else limit = 9;
+
     for(int digit = 0; digit <= limit; digit++){
         if(leadingZeros == false && digit == lastDigit) continue;
+
         bool nextLeadingZeros = (leadingZeros && digit == 0);
         bool nextTight = (tight && digit == limit);
         int nextLastDigit;
         if(nextLeadingZeros) nextLastDigit = 10;
         else nextLastDigit = digit;
+
         ans += rec(index + 1, nextLastDigit, nextLeadingZeros, nextTight, s);
     }
     
@@ -71,14 +75,17 @@ ll rec(int index, int lastDigit, bool leadingZeros, bool tight, string s){
 ll solve2(ll n){
     if(n<0) return 0;
     if(n==0) return 1;
+
     string s = to_string(n);
     memset(dp, -1, sizeof(dp));
+
     return rec(0, 10, true, true, s);
 }
 
 void solve1(){
     ll a, b; cin>>a>>b;
     ll ans = solve2(b) - solve2(a-1);
+    
     cout<<ans<<endl;
 }
 

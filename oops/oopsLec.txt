@@ -8,6 +8,7 @@ class A{
 
     }
 }
+
 # class B cannot access members of class access
 # scope of B is limited to A 
 # if you want to create objects of class B we need to proceed the name of class A 
@@ -172,12 +173,16 @@ public:
         cin>>b;
     }
     # EXAMPLE OF PARAMETESIZED CONSTRUCTOR
-    Rectangle(float len, float bre){
+    Rectangle(float &len, float &bre){
         l = len;
         b = bre;
     }
+    Rectanlge (float &side){
+        l = side;
+        b = side;
+    }
     # EXAMPLE OF COPY CONSTRUCTOR
-    Rectangle(Rectangle &r){
+    Rectangle(Rectangle &r){ 
         l = r.l;
         b = r.b;
     }
@@ -186,3 +191,76 @@ public:
         cout<<"Area of rectangle is: "<<l*b<<endl;
     }
 };
+
+int main(){
+    Rectangle r1, r2(4), r3(4, 5), r4(r3), r5 = r3;
+    # implicit -> r5 -> implicit way of calling copy constructor
+    # explicit -> r4 -> explicit way of calling copy constructor 
+    # default constructor will be called for r1, if we have only made parametrsed or copy and not default then it would have gave an error!
+    # Rectangle r1() -> error 
+    # in copy constructor we pass object by reference only otherwise it will give infinite loop 
+    # because if we pass by value then (Recangle r = r3) -> again copy constructor will be called and again (Rectangle r = r) is invoked and it becomes infinite loop!
+    # If we pass by reference then simply the reference to that is done and no copy is created!
+
+    r1.area(); -> 20
+    r2.area(); -> 16
+    r3.area(); -> 20
+    r4.area(); -> 20
+    r5.area(); -> 20
+}
+
+DESTRUCTOR FUNCTION
+# same name as class name but provided by ~
+# It is executed when the lifetime of object ends (object goes out of the scope)
+# or when it is deleted explicitly with the help of delete keyword
+# There can be atmost 1 destructor function for a class ( no destructor overloading and no parameters)
+# It can be a virtual function
+# it cannot be inherited like the constructor function
+
+class Rectangle{
+public:
+    Rectangle(){
+        cout<<"constructing object: "<<*this<<endl;
+    }
+    ~Rectangle(){
+        cout<<"destroying object: "<<*this<<endl;
+    }
+};
+
+int main(){
+    Rectangle r1, r2;
+    return 0;
+}
+
+output
+constructing object r1
+constructing object r2
+destroying function r2
+destroying object r1
+#first object r2 will be be destroyed because it will go out of the scope first 
+
+class Complex{
+int real, imaginary;
+Complex(){
+    cout<<"Enter the real part:"<<endl;
+    cin>>real;
+    cout<<"Enter the imaginary part:"<<endl;
+    cin>>imaginary;
+}
+
+friend void Sum(&Complex, &Complex);
+void Display(){
+    cout<<real<<" + i"<<imaginary<<endl;
+}
+};
+
+void sum(&Complex, &Complex){
+    a.real = a.real + b.real ;
+    a.imaginary = a.imaginary + b.imaginary;
+}
+
+int main(){
+    Complex a, b;
+    Sum(a, b);
+    a.Display();
+}

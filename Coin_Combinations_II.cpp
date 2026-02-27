@@ -49,6 +49,7 @@ int rec(int i, int target, vector<int> &coins, vector<vector<int>> &dp){
     if(target == 0) return 1;
     if(target < 0) return 0;
     if(i == coins.size()) return 0;
+    if(i == coins.size()-1 && target%coins[i]==0) return 1;
     if(dp[i][target] != -1) return dp[i][target];
 
     int sum = 0;

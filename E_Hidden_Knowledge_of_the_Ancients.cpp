@@ -53,6 +53,15 @@ void solve(){
     set<int> s;
     for(int i = 0; i<l; i++) s.insert(a[i]);
 
+    int cnt = 0;
+    int ptr1 = 0;
+    int ptr2 = l-1;
+    
+    while(ptr2<n || ptr1<n-l+1){
+        int len = ptr2-ptr1+1;
+
+    }
+
     // Output
 
 

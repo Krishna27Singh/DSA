@@ -56,7 +56,6 @@ who wins?
 void solve(){
     int n, m; cin >> n >> m;
     
-    // Max-heaps to automatically keep the largest elements at the top
     priority_queue<int> a;
     priority_queue<int> b;
     
@@ -71,27 +70,24 @@ void solve(){
 
     bool aliceTurn = true;
     
-    // Play the game until one array is empty
     while(!a.empty() && !b.empty()){
         if(aliceTurn){
             aliceTurn = false;
-            int x = a.top(); // Alice's chosen element
-            int y = b.top(); // Bob's maximal element
+            int x = a.top(); 
+            int y = b.top();
             
-            b.pop(); // Temporarily remove Bob's maximal element
+            b.pop(); 
             
             if(x < y){
-                // If y > x, y is decreased by x. Put the remaining value back.
                 b.push(y - x);
             }
-            // If x >= y, it is destroyed (we just don't push it back)
         }
         else {
             aliceTurn = true;
-            int x = b.top(); // Bob's chosen element
-            int y = a.top(); // Alice's maximal element
+            int x = b.top();
+            int y = a.top(); 
             
-            a.pop(); // Temporarily remove Alice's maximal element
+            a.pop(); 
             
             if(x < y){
                 a.push(y - x);
@@ -99,7 +95,6 @@ void solve(){
         }
     }
 
-    // Output the winner
     if(!a.empty()){
         cout << "Alice\n";
     }

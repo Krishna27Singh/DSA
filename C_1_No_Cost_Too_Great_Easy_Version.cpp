@@ -75,7 +75,6 @@ void solve(){
     }
     if(evenCnt >=2){
         cout<<0<<endl;
-        cout<<"D1"<<endl;
         return;
     }
     bool case3 = false;
@@ -92,34 +91,21 @@ void solve(){
         }
     }
 
-    // for(auto i: mpp){
-    //     cout<<i.first<<" "<<i.second<<endl;
-    // }
-
-    // bool case1 = false;
     bool case2 = false;
-    // int it = 1;
     for(auto N : a){
-        // cout<<"Iteration: "<<it<<endl;
-        for(auto i: mpp){
-            cout<<i.first<<" "<<i.second<<endl;
-        }
         if(mpp[N] >= 2){
             cout<<0<<endl;
-            cout<<"D2"<<endl;
             return;
         }
         for(int i = 2; i*i<=N; i++){
             if(N%i == 0){
                 if(mpp[i] >= 2){
                     cout<<0<<endl;
-                    cout<<"D3"<<endl;
                     return;
                 }
                 if(N/i != i){
                     if(mpp[N/i] >= 2){
                         cout<<0<<endl;
-                        cout<<"D4"<<endl;
                         return;
                     }
                 }
@@ -133,10 +119,6 @@ void solve(){
                 if(N/i != i) mpp[N/i]++;
             }
         }
-        // cout<<"check1"<<endl;
-        // for(auto i: mpp){
-        //     cout<<i.first<<" "<<i.second<<endl;
-        // }
         if(mpp[N] >= 2){
             case2 = true;
             mpp[N]--;
@@ -169,11 +151,6 @@ void solve(){
                 if(N/i != i) mpp[N/i]--;
             }
         }
-        // cout<<"check2"<<endl;
-        // for(auto i: mpp){
-        //     cout<<i.first<<" "<<i.second<<endl;
-        // }
-        // it++;
     }
 
     if(case2 || case3){

@@ -1,114 +1,112 @@
 #include <iostream>
-#include <cstdio>
-#include <cstdlib>
-#include <algorithm>
-#include <cmath>
 #include <vector>
-#include <set>
-#include <map>
-#include <unordered_set>
-#include <unordered_map>
-#include <queue>
-#include <ctime>
-#include <cassert>
-#include <complex>
-#include <string>
-#include <cstring>
-#include <chrono>
-#include <random>
-#include <bitset>
-#include <array>
-#include <climits>
-#include <numeric>
+
 using namespace std;
 
-using ll = long long;
-using uint = unsigned int;
-using ull = unsigned long long;
-using ld = long double;
-using pii = pair<int,int>;
-using pll = pair<ll,ll>;
+const int MAXA = 1000005;
+int min_prime[MAXA];
+int base_val[MAXA];
 
-#define pb push_back
-#define mp make_pair
-#define all(x) (x).begin(), (x).end()
-#define rall(x) (x).rbegin(), (x).rend()
-#define sz(x) (int)(x).size()
-
-const int INF = 1e9;
-const ll LINF = 1e18;
-const ld EPS = 1e-9;
-const ll MOD = 1e9 + 7;
-
-/*
-****************************************** APPROACH **************************************************
-a -> choose number x -> y%x == 0
-y -> choose number y -> y%x != 0
-y is removed from the array b
-
-win?
-
-
-*/
-
-void solve() {
-    int n, m;
-    cin >> n >> m;
-    
-    vector<int> a(n);
-    for (int i = 0; i < n; i++) cin >> a[i];
-    
-    vector<int> b(m);
-    int max_b = 0;
-    for (int i = 0; i < m; i++) {
-        cin >> b[i];
-        if (b[i] > max_b) max_b = b[i];
+// Precompute the smallest prime factor and the base for each number up to 10^6
+void precompute() {
+    for (int i = 2; i < MAXA; i++) {
+        min_prime[i] = i;
     }
-
-    sort(a.begin(), a.end());
-    a.erase(unique(a.begin(), a.end()), a.end());
-    int unique_a_count = a.size();
-
-    vector<int> div_count(max_b + 1, 0);
-    for (int x : a) {
-        if (x > max_b) break; 
-        for (int mult = x; mult <= max_b; mult += x) {
-            div_count[mult]++;
+    for (int i = 2; i * i < MAXA; i++) {
+        if (min_prime[i] == i) {
+            for (int j = i * i; j < MAXA; j += i) {
+                if (min_prime[j] == j) {
+                    min_prime[j] = i;
+                }
+            }
         }
     }
-
-    int aliceExtra = 0;
-    int bobExtra = 0;
-    int game = 0;
-
-    for (int i = 0; i < m; i++) {
-        int cnt = div_count[b[i]];
-        if (cnt == unique_a_count) {
-            aliceExtra++; 
-        } else if (cnt > 0) {
-            game++;       
+    
+    base_val[1] = 1;
+    for (int i = 2; i < MAXA; i++) {
+        int temp = i;
+        int p = min_prime[temp];
+        bool is_prime_power = true;
+        
+        while (temp > 1) {
+            if (min_prime[temp] != p) {
+                is_prime_power = false;
+                break;
+            }
+            temp /= min_prime[temp];
+        }
+        
+        // If it's a prime power, its base is 'p'. If it has >= 2 distinct primes, flag as -1.
+        if (is_prime_power) {
+            base_val[i] = p;
         } else {
-            bobExtra++;   
+            base_val[i] = -1;
         }
-    }
-
-    int alice_score = aliceExtra + (game + 1) / 2;
-    int bob_score = bobExtra + game / 2;
-
-    if (alice_score > bob_score) {
-        cout << "Alice\n";
-    } else {
-        cout << "Bob\n";
     }
 }
 
-/*************************************************************************************************** */
+void solve() {
+    int n;
+    cin >> n;
+    vector<int> a(n);
+    bool is_sorted_initially = true;
+    
+    for (int i = 0; i < n; i++) {
+        cin >> a[i];
+        if (i > 0 && a[i] < a[i-1]) {
+            is_sorted_initially = false;
+        }
+    }
+    
+    // Condition 1: If it's already sorted, Bob wins automatically.
+    if (is_sorted_initially) {
+        cout << "Bob\n";
+        return;
+    }
+    
+    // Check if there's any element composed of more than one distinct prime factor
+    bool all_prime_powers = true;
+    for (int i = 0; i < n; i++) {
+        if (base_val[a[i]] == -1) {
+            all_prime_powers = false;
+            break;
+        }
+    }
+    
+    // Condition 2: If there's an element that's not a prime power, Alice traps Bob and wins.
+    if (!all_prime_powers) {
+        cout << "Alice\n";
+        return;
+    }
+    
+    // Condition 3: Verify if the prime power bases are strictly non-decreasing
+    bool bases_sorted = true;
+    for (int i = 1; i < n; i++) {
+        if (base_val[a[i]] < base_val[a[i-1]]) {
+            bases_sorted = false;
+            break;
+        }
+    }
+    
+    if (bases_sorted) {
+        cout << "Bob\n";
+    } else {
+        cout << "Alice\n";
+    }
+}
 
-int main(){
-    ios::sync_with_stdio(false);
-    cin.tie(nullptr);
-    cout.tie(nullptr);
-    int tc; cin >> tc;
-    while (tc--) solve();
+int main() {
+    // Optimize standard I/O operations for performance 
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    
+    precompute();
+    
+    int t;
+    if (cin >> t) {
+        while (t--) {
+            solve();
+        }
+    }
     return 0;
 }

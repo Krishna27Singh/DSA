@@ -44,10 +44,6 @@ const ll MOD = 1e9 + 7;
 ****************************************** APPROACH **************************************************
 start from (Ax, Ay) -> deliver -> (Bx, By)
 cases. each move 1 sec
-(𝑥+1,𝑦), 
-(𝑥,𝑦+1), 
-(𝑥,𝑦−1)
-
 O(N) | O(NlogN)
 
 need to try out all possible paths right

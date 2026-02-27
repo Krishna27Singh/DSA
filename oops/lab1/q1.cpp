@@ -47,7 +47,7 @@ const ll MOD = 1e9 + 7;
 
 void solve(){
     int row, col; cin>>row>>col;
-    vector<vector<int>> grid(row, vector<int>(col));
+    vector<vector<int>> grid(row, vector<int>(col)); 
     for(int i = 0; i<row; i++){
         for(int j = 0; j<col; j++){
             cin>>grid[i][j];

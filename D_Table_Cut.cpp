@@ -50,16 +50,16 @@ maximum a * b
 */
 
 void solve(){
-    int n, m; cin>>n>>m;
-    vector<vector<int>> grid(n, vector<int>(m));
-    int ones = 0;
+    ll n, m; cin>>n>>m;
+    vector<vector<ll>> grid(n, vector<ll>(m));
+    ll ones = 0;
     for(int i = 0; i<n; i++){
         for(int j = 0; j<m; j++){
             cin>>grid[i][j];
             if(grid[i][j]) ones++;
         }
     }
-    int target = ones/2;
+    ll target = ones/2;
     if(target == 0){
         cout << 0 <<endl;
         for(int i = 0; i < m; i++) cout << "R";
@@ -71,7 +71,7 @@ void solve(){
     ll ans = target * (ones - target);
     // cout<<"Target: "<<target<<endl;
 
-    int targetRow, targetCol;
+    ll targetRow, targetCol;
     for(int row = 0; row <n; row++){
         bool flag = false;
         for(int col = m-1; col>=0; col--){

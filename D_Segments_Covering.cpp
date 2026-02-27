@@ -106,7 +106,7 @@ void solve(){
 
     // for(auto i: lr) cout<<i.first<<" "<<i.second<<" ";
 
-    vector<int> prefix(n);
+    vector<int> prefix(n, 0);
     for(int i = 0; i<n; i++){
         int j = i;
         int li = lrpq[i].first.first;
@@ -117,6 +117,12 @@ void solve(){
         }
         j--;
     }
+    for(int i = 0; i<n; i++){
+        if(prefix[i] == 0) prefix[i] = 1;
+        else break;
+    }
+
+    
 
     // Output
 

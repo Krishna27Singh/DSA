@@ -89,5 +89,19 @@ int main(){
 
     print(A1);
 
+    int arr[10];
+    arr[0] = 1;
+    arr[1] = 4;
+    arr[2] = 1;
+    arr[3] = 6;
+    arr[4] = 4;
+
+    // 0 1 2 3 4 5
+
+    int idx = 3;
+
+    
+
+
     return 0;
 }

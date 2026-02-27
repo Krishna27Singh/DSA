@@ -56,7 +56,7 @@ void solve(){
         x = x - y*4;
     }
 
-    if(x%3 == 0){
+    if( (x>=0) && (x%3 == 0)){
         cout<<"YES"<<endl;
     }
     else cout<<"NO"<<endl;
