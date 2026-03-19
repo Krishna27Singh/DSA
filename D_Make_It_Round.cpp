@@ -42,30 +42,75 @@ const ll MOD = 1e9 + 7;
 
 /*
 ****************************************** APPROACH **************************************************
-1 2 3 4 .... n
-
-m pair of friends don't know each other
-good -> only if every pair is a friend
-number of segments (a, b) such that the segment is good
-
 
 */
 
 /*
 ****************************************** Testing ****************************************************
+n * k ( 1 <= k <= m)
 
+roundest possible n
+if two more more possibilities then max n 
+can't rount it more ? cout<<n*m;
+
+2 5 -> 10
+5 2 -> 10 
+max zeros in m
 */
 
 void solve(){
-    int n, m; cin>>n>>m;
-    vector<pair<int, int>> bad(m);
-    for(int i = 0; i<m; i++){
-        int x, y; cin>>x>>y;
-        bad.pb(mp(x,y));
+    ll n,m; cin>>n>>m;
+    ll orgn = n;
+    ll orgm = m;
+
+    int case3 = -1;
+    int temp = m;
+    while(temp){
+        case3++;
+        temp /= 10;
     }
 
-    
+    while(n%10 == 0){
+        n /= 10;
+    }
 
+    int n2, n5, m2, m5;
+    n2 = n5 = m2 = m5 = -1;
+
+    temp = 1;
+    while(temp <= n){
+        temp *= 2;
+        n2++;
+    }
+    temp = 1;
+    while(temp <= n){
+        temp *= 5;
+        n5++;
+    }
+    temp = 1;
+    while(temp <= m){
+        temp *= 2;
+        m2++;
+    }
+    temp = 1;
+    while(temp <= m){
+        temp *= 5;
+        m5++;
+    }
+
+    int case1 = min(n2, m5);
+    int case2 = min(n5, m2);
+
+    int ans = max(case1, max(case2, case3));
+
+    if(ans == 0){
+        cout<<orgn*orgm;
+        return;
+    }
+
+    if(case3 > case1 && case3 > case2){
+        cout<<orgn*pow(10, case3);
+    }
     // Output
 
 
