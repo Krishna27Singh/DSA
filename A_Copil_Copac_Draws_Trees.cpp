@@ -42,6 +42,14 @@ const ll MOD = 1e9 + 7;
 
 /*
 ****************************************** APPROACH **************************************************
+5 - 6
+4 - 5
+3 - 4
+2 - 3
+1 - 2
+
+so the maximum number of readings will be n - 1
+
 
 */
 
@@ -51,10 +59,6 @@ const ll MOD = 1e9 + 7;
 */
 
 void solve(){
-    ll n, k; cin>>n>>k;
-    vector<ll> a(n);
-    for(int i = 0; i<n; i++) cin>>a[i];
-
     
 
     // Output

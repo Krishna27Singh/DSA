@@ -61,7 +61,7 @@ void solve(){
     int leaf = 0;
     for(int node = 1; node <= n; node++){
         if(adj[node].size() == 1) leaf++;
-    }
+    } 
     vector<int> ans(n+1, leaf);
 
     for(int node = 1; node<=n; node++){

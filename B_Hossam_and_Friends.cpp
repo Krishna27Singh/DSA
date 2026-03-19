@@ -51,11 +51,29 @@ const ll MOD = 1e9 + 7;
 */
 
 void solve(){
-    ll n, k; cin>>n>>k;
-    vector<ll> a(n);
-    for(int i = 0; i<n; i++) cin>>a[i];
+    int n, m; cin>>n>>m;
+    unordered_map<int, int> mpp;
+    for(int i = 0; i<m; i++){
+        // x y (x < y)
+        int x, y; cin>>x>>y;
+        if(y>x) swap(x, y);
+        mpp[x] = y;
+    }
 
-    
+    vector<int> segs;
+    for(int i = 1; i<=n; i++){
+        if(mpp.find(i) != mpp.end()) i = mpp[i];
+        else{
+            int left = i;
+            while(i<=n && mpp[i] == 0) i++;
+            int right = i;
+            i--;
+            segs.pb(right-left);
+        }
+    }
+
+    int ans = 0;
+    for(auto i: segs) ans += 
 
     // Output
 
