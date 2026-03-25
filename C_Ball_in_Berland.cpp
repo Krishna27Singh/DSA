@@ -42,16 +42,8 @@ const ll MOD = 1e9 + 7;
 
 /*
 ****************************************** APPROACH **************************************************
-**.*..*.**.***.
-
-can we do prefix and sufix?
-
-answer for an index -> prefix + sufix
-
-prefix -> from 0 to i. how many moves we need to make accumulate * at index i !
-sufix -> from i+1 to n. how many moves we need to make to accumulate * at index i !
-
-
+how to get rid of the intersection
+just traverse in ascending order ... thats it !
 */
 
 /*
@@ -60,52 +52,41 @@ sufix -> from i+1 to n. how many moves we need to make to accumulate * at index 
 */
 
 void solve(){
-    ll n; cin>>n;
-    string s; cin>>s;
+    ll cntb, cntg, k; cin>>cntb>>cntg>>k;
+    vector<ll> b(k);
+    for(int i = 0; i<k; i++) cin>>b[i];
+    vector<ll> g(k);
+    for(int i = 0; i<k; i++) cin>>g[i];
 
-    if(n==1){
-        cout<<0<<endl;
-        return;
-    }
+    ll ans = 0;
 
-    vector<ll> prefix(n, 0);
-    ll cnt = 0;
-    prefix[0] = 0;
-    if(s[0] == '*') cnt++;
-    for(int i = 1; i<n; i++){
-        if(s[i] == '*'){
-            prefix[i] = prefix[i-1];
-            cnt++;
-        }
-        else{
-            prefix[i] = prefix[i-1] + cnt;
-        }
-    }
+    unordered_map<ll, ll> mppb;
+    for(int i = 0; i<k; i++) mppb[b[i]]++;
+    unordered_map<ll, ll> mppg;
+    for(int i = 0; i<k; i++) mppg[g[i]]++;
 
-    // for(auto i: prefix) cout<<i<<" ";
+    vector<pair<ll, ll>> bg;
+    for(int i = 0; i<k; i++) bg.pb(mp(b[i], g[i]));
+
+    // for(auto i: bg) cout<<i.first<<" "<<i.second<<endl;
+    // for(auto i: mppb) cout<<i.first<<" "<<i.second<<endl;
     // cout<<endl;
+    // for(auto i: mppg) cout<<i.first<<" "<<i.second<<endl;
+    
 
-    vector<ll> sufix(n, 0);
-    sufix[n-1] = 0;
-    sufix[n-2] = 0;
-    cnt = 0;
-    if(s[n-1] == '*') cnt++;
-    for(int i = n-3; i>=0; i--){
-        if(s[i+1] == '*'){
-            sufix[i] = sufix[i+1];
-            cnt++;
-        }
-        else{
-            sufix[i] = sufix[i+1] + cnt;
-        }
+    for(int i = 0; i<k; i++){
+        auto currBoy = bg[i].first;
+        auto currGirl = bg[i].second;
+        ll cnt = k - i - mppb[currBoy] - mppg[currGirl] + 1;
+        // cout<<"cnt: "<<cnt<<endl;
+        if(cnt > 0) ans += cnt;
+
+        mppb[bg[i].first]--;  
+        mppg[bg[i].second]--; 
     }
 
-    // for(auto i: sufix) cout<<i<<" ";
-    // cout<<endl;
-
-    ll ans = LLONG_MAX;
-    for(int i = 0; i<n; i++) ans = min(ans, prefix[i] + sufix[i]);
     cout<<ans<<endl;
+
     // Output
 
 

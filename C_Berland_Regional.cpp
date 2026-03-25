@@ -42,70 +42,83 @@ const ll MOD = 1e9 + 7;
 
 /*
 ****************************************** APPROACH **************************************************
-**.*..*.**.***.
+n universities
+n students
+ith student is enrolled in the ui university
+ith student skill level is si
+strenght -> sum of skills of all members of all the teams
+strength of region for k from 1 to n
 
-can we do prefix and sufix?
-
-answer for an index -> prefix + sufix
-
-prefix -> from 0 to i. how many moves we need to make accumulate * at index i !
-sufix -> from i+1 to n. how many moves we need to make to accumulate * at index i !
-
-
+strongest -> second strongest -> third strongest
 */
 
 /*
 ****************************************** Testing ****************************************************
 
+
+6
+3 3 3 3 3 3
+5 9 6 7 9 7
+
+7
+1 2 1 2 1 2 1
+6 8 3 1 5 1 5
+
+1 -> 6 5 5 3
+2 -> 8 1 1
+
+6 + 5 + 5 + 3 + 8 + 1 + 1 
+(6+5) + (5+3) + (8+1) 
+(6+5+5) + (8+1+1) 
+(6+5+5+3)
+
+k = 1
+
+k = 2
+
+k = 3
+
+k = 4
+
+store in map
+calculate prefix sum for each
+
+
+
+
+
+
 */
 
 void solve(){
     ll n; cin>>n;
-    string s; cin>>s;
+    vector<ll> u(n);
+    for(int i = 0; i<n; i++) cin>>u[i];
+    vector<ll> s(n);
+    for(int i = 0; i<n; i++) cin>>s[i];
 
-    if(n==1){
-        cout<<0<<endl;
-        return;
-    }
+    unordered_map<ll, vector<ll>> mpp;
+    for(int i = 0; i<n; i++) mpp[u[i]].pb(s[i]);
 
-    vector<ll> prefix(n, 0);
-    ll cnt = 0;
-    prefix[0] = 0;
-    if(s[0] == '*') cnt++;
-    for(int i = 1; i<n; i++){
-        if(s[i] == '*'){
-            prefix[i] = prefix[i-1];
-            cnt++;
-        }
-        else{
-            prefix[i] = prefix[i-1] + cnt;
-        }
-    }
-
-    // for(auto i: prefix) cout<<i<<" ";
-    // cout<<endl;
-
-    vector<ll> sufix(n, 0);
-    sufix[n-1] = 0;
-    sufix[n-2] = 0;
-    cnt = 0;
-    if(s[n-1] == '*') cnt++;
-    for(int i = n-3; i>=0; i--){
-        if(s[i+1] == '*'){
-            sufix[i] = sufix[i+1];
-            cnt++;
-        }
-        else{
-            sufix[i] = sufix[i+1] + cnt;
+    vector<ll> final(n, 0);
+    for(auto it : mpp){
+        auto uni = it.first;
+        auto si = it.second;
+        int l = si.size();
+        sort(all(si)); reverse(all(si));
+        vector<ll> prefix(l, 0);
+        prefix[0] = si[0];
+        for(int i = 1; i<l; i++) prefix[i] = si[i] + prefix[i-1];
+        int k = 1;
+        while(k<=l){
+            final[k-1] += prefix[(l/k)*k - 1];
+            k++;
         }
     }
 
-    // for(auto i: sufix) cout<<i<<" ";
-    // cout<<endl;
+    for(auto i: final) cout<<i<<" ";
+    cout<<endl;
 
-    ll ans = LLONG_MAX;
-    for(int i = 0; i<n; i++) ans = min(ans, prefix[i] + sufix[i]);
-    cout<<ans<<endl;
     // Output
 
 

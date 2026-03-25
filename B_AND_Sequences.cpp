@@ -42,15 +42,6 @@ const ll MOD = 1e9 + 7;
 
 /*
 ****************************************** APPROACH **************************************************
-**.*..*.**.***.
-
-can we do prefix and sufix?
-
-answer for an index -> prefix + sufix
-
-prefix -> from 0 to i. how many moves we need to make accumulate * at index i !
-sufix -> from i+1 to n. how many moves we need to make to accumulate * at index i !
-
 
 */
 
@@ -60,52 +51,8 @@ sufix -> from i+1 to n. how many moves we need to make to accumulate * at index 
 */
 
 void solve(){
-    ll n; cin>>n;
-    string s; cin>>s;
+    
 
-    if(n==1){
-        cout<<0<<endl;
-        return;
-    }
-
-    vector<ll> prefix(n, 0);
-    ll cnt = 0;
-    prefix[0] = 0;
-    if(s[0] == '*') cnt++;
-    for(int i = 1; i<n; i++){
-        if(s[i] == '*'){
-            prefix[i] = prefix[i-1];
-            cnt++;
-        }
-        else{
-            prefix[i] = prefix[i-1] + cnt;
-        }
-    }
-
-    // for(auto i: prefix) cout<<i<<" ";
-    // cout<<endl;
-
-    vector<ll> sufix(n, 0);
-    sufix[n-1] = 0;
-    sufix[n-2] = 0;
-    cnt = 0;
-    if(s[n-1] == '*') cnt++;
-    for(int i = n-3; i>=0; i--){
-        if(s[i+1] == '*'){
-            sufix[i] = sufix[i+1];
-            cnt++;
-        }
-        else{
-            sufix[i] = sufix[i+1] + cnt;
-        }
-    }
-
-    // for(auto i: sufix) cout<<i<<" ";
-    // cout<<endl;
-
-    ll ans = LLONG_MAX;
-    for(int i = 0; i<n; i++) ans = min(ans, prefix[i] + sufix[i]);
-    cout<<ans<<endl;
     // Output
 
 
