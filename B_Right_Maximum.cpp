@@ -42,75 +42,46 @@ const ll MOD = 1e9 + 7;
 
 /*
 ****************************************** APPROACH **************************************************
-initially x = 0
-1) ai = ai + x; and x++ -> only once for each ai -> max n times
-2) x++;
+make array empty 
 
-each ai%k == 0
 
-minimum moves ?
 */
 
 /*
 ****************************************** Testing ****************************************************
-2 2 5 6 6 -> 5 + 6 = 11 ?
-
-4 3
-1 2 1 3
-
-k = 3
-x += 1
-a1 += x
-x += 1
-a0 += x
-a2 += x
-
-4 3
-1 2 1 3
-
-2 1 2 0 
-
-1 2 2
-
-
-10 6
-8 7 1 8 3 7 5 10
-
-1 2 3 3 4 4 4 5 5 5 
-
 
 */
 
 void solve(){
-    int n, k;
-		cin >> n >> k;
+    int n; cin>>n;
+    vector<int> a(n);
+    for(int i = 0; i<n; i++) cin>>a[i];
 
-		map<int, int> fr;
-		int cnt = 0;     
+    int cnt = 0;
 
-		for (int i = 0; i < n; i++) {
-				int temp;
-				cin >> temp;
-				if (temp % k) {                  
-						fr[k - temp % k]++;        
-						cnt++;
-				}
-		}
+    // maximum element index uptil index i, for each i from 0 to n-1
+    vector<int> mx(n);
+    mx[0] = 0;
+    int maxIdx = 0;
+    for(int i = 1; i<n; i++){
+        if(a[i] > a[maxIdx]) maxIdx = i;
+        else if(a[i] == a[maxIdx]) maxIdx = max(maxIdx, i);
+        mx[i] = maxIdx;
+    }
 
-		if (cnt == 0) {                       
-				cout << 0 << '\n';
-				return;
-		}
+    // for(auto i: mx) cout<<i<<" ";
+    // cout<<endl;
 
-		int ma = 0;                            
-		int rem = 0;                           
-		for (auto [x, y] : fr) {
-				if (ma <= y) {
-						ma = y;
-						rem = x;
-				}
-		}
-		cout << 1LL * (ma - 1) * k + rem + 1 << '\n';
+    while(true){
+
+        int maxIdx = mx[n-1];
+        n = maxIdx;
+        cnt++;
+        if(n <= 0) break;
+    }
+
+    cout<<cnt<<endl;
+
     // Output
 
 

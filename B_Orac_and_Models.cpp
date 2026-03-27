@@ -42,75 +42,44 @@ const ll MOD = 1e9 + 7;
 
 /*
 ****************************************** APPROACH **************************************************
-initially x = 0
-1) ai = ai + x; and x++ -> only once for each ai -> max n times
-2) x++;
+s1, s2, s3, .. sn -> find a sequence in the same order
+for any two adjacent (i(j+1) % i(j) == 0) && (si(j+1) > si(j))
+(si(j+1) > si(j)) -> the sequence should be sorted !
 
-each ai%k == 0
 
-minimum moves ?
 */
 
 /*
 ****************************************** Testing ****************************************************
-2 2 5 6 6 -> 5 + 6 = 11 ?
-
-4 3
-1 2 1 3
-
-k = 3
-x += 1
-a1 += x
-x += 1
-a0 += x
-a2 += x
-
-4 3
-1 2 1 3
-
-2 1 2 0 
-
-1 2 2
-
-
-10 6
-8 7 1 8 3 7 5 10
-
-1 2 3 3 4 4 4 5 5 5 
+1 4 2 3 6 4 9
 
 
 */
 
+
 void solve(){
-    int n, k;
-		cin >> n >> k;
+    int n; cin>>n;
+    vector<int> s(n);
+    for(int i = 0; i<n; i++) cin>>s[i];
 
-		map<int, int> fr;
-		int cnt = 0;     
+    vector<int> dp(n+1, 1);
 
-		for (int i = 0; i < n; i++) {
-				int temp;
-				cin >> temp;
-				if (temp % k) {                  
-						fr[k - temp % k]++;        
-						cnt++;
-				}
-		}
+    for(int i = 1; i<=n; i++){
+        int curr = s[i-1];
+        for(int j = 2*i; j<=n; j+=i){
+            int next = s[j-1];
+            if(next > curr){
+                dp[j] = max(dp[j], dp[i]+1);
+            }
+        }
+    }
 
-		if (cnt == 0) {                       
-				cout << 0 << '\n';
-				return;
-		}
+    int ans = INT_MIN;
 
-		int ma = 0;                            
-		int rem = 0;                           
-		for (auto [x, y] : fr) {
-				if (ma <= y) {
-						ma = y;
-						rem = x;
-				}
-		}
-		cout << 1LL * (ma - 1) * k + rem + 1 << '\n';
+    for(auto i: dp) ans = max(ans, i);
+
+    cout<<ans<<endl;
+
     // Output
 
 

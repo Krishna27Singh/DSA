@@ -42,75 +42,49 @@ const ll MOD = 1e9 + 7;
 
 /*
 ****************************************** APPROACH **************************************************
-initially x = 0
-1) ai = ai + x; and x++ -> only once for each ai -> max n times
-2) x++;
-
-each ai%k == 0
-
-minimum moves ?
+move -> 101 -> 111
+        111 -> 101
+minimum and maximum number of ones in string?
 */
 
 /*
 ****************************************** Testing ****************************************************
-2 2 5 6 6 -> 5 + 6 = 11 ?
-
-4 3
-1 2 1 3
-
-k = 3
-x += 1
-a1 += x
-x += 1
-a0 += x
-a2 += x
-
-4 3
-1 2 1 3
-
-2 1 2 0 
-
-1 2 2
-
-
-10 6
-8 7 1 8 3 7 5 10
-
-1 2 3 3 4 4 4 5 5 5 
-
 
 */
 
 void solve(){
-    int n, k;
-		cin >> n >> k;
+    int n; cin>>n;
+    string s; cin>>s;
 
-		map<int, int> fr;
-		int cnt = 0;     
+    vector<int> segs;
 
-		for (int i = 0; i < n; i++) {
-				int temp;
-				cin >> temp;
-				if (temp % k) {                  
-						fr[k - temp % k]++;        
-						cnt++;
-				}
-		}
+    for(int i = 0; i<n; i++){
+        if(s[i] == '0'){
+            if(i-1>=0 && i+1<n && s[i-1] == '1' && s[i+1] == '1') s[i] = '1';
+        }
+    }
 
-		if (cnt == 0) {                       
-				cout << 0 << '\n';
-				return;
-		}
+    for(int i = 0; i<n; i++){
+        if(s[i] == '1'){
+            int len = 0;
+            while(s[i] == '1'){
+                len++;
+                i++;
+            }
+            i--;
+            segs.pb(len);
+        }
+    }
 
-		int ma = 0;                            
-		int rem = 0;                           
-		for (auto [x, y] : fr) {
-				if (ma <= y) {
-						ma = y;
-						rem = x;
-				}
-		}
-		cout << 1LL * (ma - 1) * k + rem + 1 << '\n';
+    int mini = 0;
+    int maxi = 0;
+    for(auto seg : segs){
+        maxi += seg;
+        mini += seg/2 + 1;
+    }
+
+    cout<<mini<<" "<<maxi<<endl;
+
     // Output
 
 

@@ -42,75 +42,44 @@ const ll MOD = 1e9 + 7;
 
 /*
 ****************************************** APPROACH **************************************************
-initially x = 0
-1) ai = ai + x; and x++ -> only once for each ai -> max n times
-2) x++;
+0, 1, ... n-1, n
 
-each ai%k == 0
+unfairness -> sum of differences of neighbours
 
-minimum moves ?
+difference -> number of set bit in xor of x and y 
+
+1	00001	11	01011	21	10101
+2	00010	12	01100	22	10110
+3	00011	13	01101	23	10111
+4	00100	14	01110	24	11000
+5	00101	15	01111	25	11001
+6	00110	16	10000	26	11010
+7	00111	17	10001	27	11011
+8	01000	18	10010	28	11100
+9	01001	19	10011	29	11101
+10	01010	20	10100	30	11110
+                        31  11111
+                        32  10000
+
 */
 
 /*
 ****************************************** Testing ****************************************************
-2 2 5 6 6 -> 5 + 6 = 11 ?
-
-4 3
-1 2 1 3
-
-k = 3
-x += 1
-a1 += x
-x += 1
-a0 += x
-a2 += x
-
-4 3
-1 2 1 3
-
-2 1 2 0 
-
-1 2 2
-
-
-10 6
-8 7 1 8 3 7 5 10
-
-1 2 3 3 4 4 4 5 5 5 
-
 
 */
 
 void solve(){
-    int n, k;
-		cin >> n >> k;
+    ll n; cin>>n;
 
-		map<int, int> fr;
-		int cnt = 0;     
+    ll ans = 0;
 
-		for (int i = 0; i < n; i++) {
-				int temp;
-				cin >> temp;
-				if (temp % k) {                  
-						fr[k - temp % k]++;        
-						cnt++;
-				}
-		}
+    while(n>0){
+        ans += n;
+        n /= 2;
+    }
 
-		if (cnt == 0) {                       
-				cout << 0 << '\n';
-				return;
-		}
+    cout<<ans<<endl;
 
-		int ma = 0;                            
-		int rem = 0;                           
-		for (auto [x, y] : fr) {
-				if (ma <= y) {
-						ma = y;
-						rem = x;
-				}
-		}
-		cout << 1LL * (ma - 1) * k + rem + 1 << '\n';
     // Output
 
 

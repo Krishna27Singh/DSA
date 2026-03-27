@@ -42,75 +42,58 @@ const ll MOD = 1e9 + 7;
 
 /*
 ****************************************** APPROACH **************************************************
-initially x = 0
-1) ai = ai + x; and x++ -> only once for each ai -> max n times
-2) x++;
 
-each ai%k == 0
-
-minimum moves ?
 */
 
 /*
 ****************************************** Testing ****************************************************
-2 2 5 6 6 -> 5 + 6 = 11 ?
-
-4 3
-1 2 1 3
-
-k = 3
-x += 1
-a1 += x
-x += 1
-a0 += x
-a2 += x
-
-4 3
-1 2 1 3
-
-2 1 2 0 
-
-1 2 2
-
-
-10 6
-8 7 1 8 3 7 5 10
-
-1 2 3 3 4 4 4 5 5 5 
-
 
 */
 
+bool checkDFS(int node, int n, vector<vector<int>>& graph, vector<int> &color, int colorToFill, vector<int> &zeroOne, vector<int> &prevIds, vector<int> &vis){
+        vis[node] = 1;
+        color[node] = colorToFill;
+        prevIds.pb(node);
+        zeroOne[colorToFill]++;
+        for(auto it: graph[node]){
+            if(color[it]== -1){
+                if(!checkDFS(it, n, graph, color, !colorToFill, zeroOne, prevIds, vis)){
+                    for(auto idx : prevIds) color[idx] = -1;
+                    return false;
+                }
+            }
+            else if(color[it] == colorToFill) return false;
+        }
+        return true;
+}
+
 void solve(){
-    int n, k;
-		cin >> n >> k;
+    int n, m; cin>>n>>m;
+    vector<vector<int>> graph(n, vector<int>());
+    for(int i = 0; i<m; i++){
+        int u, v; cin>>u>>v;
+        u--; v--;
+        graph[u].pb(v);
+        graph[v].pb(u);
+    }
 
-		map<int, int> fr;
-		int cnt = 0;     
+    int ans = 0;
 
-		for (int i = 0; i < n; i++) {
-				int temp;
-				cin >> temp;
-				if (temp % k) {                  
-						fr[k - temp % k]++;        
-						cnt++;
-				}
-		}
+        vector<int> color(n, -1);
+        int colorToFill = 0;
+        vector<int> vis(n, 0);
+        for(int i = 0; i<n; i++){
+            if(color[i]==-1 && !vis[i]){
+                vector<int> zeroOne(2, 0);
+                vector<int> prevIds;
+                if(checkDFS(i, n, graph, color, colorToFill, zeroOne, prevIds, vis)){
+                    ans += max(zeroOne[0], zeroOne[1]);
+                }
+            }
+        }
 
-		if (cnt == 0) {                       
-				cout << 0 << '\n';
-				return;
-		}
+    cout<<ans<<endl;
 
-		int ma = 0;                            
-		int rem = 0;                           
-		for (auto [x, y] : fr) {
-				if (ma <= y) {
-						ma = y;
-						rem = x;
-				}
-		}
-		cout << 1LL * (ma - 1) * k + rem + 1 << '\n';
     // Output
 
 

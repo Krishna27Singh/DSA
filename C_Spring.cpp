@@ -42,75 +42,43 @@ const ll MOD = 1e9 + 7;
 
 /*
 ****************************************** APPROACH **************************************************
-initially x = 0
-1) ai = ai + x; and x++ -> only once for each ai -> max n times
-2) x++;
-
-each ai%k == 0
-
-minimum moves ?
+m days 
 */
 
 /*
 ****************************************** Testing ****************************************************
-2 2 5 6 6 -> 5 + 6 = 11 ?
-
-4 3
-1 2 1 3
-
-k = 3
-x += 1
-a1 += x
-x += 1
-a0 += x
-a2 += x
-
-4 3
-1 2 1 3
-
-2 1 2 0 
-
-1 2 2
-
-
-10 6
-8 7 1 8 3 7 5 10
-
-1 2 3 3 4 4 4 5 5 5 
-
 
 */
 
 void solve(){
-    int n, k;
-		cin >> n >> k;
+    ll a, b, c, m; cin>>a>>b>>c>>m;
 
-		map<int, int> fr;
-		int cnt = 0;     
+    // a, 2a, 3a, ..
+    // b, 2b, 3b, ...
+    // c, 2c, 3c, ...
+    // gonna store the values of (y*b) in a map mpp such that (x*a) = (y*b) ! 
+    // then gonna check the values of (y*b) such that (y*b) = (z*c) and if (y*b) exist in mpp
 
-		for (int i = 0; i < n; i++) {
-				int temp;
-				cin >> temp;
-				if (temp % k) {                  
-						fr[k - temp % k]++;        
-						cnt++;
-				}
-		}
+    // if x*a == y*b -? alice += 3 and bob += 3
+    // if y*b == z*c -> bob += 3 and carol += 3
+    // if x*a == z*c and x-> alice += 3 and carol += 3
+    // if y*b == z*c and y*c also exist in mpp then alice += 2 bob += 2 carol += 2
 
-		if (cnt == 0) {                       
-				cout << 0 << '\n';
-				return;
-		}
+    ll na = m/a;
+    ll nb = m/b;
+    ll nc = m/c;
 
-		int ma = 0;                            
-		int rem = 0;                           
-		for (auto [x, y] : fr) {
-				if (ma <= y) {
-						ma = y;
-						rem = x;
-				}
-		}
-		cout << 1LL * (ma - 1) * k + rem + 1 << '\n';
+    ll ab = m/lcm(a, b);
+    ll bc = m/lcm(b, c);
+    ll ac = m/lcm(a, c);
+    ll abc = m/lcm(a, lcm(b, c));
+
+    ll alice = 6*na - 3*ab - 3*ac + 2*abc;
+    ll bob = 6*nb - 3*ab - 3*bc + 2*abc;
+    ll carol = 6*nc - 3*ac - 3*bc + 2*abc;
+
+    cout<<alice<<" "<<bob<<" "<<carol<<endl;    
+
     // Output
 
 

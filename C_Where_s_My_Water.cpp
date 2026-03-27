@@ -42,75 +42,35 @@ const ll MOD = 1e9 + 7;
 
 /*
 ****************************************** APPROACH **************************************************
-initially x = 0
-1) ai = ai + x; and x++ -> only once for each ai -> max n times
-2) x++;
+ai -> elevation of dirt in the column ai 
 
-each ai%k == 0
+2 drains allowed 
 
-minimum moves ?
+2 drains we need to choose 
+we have to choose a drain such that it is the bottom of between 2 peaks
+
+do 2 loops for 2 drains ! 
+
 */
 
 /*
 ****************************************** Testing ****************************************************
-2 2 5 6 6 -> 5 + 6 = 11 ?
-
-4 3
-1 2 1 3
-
-k = 3
-x += 1
-a1 += x
-x += 1
-a0 += x
-a2 += x
-
-4 3
-1 2 1 3
-
-2 1 2 0 
-
-1 2 2
-
-
-10 6
-8 7 1 8 3 7 5 10
-
-1 2 3 3 4 4 4 5 5 5 
-
 
 */
 
 void solve(){
-    int n, k;
-		cin >> n >> k;
+    int n, h; cin>>n>>h;
+    vector<int> a(n);
+    for(int i = 0; i<n; i++) cin>>a[i];
 
-		map<int, int> fr;
-		int cnt = 0;     
+    vector<int> peaks;
+    peaks.pb(-1);
+    for(int i = 1; i<n-1; i++){
+        if(a[i] > a[i-1] && a[i] > a[i+1]) peaks.pb(i);
+    }
+    peaks.pb(n);
+    
 
-		for (int i = 0; i < n; i++) {
-				int temp;
-				cin >> temp;
-				if (temp % k) {                  
-						fr[k - temp % k]++;        
-						cnt++;
-				}
-		}
-
-		if (cnt == 0) {                       
-				cout << 0 << '\n';
-				return;
-		}
-
-		int ma = 0;                            
-		int rem = 0;                           
-		for (auto [x, y] : fr) {
-				if (ma <= y) {
-						ma = y;
-						rem = x;
-				}
-		}
-		cout << 1LL * (ma - 1) * k + rem + 1 << '\n';
     // Output
 
 
