@@ -69,7 +69,12 @@ void solve(){
         if(a[i] > a[i-1] && a[i] > a[i+1]) peaks.pb(i);
     }
     peaks.pb(n);
-    
+
+    int l = peaks.size();
+    vector<int> waterbtw(l);
+    for(int i = 0; i<l-1; i++){
+        
+    }
 
     // Output
 

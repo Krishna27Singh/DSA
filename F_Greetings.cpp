@@ -42,9 +42,7 @@ const ll MOD = 1e9 + 7;
 
 /*
 ****************************************** APPROACH **************************************************
-gift -> consist of various types of candies (may be multiple)
-# the number of candies of two different types should not be the same !
-largest gift ? 
+
 */
 
 /*
@@ -53,31 +51,7 @@ largest gift ?
 */
 
 void solve(){
-    int n; cin>>n;
-    vector<int> a(n);
-    vector<int> freq(n+1, 0);
-    for(int i = 0; i<n; i++){
-        int x; cin>>x;
-        freq[x]++;
-        a[i] = x;
-    }
-
-    sort(all(freq));
-    int highestFreq = freq[n];
-    int r = n; int l = 0;
-    int ans = 0;
     
-    for(int i = highestFreq; i>=1; i--){
-        int idx = lower_bound(freq.begin() + l, freq.begin() + r + 1, i) - freq.begin();
-        if(idx <= r){
-            ans += i;
-            r--;
-        }
-    }
-
-    cout<<ans<<endl;
-
-
 
     // Output
 

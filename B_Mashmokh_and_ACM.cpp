@@ -42,40 +42,44 @@ const ll MOD = 1e9 + 7;
 
 /*
 ****************************************** APPROACH **************************************************
-gift -> consist of various types of candies (may be multiple)
-# the number of candies of two different types should not be the same !
-largest gift ? 
+bi % bi+1 == 0 for each number 0 -> i-1
+
+b1, b2, b3, ... bk 
+number of sequence such that b1 % b2 == 0, b2 % b3 == 0, ... bk-1 % bk == 0
+and 1 <= b1 <= b2 <= b3 <= ... <= bk <= n
+
+k = 5, n = 7
+one of possible sequence is 
+
+dp[i][j] = number of sequences of length i ending with j
+dp[i][j] = sum of dp[i-1][k] for all k such that k % j == 0
 */
 
 /*
 ****************************************** Testing ****************************************************
+n = 6, k = 4
+b1, b2, b3, b4
+
+b4 = 6 -> b3 can be 1, 2, 3, 6 -> 
+
 
 */
 
 void solve(){
-    int n; cin>>n;
-    vector<int> a(n);
-    vector<int> freq(n+1, 0);
-    for(int i = 0; i<n; i++){
-        int x; cin>>x;
-        freq[x]++;
-        a[i] = x;
-    }
+    int n, k; cin>>n>>k;
+    ll ans = 0;
 
-    sort(all(freq));
-    int highestFreq = freq[n];
-    int r = n; int l = 0;
-    int ans = 0;
-    
-    for(int i = highestFreq; i>=1; i--){
-        int idx = lower_bound(freq.begin() + l, freq.begin() + r + 1, i) - freq.begin();
-        if(idx <= r){
-            ans += i;
-            r--;
+    vector<vector<ll>> dp(k + 1, vector<ll>(n + 1, 0));
+    for(int i = 1; i<=n; i++) dp[1][i] = 1;
+    for(int i = 2; i<=k; i++){
+        for(int j = 1; j<=n; j++){
+            for(int x = j; x<=n; x+=j){
+                dp[i][j] = (dp[i][j] + dp[i-1][x]) % MOD;
+            }
         }
     }
 
-    cout<<ans<<endl;
+    cout<<accumulate(all(dp[k]), 0LL) % MOD<<endl;
 
 
 
@@ -90,7 +94,6 @@ int main(){
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
     cout.tie(nullptr);
-    int tc; cin >> tc;
-    while (tc--) solve();
+    solve();
     return 0;
 }

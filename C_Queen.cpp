@@ -42,9 +42,7 @@ const ll MOD = 1e9 + 7;
 
 /*
 ****************************************** APPROACH **************************************************
-gift -> consist of various types of candies (may be multiple)
-# the number of candies of two different types should not be the same !
-largest gift ? 
+
 */
 
 /*
@@ -52,32 +50,56 @@ largest gift ?
 
 */
 
+void dfs(int node, vector<vector<int>>& adj, vector<bool>& visited, vector<int>& c, vector<int>& ans){
+    visited[node] = true;
+    bool isLeaf = true;
+    bool flag = true;
+    for(int neighbour : adj[node]){
+        if(!visited[neighbour]){
+            isLeaf = false;
+            if(c[neighbour] == 0) flag = false;
+            dfs(neighbour, adj, visited, c, ans);
+        }
+    }
+    if(c[node] == 1 && !isLeaf && flag) ans.pb(node);   
+    if(isLeaf && c[node] == 1) ans.pb(node);
+}
+
 void solve(){
     int n; cin>>n;
-    vector<int> a(n);
-    vector<int> freq(n+1, 0);
-    for(int i = 0; i<n; i++){
-        int x; cin>>x;
-        freq[x]++;
-        a[i] = x;
+    vector<int> p(n+1);
+    vector<int> c(n+1);
+    int root;
+    for(int node = 1; node <= n; node++){
+        int parent; cin>>parent;
+        cin>>c[node];
+        p[node] = parent;
+        if(parent == -1) root = node;
     }
 
-    sort(all(freq));
-    int highestFreq = freq[n];
-    int r = n; int l = 0;
-    int ans = 0;
-    
-    for(int i = highestFreq; i>=1; i--){
-        int idx = lower_bound(freq.begin() + l, freq.begin() + r + 1, i) - freq.begin();
-        if(idx <= r){
-            ans += i;
-            r--;
+    vector<int> ans;
+
+    // creating adjacency list for the graph. p[root] == -1 !
+    vector<vector<int>> adj(n+1);
+    for(int node = 1; node <= n; node++){
+        if(p[node] != -1){
+            adj[p[node]].pb(node);
+            adj[node].pb(p[node]);
         }
     }
 
-    cout<<ans<<endl;
+    // doing a dfs in the graph and checking if two adjacent nodes have c = 1 and pushing leaf nodes havinng c = 1 in the ans vector
+    vector<bool> visited(n+1, false);
 
+    dfs(root, adj, visited, c, ans);
 
+    sort(all(ans));
+    
+    if(ans.size()) {
+        for(int node : ans) cout<<node<<" ";
+        cout<<endl;
+    }
+    else cout<<-1<<endl;
 
     // Output
 
@@ -90,7 +112,6 @@ int main(){
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
     cout.tie(nullptr);
-    int tc; cin >> tc;
-    while (tc--) solve();
+    solve();
     return 0;
 }

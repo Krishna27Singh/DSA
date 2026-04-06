@@ -42,9 +42,10 @@ const ll MOD = 1e9 + 7;
 
 /*
 ****************************************** APPROACH **************************************************
-gift -> consist of various types of candies (may be multiple)
-# the number of candies of two different types should not be the same !
-largest gift ? 
+pieces we can cut <= k
+minimum total length of the pieces ? 
+
+----- ------ ---- -------  -- ----   -------
 */
 
 /*
@@ -53,27 +54,18 @@ largest gift ?
 */
 
 void solve(){
-    int n; cin>>n;
+    int n, m, k; cin>>n>>m>>k;
     vector<int> a(n);
-    vector<int> freq(n+1, 0);
-    for(int i = 0; i<n; i++){
-        int x; cin>>x;
-        freq[x]++;
-        a[i] = x;
-    }
+    for(int i = 0; i<n; i++) cin>>a[i];
 
-    sort(all(freq));
-    int highestFreq = freq[n];
-    int r = n; int l = 0;
-    int ans = 0;
-    
-    for(int i = highestFreq; i>=1; i--){
-        int idx = lower_bound(freq.begin() + l, freq.begin() + r + 1, i) - freq.begin();
-        if(idx <= r){
-            ans += i;
-            r--;
-        }
-    }
+    sort(all(a));
+
+    vector<int> diff;
+    for(int i = 0; i<n-1; i++) diff.pb(a[i+1]-a[i]-1);
+    sort(all(diff));
+
+    int ans = n;
+    for(int i = 0; i<n-k; i++) ans += diff[i];
 
     cout<<ans<<endl;
 
@@ -90,7 +82,6 @@ int main(){
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
     cout.tie(nullptr);
-    int tc; cin >> tc;
-    while (tc--) solve();
+    solve();
     return 0;
 }

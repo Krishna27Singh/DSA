@@ -265,4 +265,19 @@ int main(){
     a.Display();
 }
 
-test 
+OPERATOR OVERLOADING 
+# making normal operators work for user defined data types 
+# It is an example of static binding (compiler decides at compile time)
+# weather to use built in operators or operators u defined for user defined data types 
+# Another form of polymorphism
+# Advantages -> more understandable code 
+
+OPERATOR OVERLOADING 
+# making normal operators work for user defined data types 
+# It is an example of static binding (compiler decides at compile time)
+# weather to use built in operators or operators u defined for user defined data types 
+# Another form of polymorphism
+# Advantages -> more understandable code 
+
+# TYPE CONVERSION
+xxxwww

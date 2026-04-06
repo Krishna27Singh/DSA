@@ -56,21 +56,21 @@ maximum possible beauty -> sum of all the respective beauty values of ci
 */
 
 void solve(){
-    int n; cin>>n;
-    vector<int> b(n);
+    ll n; cin>>n;
+    vector<ll> b(n);
     for(int i = 0; i<n; i++) cin>>b[i];
 
-    unordered_map<int, vector<int>> mpp;
+    unordered_map<ll, vector<ll>> mpp;
 
     for(int i = 0; i<n; i++){
         mpp[b[i] - i].pb(b[i]);
     }
 
-    int ans = 0;
+    ll ans = 0;
 
     for(auto it : mpp){
         auto beauties = it.second;
-        int sum = 0;
+        ll sum = 0;
         for(auto it : beauties) sum += it;
         ans = max(ans, sum);
     }

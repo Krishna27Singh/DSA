@@ -48,7 +48,7 @@ m pair of friends don't know each other
 good -> only if every pair is a friend
 number of segments (a, b) such that the segment is good
 
-
+1 2 3 4 
 */
 
 /*
@@ -57,14 +57,32 @@ number of segments (a, b) such that the segment is good
 */
 
 void solve(){
-    int n, m; cin>>n>>m;
-    vector<pair<int, int>> bad(m);
-    for(int i = 0; i<m; i++){
-        int x, y; cin>>x>>y;
-        bad.pb(mp(x,y));
-    }
+    int n, m;
+		cin >> n >> m;
 
-    
+		vector<int> nearestEnemy(n + 1, 0);
+
+		for (int i = 0; i < m; i++) {
+				int a, b;
+				cin >> a >> b;
+				if (a > b) swap(a, b); 
+				nearestEnemy[b] = max(nearestEnemy[b], a); 
+		}
+
+		vector<int> maxLeft(n + 1);
+
+		maxLeft[1] = 1; 
+
+		long long ans = 1; 
+
+		for (int i = 2; i <= n; i++) {
+				maxLeft[i] = max(maxLeft[i - 1], nearestEnemy[i] + 1);
+				ans += i - maxLeft[i] + 1;
+		}
+
+		cout << ans << '\n';
+
+
 
     // Output
 

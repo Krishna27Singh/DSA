@@ -50,6 +50,8 @@ abs(r1-r2) + abs(r1-r2) + .. + abs(r1-rn)
 abs(r2-r3) + abs(r3-r4) +.. + abs(r2-rn)
 abs(r3-r4) + abs(r4- r5) +.. abs(r3-rn)
 abs(rn-1 - rn)
+
+
 */
 
 /*

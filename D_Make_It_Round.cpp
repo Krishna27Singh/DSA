@@ -110,6 +110,11 @@ void solve(){
 
     if(case3 > case1 && case3 > case2){
         cout<<orgn*pow(10, case3);
+        return;
+    }
+
+    if(case1 > case2){
+        
     }
     // Output
 
