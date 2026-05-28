@@ -42,16 +42,84 @@ const ll MOD = 1e9 + 7;
 
 /*
 ****************************************** APPROACH **************************************************
+requirements?
+from l to r i wanna change in constand/logn time -> not possible 
+we have to simulate 
+offline queries
+from if type 1 then change the string from l to r if si = 0 -> 1 else si = 1 -> 0
+if type = 2 then take the xor of all the ai such that si = g (0/1)
+
 
 */
 
 /*
 ****************************************** Testing ****************************************************
+5
+5
+1 2 3 4 5
+01000
+7
+2 0
+2 1
+1 2 4
+2 0
+2 1
+1 1 3
+2 1
+6
+12 12 14 14 5 5
+001001
+3
+2 1
+1 2 4
+2 1
+4
+7 7 7 777
+1111
+3
+2 0
+1 2 3
+2 0
+2
+1000000000 996179179
+11
+1
+2 1
+5
+1 42 20 47 7
+00011
+5
+1 3 4
+1 1 1
+1 3 4
+1 2 4
+2 0
+
+
+
+3 2 6 7 7 
+11 7 
+0 0 
+16430827 
+47 
 
 */
 
 void solve(){
-    
+    int n; cin>>n;
+    vector<int> a(n);
+    for(int i = 0; i<n; i++) cin>>a[i];
+    string s; cin>>s;
+    int q; cin>>q;
+    while(q--){
+        int type; cin>>type;
+        if(type == 1){
+            int l, r; cin>>l>>r;
+        }
+        else{
+            int g; cin>>g;
+        }
+    }
 
     // Output
 

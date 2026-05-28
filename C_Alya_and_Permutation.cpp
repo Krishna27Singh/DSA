@@ -42,30 +42,64 @@ const ll MOD = 1e9 + 7;
 
 /*
 ****************************************** APPROACH **************************************************
-
+k = 0
+and or and or and or ...
 */
 
 /*
 ****************************************** Testing ****************************************************
-b shifts to the left 
-
-
-4                                                                                   
-13 8 5 4      
-3  4 2 1      
-
-
 
 */
 
+int complement(int n) {
+    int mask = 0;
+
+    int temp = n;
+    while (temp) {
+        mask = (mask << 1) | 1;
+        temp >>= 1;
+    }
+
+    return (~n) & mask;
+}
+
 void solve(){
     int n; cin>>n;
-    vector<int> a(n);
-    for(int i = 0; i<n; i++) cin>>a[i];
-    vector<int> b(n);
-    for(int i = 0; i<n; i++) cin>>b[i];
 
-    
+    int lsb = n & (-n);
+
+    int bits = 32 - __builtin_clz(n);
+
+    int comp = complement(n);
+
+    if (n % 2 == 0) {
+        int H = 1 << (bits - 1); 
+        
+        int k = (1 << bits) - 1; 
+        cout << k << "\n";
+
+        int e5 = H;
+        int e4 = H - 1;
+        int e3 = H - 2;
+        int e2 = 1;
+        int e1 = (n == 6) ? 5 : 3; 
+
+        for (int i = 1; i <= n; i++) {
+            if (i == e1 || i == e2 || i == e3 || i == e4 || i == e5) continue;
+            cout << i << " ";
+        }
+
+        cout << e1 << " " << e2 << " " << e3 << " " << e4 << " " << e5 << "\n";
+    }
+    else{
+        cout<<n<<endl;
+        // cout<<"lsb: "<<lsb<<"n - lsb: "<<n-lsb<<endl;
+        for(int i = 1; i<=n-1; i++){
+            if(i == lsb || i == (n - lsb)) continue;
+            cout<<i<<" ";
+        }
+        cout<<lsb<<" "<<(n - lsb)<<" "<<n<<endl;
+    }
 
     // Output
 

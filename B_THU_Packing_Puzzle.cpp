@@ -47,25 +47,17 @@ const ll MOD = 1e9 + 7;
 
 /*
 ****************************************** Testing ****************************************************
-b shifts to the left 
-
-
-4                                                                                   
-13 8 5 4      
-3  4 2 1      
-
-
 
 */
 
 void solve(){
-    int n; cin>>n;
-    vector<int> a(n);
-    for(int i = 0; i<n; i++) cin>>a[i];
-    vector<int> b(n);
-    for(int i = 0; i<n; i++) cin>>b[i];
+    ll ct, ch, cu; cin>>ct>>ch>>cu;
 
-    
+    if (ct > cu + 2 * ch) {
+        cout << 2 * ct + 3 * ch + 2 * cu + 1 << "\n";
+    } else {
+        cout << 2 * ct + 3 * ch + 3 * cu - min(ct, cu) << "\n";
+    }
 
     // Output
 

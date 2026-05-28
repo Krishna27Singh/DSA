@@ -47,25 +47,38 @@ const ll MOD = 1e9 + 7;
 
 /*
 ****************************************** Testing ****************************************************
-b shifts to the left 
-
-
-4                                                                                   
-13 8 5 4      
-3  4 2 1      
-
-
 
 */
 
 void solve(){
-    int n; cin>>n;
+    int n, k; cin>>n>>k;
     vector<int> a(n);
     for(int i = 0; i<n; i++) cin>>a[i];
     vector<int> b(n);
     for(int i = 0; i<n; i++) cin>>b[i];
 
+    vector<long long> l(n);
+    long long t = 0;
     
+    for (int i = 0; i < n; ++i) {
+        l[i] = a[i] / b[i];
+        t += l[i];
+    }
+
+    vector<long long> c(n, 0);
+
+    if (t >= k) {
+        for (int i = n - 1; i >= 0; --i) {
+            long long take = min((long long)k, l[i]);
+            c[i] = take;
+            k -= take; 
+        }
+    }
+
+    for (int i = 0; i < n; ++i) {
+        cout << c[i] << (i == n - 1 ? "" : " ");
+    }
+    cout << "\n";
 
     // Output
 
@@ -78,7 +91,6 @@ int main(){
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
     cout.tie(nullptr);
-    int tc; cin >> tc;
-    while (tc--) solve();
+    solve();
     return 0;
 }

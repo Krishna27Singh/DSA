@@ -47,25 +47,35 @@ const ll MOD = 1e9 + 7;
 
 /*
 ****************************************** Testing ****************************************************
-b shifts to the left 
-
-
-4                                                                                   
-13 8 5 4      
-3  4 2 1      
-
-
 
 */
 
 void solve(){
-    int n; cin>>n;
-    vector<int> a(n);
-    for(int i = 0; i<n; i++) cin>>a[i];
-    vector<int> b(n);
-    for(int i = 0; i<n; i++) cin>>b[i];
-
+    string t; cin>>t;
+    int n = t.size();
     
+    // string s should be greate than equal to n/2 + 1
+
+    string s = "";
+    for(int i = 0; i<n/2; i++) s += t[i];
+
+    for(int i = n/2; i<n-1; i++){
+        s += t[i];
+        int sz = s.size();
+        string suf = t.substr(sz);
+        string sufs = s.substr(sz - (n - sz));
+        int overlapping = 2*sz - n;
+        string pref = s.substr(0, overlapping);
+        string suff = s.substr(sz - overlapping);
+        if(suf == sufs && pref == suff){
+            cout<<"YES"<<endl;
+            cout<<s<<endl;
+            return;
+        }
+    }
+
+    cout<<"NO"<<endl;
+    return;
 
     // Output
 
@@ -78,7 +88,6 @@ int main(){
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
     cout.tie(nullptr);
-    int tc; cin >> tc;
-    while (tc--) solve();
+    solve();
     return 0;
 }

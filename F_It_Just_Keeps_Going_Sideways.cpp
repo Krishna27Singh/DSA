@@ -51,7 +51,28 @@ const ll MOD = 1e9 + 7;
 */
 
 void solve(){
-    
+    ll n; cin >> n;
+    vector<ll> a(n);
+    for (int i = 0; i < n; ++i) cin >> a[i];
+
+    vector<ll> mini(n);
+
+    ll mn = INT_MAX;
+    ll cnt = 0;
+    for(int i = n-1; i>=0; i--){
+        mn = min(mn, a[i]);
+        mini[i] = mn;
+        cnt += a[i] - mn;
+    }
+
+    unordered_map<ll, ll> mpp;
+    for(auto i: mini) mpp[i]++;
+
+    ll mx = 0;
+    for(auto i: mpp) mx = max(mx, i.second);
+
+    cnt += mx;
+    cout<<cnt-1<<endl;
 
     // Output
 

@@ -47,25 +47,68 @@ const ll MOD = 1e9 + 7;
 
 /*
 ****************************************** Testing ****************************************************
-b shifts to the left 
-
-
-4                                                                                   
-13 8 5 4      
-3  4 2 1      
-
-
 
 */
 
 void solve(){
     int n; cin>>n;
-    vector<int> a(n);
-    for(int i = 0; i<n; i++) cin>>a[i];
-    vector<int> b(n);
-    for(int i = 0; i<n; i++) cin>>b[i];
 
-    
+    string s = "";
+
+    bool flag1 = true;
+    bool flag2 = true;
+
+    while(s.size() < n){
+
+    if(flag1 && s.size() < n){
+        cout<<"? "<<s+'1'<<endl;
+        cout.flush();
+
+        int x; cin>>x;
+
+        if(x){
+            s += '1';
+        }
+        else if(flag2 == false && s.size() == n-1){
+            s += '0';
+        }
+        else{
+            cout<<"? "<<s+'0'<<endl;
+            cout.flush();
+
+            cin>>x;
+
+            if(x) s += '0';
+            else flag1 = false;
+        }
+    }
+
+    if(flag2 && s.size() < n){
+        cout<<"? "<<'1'+s<<endl;
+        cout.flush();
+
+        int x; cin>>x;
+
+        if(x){
+            s = '1' + s;
+        }
+        else if(flag1 == false && s.size() == n-1){
+            s = '0' + s;
+        }
+        else{
+            cout<<"? "<<'0'+s<<endl;
+            cout.flush();
+
+            cin>>x;
+
+            if(x) s = '0' + s;
+            else flag2 = false;
+        }
+    }
+}
+
+    cout<<"! "<<s<<endl;
+    cout.flush();
 
     // Output
 

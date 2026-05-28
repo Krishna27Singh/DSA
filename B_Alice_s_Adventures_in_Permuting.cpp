@@ -42,29 +42,28 @@ const ll MOD = 1e9 + 7;
 
 /*
 ****************************************** APPROACH **************************************************
+max(a) = mex(a) // lefmost
+
 
 */
 
 /*
 ****************************************** Testing ****************************************************
-b shifts to the left 
-
-
-4                                                                                   
-13 8 5 4      
-3  4 2 1      
-
-
-
+0 1 2 3 4
 */
 
 void solve(){
-    int n; cin>>n;
-    vector<int> a(n);
-    for(int i = 0; i<n; i++) cin>>a[i];
-    vector<int> b(n);
-    for(int i = 0; i<n; i++) cin>>b[i];
 
+    ll n, b, c; cin>>n>>b>>c;
+
+    if( c == 0 && b == 1){
+        cout<<0<<endl;
+        return;
+    }
+
+    if(b == 0){
+        
+    }
     
 
     // Output

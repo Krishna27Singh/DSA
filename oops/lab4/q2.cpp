@@ -23,12 +23,10 @@ public:
     }
 };
 
-
 int main(){
 
     D obj;
 
-    // solving diamond problem using abstract class 
     cout<<obj.mul(2, 3)<<endl;
 
     return 0;

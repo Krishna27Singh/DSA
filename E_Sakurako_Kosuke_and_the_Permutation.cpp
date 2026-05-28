@@ -47,25 +47,37 @@ const ll MOD = 1e9 + 7;
 
 /*
 ****************************************** Testing ****************************************************
-b shifts to the left 
-
-
-4                                                                                   
-13 8 5 4      
-3  4 2 1      
-
-
 
 */
 
 void solve(){
-    int n; cin>>n;
-    vector<int> a(n);
-    for(int i = 0; i<n; i++) cin>>a[i];
-    vector<int> b(n);
-    for(int i = 0; i<n; i++) cin>>b[i];
-
+    int n;
+    cin >> n;
     
+    vector<int> p(n + 1);
+    for (int i = 1; i <= n; ++i) {
+        cin >> p[i];
+    }
+    
+    vector<bool> visited(n + 1, false);
+    int operations = 0;
+    
+    for (int i = 1; i <= n; ++i) {
+        if (!visited[i]) {
+            int cycle_length = 0;
+            int current = i;
+            
+            while (!visited[current]) {
+                visited[current] = true;
+                current = p[current];
+                cycle_length++;
+            }
+            
+            operations += (cycle_length - 1) / 2;
+        }
+    }
+    
+    cout << operations << "\n";
 
     // Output
 

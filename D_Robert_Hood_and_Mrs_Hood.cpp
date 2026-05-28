@@ -47,25 +47,48 @@ const ll MOD = 1e9 + 7;
 
 /*
 ****************************************** Testing ****************************************************
-b shifts to the left 
-
-
-4                                                                                   
-13 8 5 4      
-3  4 2 1      
-
-
 
 */
 
 void solve(){
-    int n; cin>>n;
-    vector<int> a(n);
-    for(int i = 0; i<n; i++) cin>>a[i];
-    vector<int> b(n);
-    for(int i = 0; i<n; i++) cin>>b[i];
-
+    int n, d, k; cin>>n>>d>>k;
+    vector<pair<int, int>> lr(k);
+    vector<int> start_cnt(n + 2, 0);
+    vector<int> end_cnt(n + 2, 0);
     
+    for(int i = 0; i < k; i++){
+        int l, r;
+        cin >> l >> r;
+        start_cnt[l]++;
+        end_cnt[r]++;
+    }
+    
+    for(int i = 1; i <= n; i++){
+        start_cnt[i] += start_cnt[i - 1];
+        end_cnt[i] += end_cnt[i - 1];
+    }
+    
+    int max_overlaps = -1;
+    int min_overlaps = k + 1; 
+    
+    int brother_start = 1;
+    int mother_start = 1;
+    
+    for(int i = 1; i <= n - d + 1; i++){
+        int current_overlaps = start_cnt[i + d - 1] - end_cnt[i - 1];
+        
+        if(current_overlaps > max_overlaps){
+            max_overlaps = current_overlaps;
+            brother_start = i;
+        }
+        
+        if(current_overlaps < min_overlaps){
+            min_overlaps = current_overlaps;
+            mother_start = i;
+        }
+    }
+    
+    cout << brother_start << " " << mother_start << "\n";
 
     // Output
 

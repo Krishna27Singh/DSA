@@ -31,6 +31,8 @@ int main(){
 
     cout<<obj.mul(2, 3)<<endl; 
 
+    // now solving using abstract class 
+
 
     return 0;
 }

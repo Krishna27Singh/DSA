@@ -42,19 +42,15 @@ const ll MOD = 1e9 + 7;
 
 /*
 ****************************************** APPROACH **************************************************
+1st min, 2nd min and 1st max element 
+replace -> with max element
+either replace minimum element with the maximum or the maximum with the minimum
+
 
 */
 
 /*
 ****************************************** Testing ****************************************************
-b shifts to the left 
-
-
-4                                                                                   
-13 8 5 4      
-3  4 2 1      
-
-
 
 */
 
@@ -62,10 +58,16 @@ void solve(){
     int n; cin>>n;
     vector<int> a(n);
     for(int i = 0; i<n; i++) cin>>a[i];
-    vector<int> b(n);
-    for(int i = 0; i<n; i++) cin>>b[i];
 
-    
+    sort(a.begin(), a.end());
+
+    int l = 0, ans = n - 2;
+        for (int r = 2; r < n; r++) {
+            while (r - l >= 2 && a[l] + a[l+1] <= a[r]) l++;
+            ans = min(ans, n - (r - l + 1));
+        }
+ 
+        cout << ans << endl;
 
     // Output
 
