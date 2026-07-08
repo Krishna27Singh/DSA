@@ -232,8 +232,105 @@ void linearSieve(int N, vector<int>& primes, vector<int>& spf) {
 
 */
 
+int fun(int i, int stick, int stickUp, string s1, string s2, int n, vector<vector<vector<int>>> &dp){
+    if(i == n){
+        if(stick == 0) return 0;
+        else return -1e9;
+    }
+    if(i > n) return -1e9;
+    if(dp[i][stick][stickUp] != -1) return dp[i][stick][stickUp];
+
+    if(stick){
+        int case1 = 0;
+        if(stickUp){
+            if(s2[i-1] == 'A' && s2[i] == 'A' 
+               || s2[i] == 'A' && s1[i] == 'A' 
+               || s2[i-1] == 'A' && s1[i] == 'A'){
+                case1++;
+            }
+            case1 += fun(i+1, 0, 0, s1, s2, n, dp);
+        }
+        else{
+            if(s1[i-1] == 'A' && s1[i] == 'A' 
+               || s1[i] == 'A' && s2[i] == 'A' 
+               || s1[i-1] == 'A' && s2[i] == 'A'){
+                case1++;
+            }
+            case1 += fun(i+1, 0, 0, s1, s2, n, dp);
+        }
+
+        int case2 = 0;
+        if(stickUp){
+            if(s2[i-1] == 'A' && s2[i] == 'A'
+               || s2[i] == 'A' && s2[i+1] == 'A'
+               || s2[i-1] == 'A' && s2[i+1] == 'A'){
+                case2++;
+            }
+            if(s1[i] == 'A' && s1[i+1] == 'A'
+               || s1[i+1] == 'A' && s1[i+2] == 'A'
+               || s1[i] == 'A' && s1[i+2] == 'A'){
+                case2++;
+            }
+            case2 += fun(i+3, 1, 1, s1, s2, n, dp);
+        }
+        else{
+            if(s1[i-1] == 'A' && s1[i] == 'A'
+               || s1[i] == 'A' && s1[i+1] == 'A'
+               || s1[i-1] == 'A' && s1[i+1] == 'A'){
+                case2++;
+            }
+            if(s2[i] == 'A' && s2[i+1] == 'A'
+               || s2[i+1] == 'A' && s2[i+2] == 'A'
+               || s2[i] == 'A' && s2[i+2] == 'A'){
+                case2++;
+            }
+            case2 += fun(i+3, 1, 0, s1, s2, n, dp);
+        }
+        return dp[i][stick][stickUp] = max(case1, case2);
+    }
+    else{
+        int case1 = 0;
+        if(s1[i] == 'A' && s1[i+1] == 'A'
+           || s1[i+1] == 'A' && s1[i+2] == 'A'
+           || s1[i] == 'A' && s1[i+2] == 'A'){
+            case1++;
+        }
+        if(s2[i] == 'A' && s2[i+1] == 'A'
+           || s2[i+1] == 'A' && s2[i+2] == 'A'
+           || s2[i] == 'A' && s2[i+2] == 'A'){
+            case1++;
+        }
+        case1 += fun(i+3, 0, 0, s1, s2, n, dp);
+
+        int case2 = 0;
+        if(s2[i] == 'A' && s1[i] == 'A'
+           || s1[i] == 'A' && s1[i+1] == 'A'
+           || s2[i] == 'A' && s1[i+1] == 'A'){
+            case2++;
+        }
+        case2 += fun(i+2, 1, 1, s1, s2, n, dp);
+
+        int case3 = 0;
+        if(s1[i] == 'A' && s2[i] == 'A'
+           || s2[i] == 'A' && s2[i+1] == 'A'
+           || s1[i] == 'A' && s2[i+1] == 'A'){
+            case3++;
+        }
+        case3 += fun(i+2, 1, 0, s1, s2, n, dp);
+
+        return dp[i][stick][stickUp] = max({case1, case2, case3});
+    }
+    return -1;
+}
+
 void solve(){
-    
+    int n; cin>>n;
+    string s1; cin>>s1;
+    string s2; cin>>s2;
+
+    vector<vector<vector<int>>> dp(n+1, vector<vector<int>>(2, vector<int>(2, -1)));
+
+    cout<<fun(0, 0, 0, s1, s2, n, dp)<<endl;
 
     // Output
 

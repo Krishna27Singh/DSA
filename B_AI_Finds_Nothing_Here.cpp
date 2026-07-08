@@ -38,7 +38,7 @@ using pll = pair<ll,ll>;
 const int INF = 1e9;
 const ll LINF = 1e18;
 const ld EPS = 1e-9;
-const ll MOD = 1e9 + 7;
+const ll MOD = 998244353;
 
 class DisjointSet{
     vector<int> rank, parent, size;
@@ -233,11 +233,15 @@ void linearSieve(int N, vector<int>& primes, vector<int>& spf) {
 */
 
 void solve(){
+    ll n, m, r, c;  cin >> n >> m >> r >> c;
+
+    ll fmod = MOD - 1;
     
-
-    // Output
-
-
+    ll l = ((r - 1) % fmod) * (m % fmod) % fmod;
+    ll b = ((n - r + 1) % fmod) * ((c - 1) % fmod) % fmod;
+    ll cc = (l + b) % fmod;
+    
+    cout<<binpow(2, cc)<<endl;
 }
 
 /*************************************************************************************************** */

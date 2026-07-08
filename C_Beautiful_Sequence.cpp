@@ -38,7 +38,7 @@ using pll = pair<ll,ll>;
 const int INF = 1e9;
 const ll LINF = 1e18;
 const ld EPS = 1e-9;
-const ll MOD = 1e9 + 7;
+const ll MOD = 998244353;
 
 class DisjointSet{
     vector<int> rank, parent, size;
@@ -233,11 +233,46 @@ void linearSieve(int N, vector<int>& primes, vector<int>& spf) {
 */
 
 void solve(){
+    int n; cin >> n;
+    vector<int> a(n);
+    vector<int> pos1, pos3;
+    vector<int> cnt2(n + 1, 0);
+
+    for(int i = 0; i < n; i++) {
+        cin >> a[i];
+        cnt2[i + 1] = cnt2[i] + (a[i] == 2 ? 1 : 0);
+        if (a[i] == 1) pos1.pb(i);
+        if (a[i] == 3) pos3.pb(i);
+    }
+
+    int m = sz(pos3);
+    vector<ll> suff3(m + 1, 0);
     
+    for (int i = m - 1; i >= 0; i--) {
+        ll val = binpow(2, cnt2[pos3[i]]);
+        suff3[i] = (suff3[i + 1] + val) % MOD;
+    }
+
+    ll ans = 0;
+
+    for (int i : pos1) {
+        auto it = lower_bound(all(pos3), i);
+        if (it == pos3.end()) continue;
+
+        int st = distance(pos3.begin(), it);
+        ll count3 = m - st;
+        
+        ll sum = suff3[st];
+        ll inv = modInverse(binpow(2, cnt2[i]));
+
+        ll temp = (sum * inv) % MOD;
+        temp = (temp - count3 + MOD) % MOD;
+
+        ans = (ans + temp) % MOD;
+    }
 
     // Output
-
-
+    cout << ans << "\n";
 }
 
 /*************************************************************************************************** */

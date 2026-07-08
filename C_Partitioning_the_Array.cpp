@@ -233,7 +233,47 @@ void linearSieve(int N, vector<int>& primes, vector<int>& spf) {
 */
 
 void solve(){
-    
+    int n; cin>>n;
+    vector<int> a(n);
+    for(int i = 0; i<n; i++) cin>>a[i];
+
+    if(n == 1){
+        cout<<1<<endl;
+        return;
+    }
+
+    int ans = 1;
+    vector<int> divisors;
+    for(int i = 1; i*i <= n; i++){
+        if(i == 1){
+            divisors.pb(1);
+            continue;
+        }
+        if(n%i == 0){
+            divisors.push_back(i);
+            if(i != n/i) divisors.push_back(n/i);
+        }
+    }
+
+    for(auto k: divisors){
+        vector<int> diff;
+        for(int i = 0; i<n-k; i+=k) diff.pb(abs(a[i+k] - a[i]));
+        int l = diff.size();
+        int GCD = diff[0];
+        for(int i = 1; i<l; i++) GCD = gcd(GCD, diff[i]);
+
+        for(int i = 1; i<k; i++){
+            vector<int> diff2;
+            for(int j = i; j<n-k; j+=k) diff2.pb(abs(a[j+k] - a[j]));
+            int l2 = diff2.size();
+            int curGCD = diff2[0];
+            for(int j = 1; j<l2; j++) curGCD = gcd(curGCD, diff2[j]);
+            GCD = gcd(GCD, curGCD);
+        }
+        if(GCD != 1) ans++;
+    }
+
+    cout<<ans<<endl;
 
     // Output
 

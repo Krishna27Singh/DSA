@@ -232,8 +232,51 @@ void linearSieve(int N, vector<int>& primes, vector<int>& spf) {
 
 */
 
+bool check(int x, int n, vector<int>& a, string& s, int k) {
+    int ops = 0;
+    bool inside = false;
+
+    for (int i = 0; i < n; i++) {
+
+        if (s[i] == 'R' && a[i] > x) {
+            inside = false;
+        }
+
+        else if (s[i] == 'B' && a[i] > x) {
+            if (!inside) {
+                ops++;
+                inside = true;
+            }
+        }
+    }
+
+    return ops <= k;
+}
+
 void solve(){
-    
+    int n, k; cin>>n>>k;
+    string s; cin>>s;
+    vector<int> a(n);
+    for(int i = 0; i<n; i++) cin>>a[i];
+
+    int lo = 0;
+    int hi = 1e9;
+    int penalty = lo + (hi - lo) / 2;
+    int ans = -1;
+    while(lo <= hi){
+        // a[i] > penalty must be correct 
+        // check 
+        if(check(penalty, n, a, s, k)){
+            ans = penalty;
+            hi = penalty - 1;
+        }
+        else{
+            lo = penalty + 1;
+        }
+        penalty = lo + (hi - lo) / 2;
+    }
+
+    cout<<ans<<endl;
 
     // Output
 

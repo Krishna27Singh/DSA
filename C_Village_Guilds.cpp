@@ -232,8 +232,40 @@ void linearSieve(int N, vector<int>& primes, vector<int>& spf) {
 
 */
 
+int dfs(int u, const vector<vector<int>>&adj, ll& ans, int d) {
+    if (adj[u].empty()) {
+        ans += 1; 
+        return d;
+    }
+
+    int d1 = -1; 
+    int d2 = -1; 
+    for (auto adjacent : adj[u]) {
+        int a = dfs(adjacent, adj, ans, d+1);
+        if(a > d1){
+            d2 = d1;
+            d1 = a;
+        }
+        else if(a > d2) d2 = a;
+    }
+
+    if (adj[u].size() >= 2) ans += (d2-d+1);
+    else ans += 1;
+    return d1;
+}
+
 void solve(){
+    int n; cin>>n;
     
+    vector<vector<int>> adj(n + 1);
+    for(int node = 2; node<=n; node++){
+        int p; cin>>p;
+        adj[p].pb(node);
+    }
+
+    ll ans = 0;
+    dfs(1, adj, ans, 0);
+    cout<<ans<<endl;
 
     // Output
 

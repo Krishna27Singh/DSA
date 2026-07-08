@@ -233,7 +233,51 @@ void linearSieve(int N, vector<int>& primes, vector<int>& spf) {
 */
 
 void solve(){
-    
+    int n, m; cin>>n>>m;
+
+    vector<int> a(n + 1), b(n + 1), d(n + 1);
+    for (int i = 1; i <= n; ++i) {
+        cin >> a[i] >> d[i] >> b[i];
+    }
+
+    vector<int> cnt(n + 1, 0);
+    int ans = 0;
+
+    auto plus = [&](int c) {
+        if (cnt[c] == 0) {
+            ans++;
+        }
+        cnt[c]++;
+    };
+
+    auto minus = [&](int c) {
+        cnt[c]--;
+        if (cnt[c] == 0) {
+            ans--;
+        }
+    };
+
+    vector<vector<pair<int, int>>> ts(m + 1);
+
+    for (int i = 1; i <= n; ++i) {
+        if (d[i] == 1) {
+            plus(b[i]);
+        } else {
+            plus(a[i]);
+            if (d[i] <= m && a[i] != b[i]) {
+                ts[d[i]].push_back({a[i], b[i]});
+            }
+        }
+    }
+
+    for (int j = 1; j <= m; ++j) {
+        for (const auto& ev : ts[j]) {
+            minus(ev.first);
+            plus(ev.second);
+        }
+        
+        cout << ans << "\n";
+    }
 
     // Output
 
@@ -246,8 +290,7 @@ int main(){
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
     cout.tie(nullptr);
-    int tc = 1; cin >> tc;
-    while (tc--) solve();
+    solve();
     return 0;
 }
 

@@ -233,7 +233,91 @@ void linearSieve(int N, vector<int>& primes, vector<int>& spf) {
 */
 
 void solve(){
-    
+    int k; cin>>k;
+
+    vector<int> case1(100000, 0);
+    vector<int> case2(100000, 0);
+    for(int i = 0; i<100000; i+=3){
+        case1[i] = 1;
+    }
+    for(int i = 1; i<100000; i+=3){
+        case2[i] = 1;
+    }
+
+    auto temp = k;
+    // case 1
+    for(int i = 0; i<100000; i++){
+        if(case1[i] == 1){
+            temp--;
+            if(temp == 0){
+                cout<<"YES"<<endl;
+                cout<<i+1<<endl;
+                for(int j = 0; j<=i; j++){
+                    if(case1[j]) cout<<"*";
+                    else cout<<".";
+                }
+                cout<<endl;
+                for(int j = 0; j<=i; j++) cout<<".";
+                cout<<endl;
+                return;
+            } else if(temp < 0) break;
+        }
+        else if(i>0 && case1[i-1] == 1){
+            temp -= 2;
+            if(temp == 0){
+                cout<<"YES"<<endl;
+                cout<<i+1<<endl;
+                for(int j = 0; j<=i; j++){
+                    if(case1[j]) cout<<"*";
+                    else cout<<".";
+                }
+                cout<<endl;
+                for(int j = 0; j<=i; j++) cout<<".";
+                cout<<endl;
+                return;
+            } else if(temp < 0) break;
+        }
+        else temp -= 2;
+    }
+
+    // case2
+    temp = k;
+    temp -= 3;
+    for(int i = 2; i<100000; i++){
+        if(case2[i] == 1){
+            temp--;
+            if(temp == 0){
+                cout<<"YES"<<endl;
+                cout<<i+1<<endl;
+                for(int j = 0; j<=i; j++){
+                    if(case2[j]) cout<<"*";
+                    else cout<<".";
+                }
+                cout<<endl;
+                for(int j = 0; j<=i; j++) cout<<".";
+                cout<<endl;
+                return;
+            } else if(temp < 0) break;
+        }
+        else if(i>0 && case2[i-1] == 1){
+            temp -= 2;
+            if(temp == 0){
+                cout<<"YES"<<endl;
+                cout<<i+1<<endl;
+                for(int j = 0; j<=i; j++){
+                    if(case2[j]) cout<<"*";
+                    else cout<<".";
+                }
+                cout<<endl;
+                for(int j = 0; j<=i; j++) cout<<".";
+                cout<<endl;
+                return;
+            } else if(temp < 0) break;
+        }
+        else temp -= 2;
+    }
+
+    cout<<"NO"<<endl;
 
     // Output
 

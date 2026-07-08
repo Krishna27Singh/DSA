@@ -119,6 +119,61 @@ struct FenwickTree {
         return curr; 
     }
 };
+template <typename T, T DefaultValue = T(), typename Operation = std::plus<T>>
+class segtree {
+private:
+		vector<T> v;                 // tree storage (size ~ 2*N)
+		int N = 1;                   // size of the power-of-two base
+		Operation op;               // associative operation (e.g., gcd, sum, min, max)
+
+public:
+		segtree(vector<T>& a) {
+				while (N < (int)a.size()) N *= 2;                  // round up to power of two
+				v = vector<T>(2 * N - 1, DefaultValue);           // initialize all nodes with identity
+				(void)build(0, 0, N - 1, a);                      // build over [0..N-1]
+		}
+
+		T build(int i, int L, int R, vector<T>& a) {
+				if (L == R) return v[i] = (L < (int)a.size() ? a[L] : DefaultValue); // leaf: real value or identity
+				int M = (L + R) / 2;
+				// internal node is op of children
+				return v[i] = op(build(i * 2 + 1, L, M, a), build(i * 2 + 2, M + 1, R, a));
+		}
+
+		T get(int x) { return v[N - 1 + x]; } // value at original index x
+
+		void point_upd(int x, T val, int i, int L, int R) {
+				if (L == R) {
+						v[i] = val;                                 // assign at leaf
+						return;
+				}
+				int M = (L + R) / 2;
+				if (x <= M)
+						point_upd(x, val, i * 2 + 1, L, M);
+				else
+						point_upd(x, val, i * 2 + 2, M + 1, R);
+				v[i] = op(v[2 * i + 1], v[2 * i + 2]);            // recalc on the way up
+		}
+		void point_upd(int x, T val) { point_upd(x, val, 0, 0, N - 1); }
+
+		void point_op(int x, T val) { point_upd(x, op(get(x), val), 0, 0, N - 1); } // in-place apply op at index
+
+		T query(int ql, int qr, int i, int L, int R) {
+				if (R < ql || L > qr) return DefaultValue;        // disjoint -> identity
+				if (ql <= L && R <= qr) return v[i];              // fully covered
+				int M = (L + R) / 2;
+				return op(query(ql, qr, i * 2 + 1, L, M), query(ql, qr, i * 2 + 2, M + 1, R));
+		}
+		T query(int ql, int qr) { return query(ql, qr, 0, 0, N - 1); }
+};
+
+// Binary operation for GCD; identity element is 0 since gcd(0, x) = x and gcd(0, 0) = 0.
+struct GcdOperation {
+		template <typename T>
+		T operator()(const T& a, const T& b) const {
+				return gcd(a, b);
+		}
+};
 struct SegmentTree {
     int n;
     vector<long long> tree;
@@ -233,7 +288,25 @@ void linearSieve(int N, vector<int>& primes, vector<int>& spf) {
 */
 
 void solve(){
-    
+    ll n, q; cin>>n>>q;
+    vector<int> a(n);
+    for(int i = 0; i<n; i++) cin>>a[i];
+
+    vector<ll> d;
+				d.reserve(max(0LL, n - 1));
+				for (ll i = 1; i < n; i++) {
+						d.push_back(llabs(a[i] - a[i - 1]));
+				}
+
+				segtree<ll, 0, GcdOperation> seg(d);
+
+				while (q--) {
+						ll l, r;
+						cin >> l >> r;
+						--l, --r;              
+						cout << seg.query(l, r - 1) << ' ';
+				}
+				cout << '\n';
 
     // Output
 

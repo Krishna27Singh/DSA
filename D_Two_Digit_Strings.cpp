@@ -29,7 +29,6 @@ using ld = long double;
 using pii = pair<int,int>;
 using pll = pair<ll,ll>;
 
-#define pb push_back
 #define mp make_pair
 #define all(x) (x).begin(), (x).end()
 #define rall(x) (x).rbegin(), (x).rend()
@@ -232,12 +231,42 @@ void linearSieve(int N, vector<int>& primes, vector<int>& spf) {
 
 */
 
-void solve(){
-    
+int lcs(int i, int j, const vector<int>& pa, const vector<int>& pb, vector<vector<int>>& dp) {
+    if (i < 0 || j < 0) return 0;
+    if (dp[i][j] != -1) return dp[i][j];
+
+    if (pa[i] == pb[j]) {
+        return dp[i][j] = 1 + lcs(i - 1, j - 1, pa, pb, dp);
+    } 
+    return dp[i][j] = max(lcs(i - 1, j, pa, pb, dp), lcs(i, j - 1, pa, pb, dp));
+}
+
+void solve() {
+    string a, b; cin>>a>>b;
+    int la = a.length();
+    int lb = b.length();
+
+    vector<int> pa(la);
+    pa[0] = (a[0] - '0') % 10;
+    for (int i = 1; i < la; i++) pa[i] = (pa[i-1] + a[i] - '0') % 10;
+    vector<int> pb(lb);
+    pb[0] = (b[0] - '0') % 10;
+    for (int i = 1; i < lb; i++) pb[i] = (pb[i-1] + b[i] - '0') % 10;
+
+    if (pa[la-1] != pb[lb-1]) {
+        cout << -1 << "\n";
+        return;
+    }
+    if (la == 1 || lb == 1) {
+        cout << 1 << "\n";
+        return;
+    }
+
+    vector<vector<int>> dp(la - 1, vector<int>(lb - 1, -1));
+
+    cout << lcs(la - 2, lb - 2, pa, pb, dp) + 1 << "\n";
 
     // Output
-
-
 }
 
 /*************************************************************************************************** */

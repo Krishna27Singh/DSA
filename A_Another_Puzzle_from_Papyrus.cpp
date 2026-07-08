@@ -233,7 +233,36 @@ void linearSieve(int N, vector<int>& primes, vector<int>& spf) {
 */
 
 void solve(){
-    
+    int n, c; cin>>n>>c;
+    vector<int> a(n);
+    for(int i = 0; i<n; i++) cin>>a[i];
+    vector<int> b(n);
+    for(int i = 0; i<n; i++) cin>>b[i];
+
+    bool rearrange = false;
+    for(int i =0; i<n; i++){
+        if(a[i] < b[i]){
+            rearrange = true;
+            break;
+        }
+    }
+
+    sort(all(a));
+    sort(all(b));
+
+    for(int i = 0; i<n; i++){
+        if(a[i] < b[i]){
+            cout<<-1<<endl;
+            return;
+        }
+    }
+
+    int cost = 0;
+    for(int i = 0; i<n; i++) cost += abs(a[i] - b[i]);
+
+    if(rearrange) cost += c;
+    cout<<cost<<endl;
+
 
     // Output
 

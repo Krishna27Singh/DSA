@@ -233,7 +233,37 @@ void linearSieve(int N, vector<int>& primes, vector<int>& spf) {
 */
 
 void solve(){
+    ll x, y; cin>>x>>y;
+    ll k; cin>>k; // >= 2
+
+    ll ops = 0;
+
+    vector<ll> px;
+    ll temp = x;
+    px.push_back(temp);
+    while (temp > 0) {
+        temp /= k;
+        px.push_back(temp);
+    }
     
+    vector<ll> py;
+    temp = y;
+    py.push_back(temp);
+    while (temp > 0) {
+        temp /= k;
+        py.push_back(temp);
+    }
+    int i = px.size() - 1;
+    int j = py.size() - 1;
+    
+    while (i >= 0 && j >= 0 && px[i] == py[j]) {
+        i--;
+        j--;
+    }
+    
+    ops += (i + 1) + (j + 1);
+
+    cout<<ops<<endl;
 
     // Output
 

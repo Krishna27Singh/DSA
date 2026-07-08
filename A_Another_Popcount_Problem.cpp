@@ -233,7 +233,20 @@ void linearSieve(int N, vector<int>& primes, vector<int>& spf) {
 */
 
 void solve(){
+    int n,k; cin>>n>>k;
+    ll cnt = 0;
+    ll p = 1; 
     
+    while (n >= p) {
+        ll take = min((long long)k, n / p);
+        
+        cnt += take;         
+        n -= take * p;       
+        
+        p *= 2;              
+    }
+    
+    cout << cnt << endl;
 
     // Output
 

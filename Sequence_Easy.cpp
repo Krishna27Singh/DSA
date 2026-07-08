@@ -38,7 +38,7 @@ using pll = pair<ll,ll>;
 const int INF = 1e9;
 const ll LINF = 1e18;
 const ld EPS = 1e-9;
-const ll MOD = 1e9 + 7;
+const ll MOD = 998244353;
 
 class DisjointSet{
     vector<int> rank, parent, size;
@@ -227,17 +227,24 @@ void linearSieve(int N, vector<int>& primes, vector<int>& spf) {
 
 */
 
-/*
-****************************************** Testing ****************************************************
-
-*/
+vector<ll> fact, factInv;
 
 void solve(){
+    int n, k; cin>>n>>k;
+    ll ans = 0;
     
-
+    for (int i = 0; i < n; i++) {
+        ll temp = 0;
+        for (int j = 0; j <= i / k && j <= n - i + 1; j++) {
+            ll t = nCr(n - i + 1, j, fact, factInv) * nCr(n - j * k, n - i, fact, factInv) % MOD;
+            if (j % 2 == 1) temp = (temp - t + MOD) % MOD; 
+            else temp = (temp + t) % MOD;
+        }
+        ans = (ans + 1LL * (temp * fact[i] % MOD * fact[n - i] % MOD)) % MOD;
+    }
+    
+    cout << ans << "\n";
     // Output
-
-
 }
 
 /*************************************************************************************************** */
@@ -246,8 +253,12 @@ int main(){
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
     cout.tie(nullptr);
-    int tc = 1; cin >> tc;
-    while (tc--) solve();
+    
+    buildFact(2005, fact, factInv);
+    
+    int tc = 1; 
+    if (cin >> tc) {
+        while (tc--) solve();
+    }
     return 0;
 }
-

@@ -233,7 +233,17 @@ void linearSieve(int N, vector<int>& primes, vector<int>& spf) {
 */
 
 void solve(){
+    int n; cin>>n;
+    ll mcurr = 0;
+    ll ans = 0;
     
+    for (int i = 0; i < n; ++i) {
+        ll temp; cin>>temp;
+        mcurr = max(mcurr, temp);
+        ans += (mcurr - temp);
+    }
+    
+    cout << ans << "\n";
 
     // Output
 

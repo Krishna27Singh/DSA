@@ -233,7 +233,57 @@ void linearSieve(int N, vector<int>& primes, vector<int>& spf) {
 */
 
 void solve(){
+    ll n; cin>>n;
+    vector<int> a(n);
+    for (int i = 0; i < n; ++i) {
+        cin >> a[i];
+    }
+
+    vector<int> p1(n, 0);
+    vector<int> p2(n, 0);
+
+    int c1 = 0;
+    int c2 = 0;
     
+    for (int i = 0; i < n; ++i) {
+        if (a[i] == 1) {
+            c1 += 1;
+            c2 += 1;
+        } else if (a[i] == 2) {
+            c1 -= 1;
+            c2 += 1;
+        } else { 
+            c1 -= 1;
+            c2 -= 1;
+        }
+        p1[i] = c1;
+        p2[i] = c2;
+    }
+
+    vector<int> suff(n, -1e9);
+    if (n >= 2) {
+        suff[n - 2] = p2[n - 2];
+        for (int i = n - 3; i >= 0; --i) {
+            suff[i] = max(p2[i], suff[i + 1]);
+        }
+    }
+
+    bool flag = false;
+
+    for (int i = 0; i <= n - 3; ++i) {
+        if (p1[i] >= 0) {
+            if (suff[i + 1] >= p2[i]) {
+                flag = true;
+                break;
+            }
+        }
+    }
+
+    if (flag) {
+        cout << "YES\n";
+    } else {
+        cout << "NO\n";
+    }
 
     // Output
 

@@ -233,7 +233,16 @@ void linearSieve(int N, vector<int>& primes, vector<int>& spf) {
 */
 
 void solve(){
-    
+    string s; cin>>s;
+    int e = 0;
+    int w = 0;
+    for(auto i: s){
+        if(i == 'E') e++;
+        else w++;
+    }
+
+    if(e > w) cout<<"East"<<endl;
+    else cout<<"West"<<endl;
 
     // Output
 
@@ -246,8 +255,7 @@ int main(){
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
     cout.tie(nullptr);
-    int tc = 1; cin >> tc;
-    while (tc--) solve();
+    solve();
     return 0;
 }
 

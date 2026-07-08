@@ -233,7 +233,34 @@ void linearSieve(int N, vector<int>& primes, vector<int>& spf) {
 */
 
 void solve(){
-    
+    int n; cin>>n;
+
+    string s; cin>>s;
+
+    deque<int> dq;
+    bool flag = false;
+
+    for (int i = 0; i < n; ++i) {
+        int val = i + 1; 
+        if (!flag) {
+            dq.push_back(val);
+        } else {
+            dq.push_front(val);
+        }
+        if (s[i] == 'o') {
+            flag = !flag;
+        }
+    }
+    if (!flag) {
+        for (auto it = dq.begin(); it != dq.end(); ++it) {
+            cout << *it << (next(it) == dq.end() ? "" : " ");
+        }
+    } else {
+        for (auto it = dq.rbegin(); it != dq.rend(); ++it) {
+            cout << *it << (next(it) == dq.rend() ? "" : " ");
+        }
+    }
+    cout << "\n";
 
     // Output
 
@@ -246,8 +273,7 @@ int main(){
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
     cout.tie(nullptr);
-    int tc = 1; cin >> tc;
-    while (tc--) solve();
+    solve();
     return 0;
 }
 

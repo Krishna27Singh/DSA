@@ -233,7 +233,60 @@ void linearSieve(int N, vector<int>& primes, vector<int>& spf) {
 */
 
 void solve(){
-    
+    int n; cin>>n;
+    string s; cin>>s;
+
+    int inv = 0;
+    int cnt = 0;
+    int contri0 = 0;
+
+    for(int i = 0; i<n; i++){
+        if(s[i] == '1'){
+            cnt++;
+            continue;
+        }
+        if(cnt > 0) contri0++;
+        inv += cnt;
+    }
+    if(inv == 0){
+        cout<<"Bob"<<endl;
+        return;
+    }
+
+    if(inv&1){
+        cout<<"Alice"<<endl;
+        return;
+    }
+    else{
+        if(contri0 == 1){
+            cout<<"Alice"<<endl;
+            return;
+        }
+        cnt = 0;
+        for(int i = 0; i<n; i++){
+            if(s[i] == '1'){
+                cnt++;
+                continue;
+            }
+            if(cnt&1){
+                cout<<"Alice"<<endl;
+                return;
+            }
+        }
+        cnt = 0;
+        for(int i = n-1; i>=0; i--){
+            if(s[i] == '0'){
+                cnt++;
+                continue;
+            } 
+            if(cnt&1){
+                cout<<"Alice"<<endl;
+                return;
+            }
+        }
+    }
+
+    cout<<"Bob"<<endl;
 
     // Output
 

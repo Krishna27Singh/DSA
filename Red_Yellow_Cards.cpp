@@ -233,7 +233,11 @@ void linearSieve(int N, vector<int>& primes, vector<int>& spf) {
 */
 
 void solve(){
-    
+    ll R, Y;
+    cin >> R >> Y;
+    ll temp = max(Y - R, 0LL);
+    ll answer = R + temp / 2;
+    cout << answer << "\n";
 
     // Output
 

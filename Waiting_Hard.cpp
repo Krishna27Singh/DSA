@@ -233,7 +233,65 @@ void linearSieve(int N, vector<int>& primes, vector<int>& spf) {
 */
 
 void solve(){
+    int n; cin>>n;
+    vector<ll> a(n + 1); ll si = 0;
+    for (int i = 1; i <= n; i++) {
+        cin >> a[i]; si += a[i];
+    }
+
+    vector<int> check;
+    ll tm = 0;
+    vector<bool> flag(n + 1, false);
+    vector<ll> m(n + 1, 0);
+
+    for (int i = 1; i <= n; i++) {
+        m[i] = max(m[i - 1], a[i]);
+        tm += m[i];
+        if (a[i] > m[i - 1]) {
+            flag[i] = true;
+            check.push_back(i);
+        }
+    }
+    check.push_back(n + 1); 
+
+    vector<ll> b(n + 1, 0);
+    vector<ll> bm(n + 1, 0);
+    vector<ll> mpm(n + 1, 0);
+
+    for (int i = 1; i <= n; i++) {
+        if (!flag[i]) {
+            b[i] = a[i];
+        } else {
+            b[i] = 0;
+        }
+        bm[i] = max(bm[i - 1], b[i]);
+        mpm[i] = mpm[i - 1] + bm[i];
+    }
+
+    m[0] = 1; 
+    ll del = 0;
+    ll temp = tm - si;
+
+    int i = 0;
     
+    for (int k = 1; k <= n; k++) {
+        if (!flag[k]) {
+            ll delta = a[k] - m[k - 1];
+            del = min(del, delta); 
+        } else {
+            int kr = check[i + 1];
+            ll p = m[k - 1];
+            auto it = upper_bound(bm.begin() + k, bm.begin() + kr, p);
+            int idx = distance(bm.begin(), it);
+            long long ss = 1LL * (idx - k) * p + (mpm[kr - 1] - mpm[idx - 1]);
+            long long delta = ss - 1LL * (kr - k - 1) * a[k] - p;
+            del = min(del, delta);
+
+            i++;
+        }
+    }
+
+    cout << temp + del << "\n";
 
     // Output
 

@@ -233,7 +233,36 @@ void linearSieve(int N, vector<int>& primes, vector<int>& spf) {
 */
 
 void solve(){
+    int n;
+    cin >> n;
     
+    string s;
+    cin >> s;
+    
+    vector<long long> x(n);
+    for (int i = 0; i < n; ++i) {
+        cin >> x[i];
+    }
+    
+    vector<long long> y(n - 1);
+    for (int i = 0; i < n - 1; ++i) {
+        cin >> y[i];
+    }
+
+    long long sp = (s[0] == 'R' ? -x[0] : 0);
+    long long rp = (s[0] == 'S' ? -x[0] : 0);
+
+    for (int i = 1; i < n; ++i) {
+        long long sc = (s[i] == 'R' ? x[i] : 0);
+        long long rc = (s[i] == 'S' ? x[i] : 0);
+        long long scu = max(sp, rp + y[i - 1]) - sc;
+        long long rcu = max(sp, rp) - rc;
+        sp = scu;
+        rp = rcu;
+    }
+
+    cout << max(sp, rp) << "\n";
+
 
     // Output
 

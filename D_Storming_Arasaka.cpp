@@ -39,6 +39,8 @@ const int INF = 1e9;
 const ll LINF = 1e18;
 const ld EPS = 1e-9;
 const ll MOD = 1e9 + 7;
+const int MAXN = 1e6;
+vector<int> primes, spf;
 
 class DisjointSet{
     vector<int> rank, parent, size;
@@ -233,7 +235,22 @@ void linearSieve(int N, vector<int>& primes, vector<int>& spf) {
 */
 
 void solve(){
-    
+    int n; cin>>n;
+
+    int cntPrime = 0;
+    int sumExp = 0;
+
+    while (n > 1) {
+        int p = spf[n];
+        cntPrime++;              
+
+        while (n % p == 0) {
+            sumExp++;           
+            n /= p;
+        }
+    }
+
+    cout << cntPrime + sumExp - 1 << '\n';
 
     // Output
 
@@ -246,6 +263,7 @@ int main(){
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
     cout.tie(nullptr);
+    linearSieve(MAXN, primes, spf);
     int tc = 1; cin >> tc;
     while (tc--) solve();
     return 0;

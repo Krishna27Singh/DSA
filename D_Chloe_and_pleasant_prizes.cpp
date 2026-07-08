@@ -39,6 +39,7 @@ const int INF = 1e9;
 const ll LINF = 1e18;
 const ld EPS = 1e-9;
 const ll MOD = 1e9 + 7;
+ll llinf = LLONG_MAX;
 
 class DisjointSet{
     vector<int> rank, parent, size;
@@ -232,22 +233,62 @@ void linearSieve(int N, vector<int>& primes, vector<int>& spf) {
 
 */
 
-void solve(){
-    
+int a[2e5 + 5];
+vector<int> g[maxn];
 
-    // Output
+ll sum_subTree[maxn], mx_subTree[maxn];
 
 
+void dfs1(int v, int p) {
+    sum_subTree[v] = a[v];
+    mx_subTree[v] = -llinf;
+    for (int i = 0; i < g[v].size(); i++) {
+        int to = g[v][i];
+        if (to == p)
+            continue;
+        dfs1(to, v);
+        sum_subTree[v] += sum_subTree[to];
+        mx_subTree[v] = max(mx_subTree[v], mx_subTree[to]);
+    }
+    mx_subTree[v] = max(mx_subTree[v], sum_subTree[v]);
 }
 
-/*************************************************************************************************** */
+ll ans = -llinf;
 
-int main(){
-    ios::sync_with_stdio(false);
-    cin.tie(nullptr);
-    cout.tie(nullptr);
-    int tc = 1; cin >> tc;
-    while (tc--) solve();
+void dfs2(int v, int p, ll out) {
+    if (out != -llinf)
+    ans = max(ans, sum_subTree[v] + out);
+
+    vector<pair<ll, int> > miniset;
+    for (int i = 0; i < g[v].size(); i++) {
+        int to = g[v][i];
+        if (to == p)
+            continue;
+        miniset.pb(mp(mx_subTree[to], to));
+        sort(miniset.rbegin(), miniset.rend());
+        if (miniset.size() == 3)
+            miniset.pop_back();
+    }
+    miniset.pb(mp(-llinf, -1));
+    for (int i = 0; i < g[v].size(); i++) {
+        int to = g[v][i];
+        if (to == p)
+            continue;
+        ll cur = miniset[0].s == to ? miniset[1].f : miniset[0].f;
+        dfs2(to, v, max(out, cur));
+    }
+}
+
+int main() {
+    for (int i = 0; i + 1 < n; i++) {
+        int u, v; cin>>u>>v;
+        u--, v--;
+        g[u].pb(v);
+        g[v].pb(u);
+    }
+
+    dfs1(0, -1);
+    dfs2(0, -1, -llinf);
+    cout << ((ans == -llinf) ? ("Impossible") : to_string(ans));
     return 0;
 }
-

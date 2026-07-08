@@ -233,7 +233,27 @@ void linearSieve(int N, vector<int>& primes, vector<int>& spf) {
 */
 
 void solve(){
+    int n; cin>>n;
+    char x; cin>>x;
+    vector<string> s(n);
+    for(int i = 0; i<n; i++) cin>>s[i];
+
+    int idx;
+    if(x == 'A') idx = 0;
+    else if(x == 'B') idx = 1;
+    else if(x == 'C') idx = 2;
+    else if(x == 'D') idx = 3;
+    else idx = 4;
+
+    for(auto str : s){
+        if(str[idx] == 'o'){
+            cout<<"Yes"<<endl;
+            return;
+        }
+    }
     
+    cout<<"No"<<endl;
+
 
     // Output
 
@@ -246,8 +266,7 @@ int main(){
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
     cout.tie(nullptr);
-    int tc = 1; cin >> tc;
-    while (tc--) solve();
+    solve();
     return 0;
 }
 

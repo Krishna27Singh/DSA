@@ -233,6 +233,10 @@ void linearSieve(int N, vector<int>& primes, vector<int>& spf) {
 */
 
 void solve(){
+    int n, k; cin>>n>>k;
+    vector<pair<int, int>> range(n);
+    for(int i = 0; i<n; i++) cin>>range[i].first>>range[i].second;
+
     
 
     // Output

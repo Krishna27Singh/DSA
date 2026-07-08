@@ -233,7 +233,14 @@ void linearSieve(int N, vector<int>& primes, vector<int>& spf) {
 */
 
 void solve(){
-    
+    int x, y; cin>>x>>y;
+
+    if(gcd(x, 16) == 16 && gcd(y, 9) == 9 && x/gcd(x, 16) == y/gcd(y, 9)){
+        cout<<"Yes"<<endl;
+    }
+    else{
+        cout<<"No"<<endl;
+    }
 
     // Output
 
@@ -246,8 +253,7 @@ int main(){
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
     cout.tie(nullptr);
-    int tc = 1; cin >> tc;
-    while (tc--) solve();
+    solve();
     return 0;
 }
 

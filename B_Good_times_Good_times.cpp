@@ -20,6 +20,8 @@
 #include <array>
 #include <climits>
 #include <numeric>
+#pragma GCC optimize("O3,unroll-loops")
+#pragma GCC target("avx2,bmi,bmi2,lzcnt,popcnt")
 using namespace std;
 
 using ll = long long;
@@ -232,13 +234,61 @@ void linearSieve(int N, vector<int>& primes, vector<int>& spf) {
 
 */
 
-void solve(){
-    
+// vector<ll> v;
+// int wind[10000];      
 
-    // Output
+// void opt() {
+//     for (int i = 0; i < 10000; i++) {
+//         int m = 0;
+//         int temp = i;
+//         for (int k = 0; k < 4; k++) {
+//             m |= (1 << (temp % 10));
+//             temp /= 10;
+//         }
+//         wind[i] = m;
+//     }
+// }
 
+// void dfs(ll cur, int d1, int d2) {
+//     if (cur >= 2 && cur <= 1000000000) v.push_back(cur);
+//     if (cur > 100000000) return; 
 
+//     if (cur > 0) {
+//         dfs(cur * 10 + d1, d1, d2);
+//         if (d1 != d2) {
+//             dfs(cur * 10 + d2, d1, d2);
+//         }
+//     }
+// }
+
+// bool check(ll val) {
+//     int m = 0;
+//     while (val >= 10000) {
+//         m |= wind[val % 10000];
+//         int m1 = m & (m - 1);
+//         if (m1 & (m1 - 1)) return false; 
+//         val /= 10000;
+//     }
+//     while (val > 0) {
+//         m |= (1 << (val % 10));
+//         val /= 10;
+//     }
+//     int m1 = m & (m - 1);
+//     return (m1 & (m1 - 1)) == 0;
+// }
+
+void solve() {
+    ll x; cin>>x;
+    int d = 0;
+    for (ll tmp = x; tmp > 0; tmp /= 10) d++;
+ 
+    ll y = 1;
+    for (int i = 0; i < d; i++) y *= 10;
+    y += 1;
+ 
+    cout << y << "\n";
 }
+
 
 /*************************************************************************************************** */
 
@@ -246,6 +296,15 @@ int main(){
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
     cout.tie(nullptr);
+    // opt();
+    // for (int d1 = 0; d1 <= 9; d1++) {
+    //     for (int d2 = d1; d2 <= 9; d2++) {
+    //         if (d1 > 0) dfs(d1, d1, d2);
+    //         if (d2 > 0 && d1 != d2) dfs(d2, d1, d2);
+    //     }
+    // }
+    // sort(v.begin(), v.end());
+    // v.erase(unique(v.begin(), v.end()), v.end());
     int tc = 1; cin >> tc;
     while (tc--) solve();
     return 0;

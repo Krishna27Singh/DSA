@@ -233,7 +233,37 @@ void linearSieve(int N, vector<int>& primes, vector<int>& spf) {
 */
 
 void solve(){
-    
+    ll n; cin>>n;
+    vector<ll> a(n);
+    for (int i = 0; i < n; ++i) cin >> a[i];
+    vector<ll> b(n);
+    for (int i = 0; i < n; ++i) cin >> b[i];
+
+    bool flag = true;
+    long long o = 0, e = 0;
+
+    for (int i = 0; i < n; ++i) {
+        ll del = b[i] - a[i];
+        if (i % 2 == 0) { 
+            long long temp = del; 
+            if (e + temp < 0) {
+                flag = false;
+                break;
+            }
+            o = temp + e;
+        }
+        else { 
+            ll temp = -del; 
+            if (o - temp < 0) {
+                flag = false;
+                break;
+            }
+            e = o - temp;
+        }
+    }
+
+    if (flag) cout << "YES"<<endl;
+    else cout << "NO"<<endl;
 
     // Output
 

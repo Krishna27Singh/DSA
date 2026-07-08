@@ -38,7 +38,7 @@ using pll = pair<ll,ll>;
 const int INF = 1e9;
 const ll LINF = 1e18;
 const ld EPS = 1e-9;
-const ll MOD = 1e9 + 7;
+const ll MOD = 998244353;
 
 class DisjointSet{
     vector<int> rank, parent, size;
@@ -232,12 +232,57 @@ void linearSieve(int N, vector<int>& primes, vector<int>& spf) {
 
 */
 
-void solve(){
+string N;
+int n_len;
+
+// DP table: pos(505) x is_less(2) x is_started(2) x rem3(3) x mask(1024)
+int memo[505][2][2][3][1024];
+
+int solve(int pos, int is_less, int is_started, int rem3, int mask) {
+    // Base Case: We have placed all digits
+    if (pos == n_len) {
+        if (!is_started) return 0; // x >= 1, ignore 0
+        
+        // Check conditions
+        int condA = (rem3 == 0);                               // Multiple of 3
+        int condB = ((mask >> 3) & 1);                         // Contains '3'
+        int condC = (__builtin_popcount(mask) == 3);           // Exactly 3 unique digits
+        
+        // We only want numbers satisfying exactly ONE of the conditions
+        int count = condA + condB + condC;
+        return (count == 1) ? 1 : 0;
+    }
     
-
-    // Output
-
-
+    // Return memoized result if already computed
+    int &ret = memo[pos][is_less][is_started][rem3][mask];
+    if (ret != -1) return ret;
+    
+    long long ans = 0;
+    
+    // If our prefix is strictly less than N's prefix, we can go up to 9.
+    // Otherwise, we are constrained by the current digit of N.
+    int limit = is_less ? 9 : (N[pos] - '0');
+    
+    for (int d = 0; d <= limit; ++d) {
+        int nxt_is_less = is_less | (d < limit);
+        int nxt_is_started = is_started | (d > 0);
+        int nxt_rem3 = rem3;
+        int nxt_mask = mask;
+        
+        if (nxt_is_started) {
+            nxt_rem3 = (rem3 + d) % 3;
+            nxt_mask = mask | (1 << d);
+        } else {
+            // While we haven't started placing non-zero digits (leading zeros),
+            // don't contribute them to sum or the unique digit mask.
+            nxt_rem3 = 0;
+            nxt_mask = 0;
+        }
+        
+        ans += solve(pos + 1, nxt_is_less, nxt_is_started, nxt_rem3, nxt_mask);
+    }
+    
+    return ret = ans % MOD;
 }
 
 /*************************************************************************************************** */
@@ -246,8 +291,8 @@ int main(){
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
     cout.tie(nullptr);
-    int tc = 1; cin >> tc;
-    while (tc--) solve();
+    memset(memo, -1, sizeof(memo));
+    cout << solve(0, 0, 0, 0, 0) << "\n";
     return 0;
 }
 

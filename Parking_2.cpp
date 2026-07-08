@@ -233,7 +233,19 @@ void linearSieve(int N, vector<int>& primes, vector<int>& spf) {
 */
 
 void solve(){
-    
+    int X, Y, L, R, A, B;
+    cin >> X >> Y >> L >> R >> A >> B;
+
+    int ans = 0;
+
+    for (int h = A; h < B; h++) {
+        if (L <= h && h < R)
+            ans += X;
+        else
+            ans += Y;
+    }
+
+    cout << ans << '\n';
 
     // Output
 
@@ -246,8 +258,7 @@ int main(){
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
     cout.tie(nullptr);
-    int tc = 1; cin >> tc;
-    while (tc--) solve();
+    solve();
     return 0;
 }
 

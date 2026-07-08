@@ -232,14 +232,64 @@ void linearSieve(int N, vector<int>& primes, vector<int>& spf) {
 
 */
 
-void solve(){
-    
-
-    // Output
-
-
+bool check(ll x) {
+    if (x < 0) return false;
+    ll r = round(sqrt(x));
+    return r * r == x;
 }
 
+void dfs(int node, int p, vector<int>& l, vector<int>& par, const vector<vector<int>>& adj) {
+    l[node] = 1;
+    par[node] = p;
+    for (int adjacent : adj[node]) {
+        if (adjacent != p) {
+            dfs(adjacent, node, l, par, adj);
+            l[node] += l[adjacent];
+        }
+    }
+}
+
+void solve() {
+    int n; cin>>n;
+    vector<ll> a(n + 1);
+    for (int i = 1; i <= n; ++i) cin >> a[i];
+    
+    vector<vector<int>> adj(n + 1);
+    for (int i = 0; i < n - 1; i++) {
+        int u, v;
+        cin >> u >> v;
+        adj[u].push_back(v);
+        adj[v].push_back(u);
+    }
+
+    vector<int> l(n + 1, 0);
+    vector<int> par(n + 1, 0);
+    
+    dfs(1, 0, l, par, adj);
+
+    ll ans = 0;
+    for (int node = 1; node <= n; node++) {
+        if (check(a[node])) {
+            ll tel1 = 0; ll tel2 = 0;
+            for (int adjacent : adj[node]) {
+                ll len;
+                if(adjacent == par[node]) len = n - l[node];
+                else len = l[adjacent];
+                tel1 += len * len;
+                tel2 += len * len * len;
+            }
+            tel1++;
+            tel2++;
+            ll temp = n;
+            ll f = (temp * temp * temp - 3 * temp * tel1 + 2 * tel2) / 6;
+            
+            ans += f;
+        }
+    }
+    cout << ans << "\n";
+
+    // Output
+}
 /*************************************************************************************************** */
 
 int main(){

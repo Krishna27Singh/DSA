@@ -233,7 +233,10 @@ void linearSieve(int N, vector<int>& primes, vector<int>& spf) {
 */
 
 void solve(){
-    
+    int a, b; cin>>a>>b;
+    if(3*a > 2*b){
+        cout<<"Yes"<<endl;
+    } else cout<<"No"<<endl;
 
     // Output
 
@@ -246,8 +249,7 @@ int main(){
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
     cout.tie(nullptr);
-    int tc = 1; cin >> tc;
-    while (tc--) solve();
+    solve();
     return 0;
 }
 

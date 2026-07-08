@@ -233,7 +233,32 @@ void linearSieve(int N, vector<int>& primes, vector<int>& spf) {
 */
 
 void solve(){
-    
+    int x, y; cin>>x>>y;
+    unordered_map<int, int> mppx;
+    unordered_map<int, int> mppy;
+
+    // store divisors of x and y in mppx and mppy
+    for(int i = 1; i*i <= x; i++){
+        if(x % i == 0){
+            mppx[i]++;
+            if(i != x/i) mppx[x/i]++;
+        }
+    }
+    for(int i = 1; i*i <= y; i++){
+        if(y % i == 0){
+            mppy[i]++;
+            if(i != y/i) mppy[y/i]++;
+        }
+    }
+
+    for(auto i: mppy){
+        if(i.second > mppx[i.first]){
+            cout<<"NO"<<endl;
+            return;
+        }
+    }
+
+    cout<<"YES"<<endl;
 
     // Output
 
