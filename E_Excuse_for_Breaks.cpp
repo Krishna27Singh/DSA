@@ -233,49 +233,35 @@ void linearSieve(int N, vector<int>& primes, vector<int>& spf) {
 */
 
 void solve(){
-    int n; cin >> n;
-    vector<int> a(n);
-    for(int i = 0; i < n; i++) cin >> a[i];
+    ll n, m, d; cin >> n >> m >> d;
 
-    vector<set<int>> adj(n + 1);
-    for(int i = 0; i < n; i++){
-        adj[i + 1].insert(a[i]);
-        adj[a[i]].insert(i + 1);
+    vector<ll> t(2*m + 5);
+    vector<ll> v(2*m + 5);
+
+    for (int i = 1; i <= m; i++) {
+        ll x, y; cin >> x >> y;
+        t[i] = x;
+        v[i] = y + v[i - 1];
     }
 
-    vector<int> vis(n + 1, 0);
-    int total = 0;
-    int closed = 0;
-    
-    for(int i = 1; i <= n; i++){
-        if(vis[i] == 0){
-            total++;
-            queue<int> q;
-            q.push(i);
-            vis[i] = 1;
-            
-            bool flag = true;
-            
-            while(!q.empty()){
-                int node = q.front();
-                q.pop();
-                if(adj[node].size() != 2) {
-                    flag = false;
-                }
-                for(auto it: adj[node]){
-                    if(vis[it] == 0){
-                        vis[it] = 1;
-                        q.push(it);
-                    }
-                }
-            }
-            if(flag) closed++;
+    for (int i = 1; i <= m; i++) {
+        t[m + i] = n + t[i];
+        v[m + i] = v[m] + v[i];
+    }
+
+    bool flag = false;
+    for (int i = 1; i <= m; i++) {
+        int k = i;
+        for (int j = 1; j <= m; j++) {
+            ll st = t[i] + 1 + t[j];
+            while (k + 1 <= 2 * m && t[k + 1] <= st) k++;
+            if (v[i] + t[i] * d + v[j] + t[j] * d > v[k] + st * d) flag = true;
         }
     }
-    int maxi = total;
-    int mini = closed + (total > closed ? 1 : 0);
 
-    cout << mini << " " << maxi << "\n";
+    if(flag) cout<<"YES"<<endl;
+    else cout<<"NO"<<endl;
+
     // Output
 
 

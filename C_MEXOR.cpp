@@ -233,49 +233,56 @@ void linearSieve(int N, vector<int>& primes, vector<int>& spf) {
 */
 
 void solve(){
-    int n; cin >> n;
-    vector<int> a(n);
-    for(int i = 0; i < n; i++) cin >> a[i];
-
-    vector<set<int>> adj(n + 1);
-    for(int i = 0; i < n; i++){
-        adj[i + 1].insert(a[i]);
-        adj[a[i]].insert(i + 1);
-    }
-
-    vector<int> vis(n + 1, 0);
-    int total = 0;
-    int closed = 0;
-    
-    for(int i = 1; i <= n; i++){
-        if(vis[i] == 0){
-            total++;
-            queue<int> q;
-            q.push(i);
-            vis[i] = 1;
-            
-            bool flag = true;
-            
-            while(!q.empty()){
-                int node = q.front();
-                q.pop();
-                if(adj[node].size() != 2) {
-                    flag = false;
-                }
-                for(auto it: adj[node]){
-                    if(vis[it] == 0){
-                        vis[it] = 1;
-                        q.push(it);
-                    }
-                }
-            }
-            if(flag) closed++;
+    int n, k; cin>>n>>k;
+    if (n == 1) {
+        if (k == 1) {
+            cout << "YES\n";
+            cout << 0 << "\n";
         }
+        else {
+            cout << "NO\n";
+        }
+        return;
     }
-    int maxi = total;
-    int mini = closed + (total > closed ? 1 : 0);
 
-    cout << mini << " " << maxi << "\n";
+    k ^= n;
+    auto len = [](int x) {
+        if (x == 0) return 0;
+        return 32 - __builtin_clz(x);
+    };
+
+    if (len(k) > len(n - 1)) {
+        cout << "NO\n";
+        return;
+    }
+
+    vector<int> s;
+    if (k > 0 && k <= n - 1) {
+        s.push_back(k);
+    } 
+    else if (k) {
+        s.push_back(n - 1);
+        s.push_back((n - 1) ^ k);
+    }
+
+    s.push_back(0);
+    vector<int> a = s;
+    vector<bool> used(n, false);
+
+    for (int x : s)
+        if (0 <= x && x < n)
+            used[x] = true;
+
+    for (int i = 0; i < n; i++) {
+        if (!used[i])
+            a.push_back(i);
+    }
+
+    cout << "YES\n";
+    for (int i = (int)a.size() - 1; i >= 0; i--) {
+        cout << a[i] << (i ? ' ' : '\n');
+    }
+
     // Output
 
 

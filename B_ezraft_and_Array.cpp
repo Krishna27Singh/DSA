@@ -232,50 +232,39 @@ void linearSieve(int N, vector<int>& primes, vector<int>& spf) {
 
 */
 
+int n;
+// vector<vector<ll>> ans(50);
+// void build(vector<vector<ll>> &ans){
+//     vector<ll> temp = {1, 2};
+//     ll si = 3;
+//     for(int i = 2; i<50; i++){
+//         temp.push_back(si);
+//         si += si;
+//         si *= 2;
+//         for(int i = 0; i<temp.size(); i++) temp[i] = temp[i] * 2;
+//         ans[i] = temp;
+//     }
+// }
+
 void solve(){
-    int n; cin >> n;
-    vector<int> a(n);
-    for(int i = 0; i < n; i++) cin >> a[i];
-
-    vector<set<int>> adj(n + 1);
-    for(int i = 0; i < n; i++){
-        adj[i + 1].insert(a[i]);
-        adj[a[i]].insert(i + 1);
+    cin>>n;
+    if(n == 1){
+        cout<<1<<endl;
+        return;
+    }
+    if(n == 2){
+        cout<<-1<<endl;
+        return;
     }
 
-    vector<int> vis(n + 1, 0);
-    int total = 0;
-    int closed = 0;
-    
-    for(int i = 1; i <= n; i++){
-        if(vis[i] == 0){
-            total++;
-            queue<int> q;
-            q.push(i);
-            vis[i] = 1;
-            
-            bool flag = true;
-            
-            while(!q.empty()){
-                int node = q.front();
-                q.pop();
-                if(adj[node].size() != 2) {
-                    flag = false;
-                }
-                for(auto it: adj[node]){
-                    if(vis[it] == 0){
-                        vis[it] = 1;
-                        q.push(it);
-                    }
-                }
-            }
-            if(flag) closed++;
-        }
+    cout << "1 2 ";
+    ll curr = 3;
+    for (int i = 3; i <= n; i++) {
+        cout << curr << " ";
+        curr *= 2;
     }
-    int maxi = total;
-    int mini = closed + (total > closed ? 1 : 0);
+    cout << "\n";
 
-    cout << mini << " " << maxi << "\n";
     // Output
 
 

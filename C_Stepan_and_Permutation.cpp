@@ -233,49 +233,52 @@ void linearSieve(int N, vector<int>& primes, vector<int>& spf) {
 */
 
 void solve(){
-    int n; cin >> n;
-    vector<int> a(n);
-    for(int i = 0; i < n; i++) cin >> a[i];
-
-    vector<set<int>> adj(n + 1);
-    for(int i = 0; i < n; i++){
-        adj[i + 1].insert(a[i]);
-        adj[a[i]].insert(i + 1);
+    int n, x, y;
+    cin >> n >> x >> y;
+    vector<int> p(n + 1);
+    for (int i = 1; i <= n; i++) {
+        cin >> p[i];
     }
-
-    vector<int> vis(n + 1, 0);
-    int total = 0;
-    int closed = 0;
     
-    for(int i = 1; i <= n; i++){
-        if(vis[i] == 0){
-            total++;
-            queue<int> q;
-            q.push(i);
-            vis[i] = 1;
-            
-            bool flag = true;
-            
-            while(!q.empty()){
-                int node = q.front();
-                q.pop();
-                if(adj[node].size() != 2) {
-                    flag = false;
-                }
-                for(auto it: adj[node]){
-                    if(vis[it] == 0){
-                        vis[it] = 1;
-                        q.push(it);
+    bool flag = true;
+    vector<bool> vis(n + 1, false);
+    
+    for (int i = 1; i <= n; i++) {
+        if (!vis[i]) {
+            vector<int> idx;
+            vector<int> val;
+            vector<int> q;
+            q.push_back(i);
+            vis[i] = true;
+            int no = 0;
+            while (no < q.size()) {
+                int u = q[no];
+                no++;
+                idx.push_back(u);
+                val.push_back(p[u]);
+                int adj[4] = {u - x, u + x, u - y, u + y};
+                for (int v : adj) {
+                    if (v >= 1 && v <= n && !vis[v]) {
+                        vis[v] = true;
+                        q.push_back(v);
                     }
                 }
             }
-            if(flag) closed++;
+            sort(idx.begin(), idx.end());
+            sort(val.begin(), val.end());
+
+            if (idx != val) {
+                flag = false;
+                break;
+            }
         }
     }
-    int maxi = total;
-    int mini = closed + (total > closed ? 1 : 0);
-
-    cout << mini << " " << maxi << "\n";
+    
+    if (flag) {
+        cout << "YES\n";
+    } else {
+        cout << "NO\n";
+    }
     // Output
 
 

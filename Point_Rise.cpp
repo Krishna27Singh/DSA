@@ -232,53 +232,48 @@ void linearSieve(int N, vector<int>& primes, vector<int>& spf) {
 
 */
 
-void solve(){
-    int n; cin >> n;
-    vector<int> a(n);
-    for(int i = 0; i < n; i++) cin >> a[i];
-
-    vector<set<int>> adj(n + 1);
-    for(int i = 0; i < n; i++){
-        adj[i + 1].insert(a[i]);
-        adj[a[i]].insert(i + 1);
+void solve() {
+    int n; cin>>n;
+    vector<ll> x(n + 1);
+    for (int i = 1; i <= n; ++i) {
+        cin >> x[i];
     }
+    sort(x.begin() + 1, x.end());
 
-    vector<int> vis(n + 1, 0);
-    int total = 0;
-    int closed = 0;
-    
-    for(int i = 1; i <= n; i++){
-        if(vis[i] == 0){
-            total++;
-            queue<int> q;
-            q.push(i);
-            vis[i] = 1;
-            
-            bool flag = true;
-            
-            while(!q.empty()){
-                int node = q.front();
-                q.pop();
-                if(adj[node].size() != 2) {
-                    flag = false;
-                }
-                for(auto it: adj[node]){
-                    if(vis[it] == 0){
-                        vis[it] = 1;
-                        q.push(it);
-                    }
+    ll mini = -1;
+    auto update = [&](int i1, int j1, int i2, int j2, int i3, int j3) {
+        if (i1 == i2 || i1 == j2 || j1 == i2 || j1 == j2) return;
+        if (i1 == i3 || i1 == j3 || j1 == i3 || j1 == j3) return;
+        if (i2 == i3 || i2 == j3 || j2 == i3 || j2 == j3) return;
+        ll s1 = max(2LL * x[j1] - x[i2] - x[i3], x[j2] + x[j3] - 2LL * x[i1]);
+        ll s2 = max(2LL * x[j2] - x[i1] - x[i3], x[j1] + x[j3] - 2LL * x[i2]);
+        ll s3 = max(2LL * x[j3] - x[i1] - x[i2], x[j1] + x[j2] - 2LL * x[i3]);
+
+        ll temp = min({s1, s2, s3});
+        if (mini == -1 || temp < mini) {
+            mini = temp;
+        }
+    };
+
+    for (int jL = 1; jL < n; ++jL) {
+        for (int iR = 2; iR <= n; ++iR) {
+            if (iR > jL + 1) {
+                update(1, jL, iR, n, jL + 1, iR - 1);
+            } else {
+                for (int k = 1; k <= n; ++k) {
+                    update(1, jL, iR, n, k, k);
                 }
             }
-            if(flag) closed++;
         }
     }
-    int maxi = total;
-    int mini = closed + (total > closed ? 1 : 0);
 
-    cout << mini << " " << maxi << "\n";
-    // Output
+    for (int a = 1; a <=  n; ++a) {
+        for (int b = a + 1; b <= n; ++b) {
+            update(1, n, a, a, b, b);
+        }
+    }
 
-
+    cout << mini << "\n";
 }
 
 /*************************************************************************************************** */

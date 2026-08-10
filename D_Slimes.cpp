@@ -235,47 +235,33 @@ void linearSieve(int N, vector<int>& primes, vector<int>& spf) {
 void solve(){
     int n; cin >> n;
     vector<int> a(n);
-    for(int i = 0; i < n; i++) cin >> a[i];
-
-    vector<set<int>> adj(n + 1);
-    for(int i = 0; i < n; i++){
-        adj[i + 1].insert(a[i]);
-        adj[a[i]].insert(i + 1);
-    }
-
-    vector<int> vis(n + 1, 0);
-    int total = 0;
-    int closed = 0;
-    
-    for(int i = 1; i <= n; i++){
-        if(vis[i] == 0){
-            total++;
-            queue<int> q;
-            q.push(i);
-            vis[i] = 1;
-            
-            bool flag = true;
-            
-            while(!q.empty()){
-                int node = q.front();
-                q.pop();
-                if(adj[node].size() != 2) {
-                    flag = false;
-                }
-                for(auto it: adj[node]){
-                    if(vis[it] == 0){
-                        vis[it] = 1;
-                        q.push(it);
-                    }
-                }
-            }
-            if(flag) closed++;
+    for (auto& x : a) cin >> x;
+    vector<int> ans(n, n);
+    for (int z = 0; z < 2; ++z) {
+      vector<ll> s(n + 1);
+      for (int i = 0; i < n; ++i) s[i + 1] = s[i] + a[i];
+      vector<int> p(n, -1);
+      for (int i = 1; i < n; ++i) {
+        int j = (z ? n - i - 1 : i);
+        int l = 1, r = i;
+        while (l <= r) {
+          int m = (l + r) / 2;
+          if (s[i] - s[i - m] > a[i] && p[i - 1] >= i - m) {
+            ans[j] = min(ans[j], m);
+            r = m - 1;
+          } else {
+            l = m + 1;
+          }
         }
+        if (a[i - 1] > a[i]) ans[j] = 1;
+        p[i] = (a[i] == a[i - 1] ? p[i - 1] : i - 1);
+      }
+      reverse(a.begin(), a.end());
     }
-    int maxi = total;
-    int mini = closed + (total > closed ? 1 : 0);
+    for (int i = 0; i < n; ++i)
+      cout << (ans[i] == n ? -1 : ans[i]) << ' ';
+    cout << '\n';
 
-    cout << mini << " " << maxi << "\n";
     // Output
 
 

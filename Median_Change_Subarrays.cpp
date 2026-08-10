@@ -232,53 +232,87 @@ void linearSieve(int N, vector<int>& primes, vector<int>& spf) {
 
 */
 
+ll help1(FenwickTree& bit, int val, int del, int maxi) {
+    int idx = val + del;
+    if (idx < 0) return 0LL;
+    if (idx > maxi) idx = maxi;
+    return bit.sum(0, idx);
+}
+
+ll help2(FenwickTree& bit, int val, int del, int maxi) {
+    int idx = val + del;
+    if (idx > maxi) return 0LL;
+    if (idx < 0) idx = 0;
+    return bit.sum(idx, maxi);
+}
+
 void solve(){
-    int n; cin >> n;
-    vector<int> a(n);
-    for(int i = 0; i < n; i++) cin >> a[i];
-
-    vector<set<int>> adj(n + 1);
-    for(int i = 0; i < n; i++){
-        adj[i + 1].insert(a[i]);
-        adj[a[i]].insert(i + 1);
+    int n; cin>>n;
+    vector<int> a(n + 1);
+    vector<int> b(n);
+    for (int i = 1; i <= n; ++i) {
+        cin >> a[i];
+        b[i - 1] = a[i];
     }
-
-    vector<int> vis(n + 1, 0);
-    int total = 0;
-    int closed = 0;
     
-    for(int i = 1; i <= n; i++){
-        if(vis[i] == 0){
-            total++;
-            queue<int> q;
-            q.push(i);
-            vis[i] = 1;
-            
-            bool flag = true;
-            
-            while(!q.empty()){
-                int node = q.front();
-                q.pop();
-                if(adj[node].size() != 2) {
-                    flag = false;
-                }
-                for(auto it: adj[node]){
-                    if(vis[it] == 0){
-                        vis[it] = 1;
-                        q.push(it);
-                    }
-                }
-            }
-            if(flag) closed++;
+    sort(b.begin(), b.end());
+    int mid = b[(n - 1) / 2];
+    int lsum = 0, rsum = 0;
+    for (int i = 1; i <= n; ++i) if (a[i] >= mid) lsum++; else lsum--;
+    for(int i = 1; i<=n; i++) if (a[i] >= mid + 1) rsum++; else rsum--;
+    
+    int temp = -rsum;
+    int n2 = temp / 2 + 1;
+    int n1 = (lsum + 1) / 2;
+    
+    vector<int> evesum(n + 1, 0), odsum(n + 1, 0);
+    vector<int> tevesum(n + 1, 0), todsum(n + 1, 0);
+    for (int i = 1; i <= n; ++i) {
+        int e1 = 0, o1 = 0;
+        int e2 = 0, o2 = 0;
+        
+        if (i % 2 == 0) {
+            if (a[i] == mid - 1) e1 = 1;
+            if (a[i] == mid + 1) o2 = -1;
+            if (a[i] == mid) o1 = -1;
+            if (a[i] == mid) e2 = 1;
+        } 
+        else {
+            if (a[i] == mid) o2 = 1;
+            if (a[i] == mid) e1 = -1;
+            if (a[i] == mid - 1) o1 = 1;
+            if (a[i] == mid + 1) e2 = -1;
         }
+        todsum[i] = todsum[i - 1] + o2;
+        tevesum[i] = tevesum[i - 1] + e2;
+        evesum[i] = evesum[i - 1] + e1;
+        odsum[i] = odsum[i - 1] + o1;
     }
-    int maxi = total;
-    int mini = closed + (total > closed ? 1 : 0);
-
-    cout << mini << " " << maxi << "\n";
-    // Output
-
-
+    
+    int maxi = 4 * n + 5;
+    int del = 2 * n + 2;
+    
+    FenwickTree evebit(maxi + 2);
+    FenwickTree oddbit(maxi + 2);
+    FenwickTree evebit1(maxi + 2);
+    FenwickTree oddbit1(maxi + 2);
+    
+    ll ans = 0;
+    for (int r = 1; r <= n; r++) {
+        int l = r - 1;
+        if (l % 2 == 0) {
+            evebit.add(odsum[l] + del, 1);
+            evebit1.add(todsum[l] + del, 1);
+        } else {
+            oddbit.add(evesum[l] + del, 1);
+            oddbit1.add(tevesum[l] + del, 1);
+        }
+        ans += help2(oddbit, evesum[r] + n1, del, maxi);
+        ans += help2(evebit, odsum[r] + n1, del, maxi);
+        ans += help1(oddbit1, tevesum[r] - n2, del, maxi); 
+        ans += help1(evebit1, todsum[r] - n2, del, maxi);
+    }
+    cout << ans << "\n";
 }
 
 /*************************************************************************************************** */
@@ -291,4 +325,3 @@ int main(){
     while (tc--) solve();
     return 0;
 }
-

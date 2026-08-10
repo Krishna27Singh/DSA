@@ -233,49 +233,40 @@ void linearSieve(int N, vector<int>& primes, vector<int>& spf) {
 */
 
 void solve(){
-    int n; cin >> n;
-    vector<int> a(n);
-    for(int i = 0; i < n; i++) cin >> a[i];
+    ll a, b, c, d; cin >> a >> b >> c >> d;
 
-    vector<set<int>> adj(n + 1);
-    for(int i = 0; i < n; i++){
-        adj[i + 1].insert(a[i]);
-        adj[a[i]].insert(i + 1);
-    }
+	vector<ll> da; 
+	for (ll i = 1; i * i <= a; i++) {
+		if (a % i == 0) {
+			da.push_back(i);
+			if (i * i != a) da.push_back(a / i);
+		}
+	}
+    vector<ll> db;
+	for (ll i = 1; i * i <= b; i++) {
+		if (b % i == 0) {
+			db.push_back(i);
+			if (i * i != b) db.push_back(b / i);
+		}
+	}
 
-    vector<int> vis(n + 1, 0);
-    int total = 0;
-    int closed = 0;
-    
-    for(int i = 1; i <= n; i++){
-        if(vis[i] == 0){
-            total++;
-            queue<int> q;
-            q.push(i);
-            vis[i] = 1;
-            
-            bool flag = true;
-            
-            while(!q.empty()){
-                int node = q.front();
-                q.pop();
-                if(adj[node].size() != 2) {
-                    flag = false;
-                }
-                for(auto it: adj[node]){
-                    if(vis[it] == 0){
-                        vis[it] = 1;
-                        q.push(it);
-                    }
-                }
-            }
-            if(flag) closed++;
-        }
-    }
-    int maxi = total;
-    int mini = closed + (total > closed ? 1 : 0);
+	for (ll x1 : da) {
+		for (ll y1 : db) {
+			ll p = x1 * y1;       
+			ll q = (a * b) / p;  
+			ll x = a + 1;
+			if (x % p) x += p - (x % p); 
+			ll y = b + 1;
+			if (y % q) y += q - (y % q); 
+			if (x <= c && y <= d) {
+				cout << x << " " << y << endl;
+				return; 
+			}
+		}
+	}
 
-    cout << mini << " " << maxi << "\n";
+	cout << "-1 -1" << endl; 
+
     // Output
 
 

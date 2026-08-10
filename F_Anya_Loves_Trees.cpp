@@ -233,49 +233,70 @@ void linearSieve(int N, vector<int>& primes, vector<int>& spf) {
 */
 
 void solve(){
-    int n; cin >> n;
-    vector<int> a(n);
-    for(int i = 0; i < n; i++) cin >> a[i];
-
-    vector<set<int>> adj(n + 1);
-    for(int i = 0; i < n; i++){
-        adj[i + 1].insert(a[i]);
-        adj[a[i]].insert(i + 1);
+    ll n; cin >> n;
+    vector<vector<ll>> adj(n + 1);
+    for (int i = 2; i <= n; ++i) {
+        ll p; cin >> p;
+        adj[p].push_back(i); 
     }
-
-    vector<int> vis(n + 1, 0);
-    int total = 0;
-    int closed = 0;
+    vector<ll> a(n + 1);
+    for (int i = 1; i <= n; ++i) {
+        cin >> a[i];
+    }
     
-    for(int i = 1; i <= n; i++){
-        if(vis[i] == 0){
-            total++;
-            queue<int> q;
-            q.push(i);
-            vis[i] = 1;
+    vector<ll> topo;
+    vector<ll> maxi(n + 1);
+    vector<ll> mini(n + 1);
+    vector<ll> len(n + 1);
+    topo.push_back(1);
+    ll node = 0;
+    while (node < topo.size()) {
+        ll u = topo[node]; node++;
+        for (auto v : adj[u]) topo.push_back(v);
+    }
+    
+    bool flag = true;
+    for (ll i = n - 1; i >= 0; i--) {
+        ll u = topo[i];
+        if(!adj[u].empty()) {
+            mini[u] = 1e9;
+            len[u] = 0;
+            maxi[u] = -1e9;
             
-            bool flag = true;
-            
-            while(!q.empty()){
-                int node = q.front();
-                q.pop();
-                if(adj[node].size() != 2) {
-                    flag = false;
-                }
-                for(auto it: adj[node]){
-                    if(vis[it] == 0){
-                        vis[it] = 1;
-                        q.push(it);
-                    }
-                }
+            for (auto adjacent : adj[u]) {
+                mini[u] = min(mini[u], mini[adjacent]);
+                len[u] += len[adjacent];
+                maxi[u] = max(maxi[u], maxi[adjacent]);
             }
-            if(flag) closed++;
+            if (maxi[u] - mini[u] + 1 != len[u]) {
+                flag = false;
+                break;
+            }
+            ll lenn = adj[u].size();
+            ll check = 0;
+            for (ll j = 0; j < lenn; j++) {
+                ll v1 = adj[u][j];
+                ll v2 = adj[u][(j + 1) % lenn]; 
+                if (mini[v1] > mini[v2]) check++;
+            }
+            if (check > 1) {
+                flag = false;
+                break;
+            }
+        } 
+        else{
+            mini[u] = a[u];
+            len[u] = 1;
+            maxi[u] = a[u];
         }
     }
-    int maxi = total;
-    int mini = closed + (total > closed ? 1 : 0);
+    
+    if (flag) {
+        cout << "YES\n";
+    } else {
+        cout << "NO\n";
+    }
 
-    cout << mini << " " << maxi << "\n";
     // Output
 
 

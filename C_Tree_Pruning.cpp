@@ -232,50 +232,37 @@ void linearSieve(int N, vector<int>& primes, vector<int>& spf) {
 
 */
 
+int dfs(int x, int p, int depth, vector<vector<int>> &adj, vector<vector<int>> &dep) {
+	int maxi = depth;
+	for (auto &adjacent : adj[x]) {
+		if (adjacent == p) continue; 
+			maxi = max(maxi, dfs(adjacent, x, depth + 1, adj, dep)); 
+	}
+	dep[depth].push_back(maxi);
+	return maxi;
+}
+
 void solve(){
     int n; cin >> n;
-    vector<int> a(n);
-    for(int i = 0; i < n; i++) cin >> a[i];
+	vector<vector<int>> adj(n);
+	for (int i = 0; i < n - 1; i++) {
+		int u, v; cin >> u >> v; u--, v--; 
+		adj[u].push_back(v);
+		adj[v].push_back(u);
+}
 
-    vector<set<int>> adj(n + 1);
-    for(int i = 0; i < n; i++){
-        adj[i + 1].insert(a[i]);
-        adj[a[i]].insert(i + 1);
-    }
+	vector<vector<int>> dep(n);
+    dfs(0, -1, 0, adj, dep); 
 
-    vector<int> vis(n + 1, 0);
-    int total = 0;
-    int closed = 0;
-    
-    for(int i = 1; i <= n; i++){
-        if(vis[i] == 0){
-            total++;
-            queue<int> q;
-            q.push(i);
-            vis[i] = 1;
-            
-            bool flag = true;
-            
-            while(!q.empty()){
-                int node = q.front();
-                q.pop();
-                if(adj[node].size() != 2) {
-                    flag = false;
-                }
-                for(auto it: adj[node]){
-                    if(vis[it] == 0){
-                        vis[it] = 1;
-                        q.push(it);
-                    }
-                }
-            }
-            if(flag) closed++;
-        }
-    }
-    int maxi = total;
-    int mini = closed + (total > closed ? 1 : 0);
+	int ans = n;
+	multiset<int> s; 
+	for (int i = 0; i < n; i++) {
+		for (auto &x : dep[i]) s.insert(x);
+		while (!s.empty() && (*s.begin()) < i) s.erase(s.begin());
+		ans = min(ans, n - (int)s.size());
+	}
+	cout << ans << "\n";
 
-    cout << mini << " " << maxi << "\n";
     // Output
 
 

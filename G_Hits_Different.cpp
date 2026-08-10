@@ -232,50 +232,38 @@ void linearSieve(int N, vector<int>& primes, vector<int>& spf) {
 
 */
 
+const int MAXN = 1000005;
+vector<ll> dp(MAXN, -1);
+
+ll fun(ll n, vector<ll> &dp){
+    // cout<<"n: "<<n<<endl;
+    if(dp[n] != -1) return dp[n];
+    ll lvl = 1;
+    while((lvl*(lvl+1))/2 < n) lvl++;
+    if(lvl == 1) return dp[n] = 1;
+    if(lvl == 2){
+        return dp[n] = n*n + fun(1, dp);
+    }
+
+    ll idx = n - (lvl*(lvl-1))/2;
+    if(n == (lvl*(lvl+1))/2) return dp[n] = n*n + fun(((lvl-1)*(lvl-2))/2 + idx - 1, dp);
+    if(n == ((lvl*(lvl-1))/2 + 1)) return dp[n] = n*n + fun(((lvl-1)*(lvl-2))/2 + idx, dp);
+    ll ans = n*n + fun(((lvl-1)*(lvl-2))/2 + idx - 1, dp) + fun(((lvl-1)*(lvl-2))/2 + idx, dp);
+    if(n == 5) ans--;
+    else{
+        ll nn = ((lvl-1)*(lvl-2))/2 + idx - 1;
+        lvl--;
+        ll idx = nn - (lvl*(lvl-1))/2;
+        ll minusn = ((lvl-1)*(lvl-2))/2 + idx;
+        ans -= fun(minusn, dp);
+    }
+    return dp[n] = ans;
+}
+
 void solve(){
-    int n; cin >> n;
-    vector<int> a(n);
-    for(int i = 0; i < n; i++) cin >> a[i];
+    ll n; cin>>n;
 
-    vector<set<int>> adj(n + 1);
-    for(int i = 0; i < n; i++){
-        adj[i + 1].insert(a[i]);
-        adj[a[i]].insert(i + 1);
-    }
-
-    vector<int> vis(n + 1, 0);
-    int total = 0;
-    int closed = 0;
-    
-    for(int i = 1; i <= n; i++){
-        if(vis[i] == 0){
-            total++;
-            queue<int> q;
-            q.push(i);
-            vis[i] = 1;
-            
-            bool flag = true;
-            
-            while(!q.empty()){
-                int node = q.front();
-                q.pop();
-                if(adj[node].size() != 2) {
-                    flag = false;
-                }
-                for(auto it: adj[node]){
-                    if(vis[it] == 0){
-                        vis[it] = 1;
-                        q.push(it);
-                    }
-                }
-            }
-            if(flag) closed++;
-        }
-    }
-    int maxi = total;
-    int mini = closed + (total > closed ? 1 : 0);
-
-    cout << mini << " " << maxi << "\n";
+    cout<<fun(n, dp)<<endl;
     // Output
 
 
@@ -287,6 +275,7 @@ int main(){
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
     cout.tie(nullptr);
+    dp[1] = 1;
     int tc = 1; cin >> tc;
     while (tc--) solve();
     return 0;

@@ -233,49 +233,30 @@ void linearSieve(int N, vector<int>& primes, vector<int>& spf) {
 */
 
 void solve(){
-    int n; cin >> n;
-    vector<int> a(n);
-    for(int i = 0; i < n; i++) cin >> a[i];
-
-    vector<set<int>> adj(n + 1);
-    for(int i = 0; i < n; i++){
-        adj[i + 1].insert(a[i]);
-        adj[a[i]].insert(i + 1);
-    }
-
-    vector<int> vis(n + 1, 0);
-    int total = 0;
-    int closed = 0;
+    int n, k; cin>>n>>k;
+    string s; cin>>s;
     
-    for(int i = 1; i <= n; i++){
-        if(vis[i] == 0){
-            total++;
-            queue<int> q;
-            q.push(i);
-            vis[i] = 1;
-            
-            bool flag = true;
-            
-            while(!q.empty()){
-                int node = q.front();
-                q.pop();
-                if(adj[node].size() != 2) {
-                    flag = false;
-                }
-                for(auto it: adj[node]){
-                    if(vis[it] == 0){
-                        vis[it] = 1;
-                        q.push(it);
-                    }
-                }
-            }
-            if(flag) closed++;
-        }
+    int cnt1 = 0, cnt0 = 0;
+    for (char c : s) {
+        if (c == '0') cnt0++;
+        else cnt1++;
     }
-    int maxi = total;
-    int mini = closed + (total > closed ? 1 : 0);
+    if (cnt0 < k || cnt1 < k) {
+        cout << s << "\n";
+    } 
+    else if (n == 2*k) {
+        string temp = s;
+        for (auto &c : temp) {
+            if(c == '0') c = '1';
+            else c = '0';
+        }
+        cout << min(s, temp) << "\n";
+    }
+    else {
+        string temp = string(cnt0, '0') + string(cnt1, '1');
+        cout << temp << "\n";
+    }
 
-    cout << mini << " " << maxi << "\n";
     // Output
 
 

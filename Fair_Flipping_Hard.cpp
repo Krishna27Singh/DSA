@@ -232,50 +232,70 @@ void linearSieve(int N, vector<int>& primes, vector<int>& spf) {
 
 */
 
+int maxi(int U, int V, int K, int O, int Z) {
+    int H = min(O, Z);
+    int tl = max(0, H - K);
+    int tr = max(0, max(O, Z) - K);
+    if (V < tl) return V + K;
+    else if (U > tr) return O + Z - K - U;
+    else return H;
+}
+int mini(int U, int V, int K) {
+    if (K >= U && K <= V) {
+        return 0;
+    }
+    return min(abs(U - K), abs(V - K));
+}
+
 void solve(){
-    int n; cin >> n;
-    vector<int> a(n);
-    for(int i = 0; i < n; i++) cin >> a[i];
-
-    vector<set<int>> adj(n + 1);
-    for(int i = 0; i < n; i++){
-        adj[i + 1].insert(a[i]);
-        adj[a[i]].insert(i + 1);
+    int n, k; cin>>n>>k;
+    string a; cin>>a;
+    int O = 0, Z = 0;
+    for (auto c : a) {
+        if (c == '1') O++;
+        else Z++;
     }
-
-    vector<int> vis(n + 1, 0);
-    int total = 0;
-    int closed = 0;
     
-    for(int i = 1; i <= n; i++){
-        if(vis[i] == 0){
-            total++;
-            queue<int> q;
-            q.push(i);
-            vis[i] = 1;
-            
-            bool flag = true;
-            
-            while(!q.empty()){
-                int node = q.front();
-                q.pop();
-                if(adj[node].size() != 2) {
-                    flag = false;
-                }
-                for(auto it: adj[node]){
-                    if(vis[it] == 0){
-                        vis[it] = 1;
-                        q.push(it);
-                    }
-                }
-            }
-            if(flag) closed++;
-        }
+    if (k > min(O, Z)) {
+        cout << a << "\n";
+        cout << 0 << "\n";
+        return;
     }
-    int maxi = total;
-    int mini = closed + (total > closed ? 1 : 0);
+    
+    if (k == O && k == Z) {
+        string tempa = a;
+        for (auto &c : tempa) {
+            c = (c == '0' ? '1' : '0');
+        }
+        if (a <= tempa) {
+            cout << a << "\n";
+            cout << 0 << "\n";
+        } else {
+            cout << tempa << "\n";
+            cout << 1 << "\n";
+        }
+        return;
+    }
+    
+    string g = string(Z, '0') + string(O, '1');
+    cout << g << "\n";
+    
+    int l = 0;
+    for (int i = 0; i < Z; i++) {
+        if (a[i] == '1') l++;
+    }
+    
+    int U = l, V = l;
+    int cnt = 0;
+    while (U > 0) {
+        int tempu = mini(U, V, k);
+        int tempv = maxi(U, V, k, O, Z);
+        U = tempu;
+        V = tempv;
+        cnt++;
+    }
+    cout << cnt << "\n";
 
-    cout << mini << " " << maxi << "\n";
     // Output
 
 

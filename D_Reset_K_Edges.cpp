@@ -232,50 +232,69 @@ void linearSieve(int N, vector<int>& primes, vector<int>& spf) {
 
 */
 
-void solve(){
-    int n; cin >> n;
-    vector<int> a(n);
-    for(int i = 0; i < n; i++) cin >> a[i];
+int n, k;
+vector<vector<int>> g;
+vector<int> p, d, o;
+vector<bool> vis;
+void mark(int u){
+    vis[u] = 1;
+    for(auto v : g[u])
+        if(!vis[v]) mark(v);
+}
+bool check(int h){
+    fill(all(vis), 0);
+    int c = 0;
+    for(int u : o){
+        if(d[u] <= h) break;
+        if(vis[u]) continue;
+        int v = u;
+        for(int i = 0; i < h - 1; i++) v = p[v];
 
-    vector<set<int>> adj(n + 1);
-    for(int i = 0; i < n; i++){
-        adj[i + 1].insert(a[i]);
-        adj[a[i]].insert(i + 1);
+        mark(v);
+        if(++c > k) return false;
+    }
+    return true;
+}
+
+void solve(){
+    cin >> n >> k;
+    g.assign(n + 1, {});
+    p.assign(n + 1, 0);
+    d.assign(n + 1, 0);
+    vis.assign(n + 1, 0);
+
+    for(int i = 2; i <= n; i++){
+        cin >> p[i];
+        g[p[i]].pb(i);
     }
 
-    vector<int> vis(n + 1, 0);
-    int total = 0;
-    int closed = 0;
-    
-    for(int i = 1; i <= n; i++){
-        if(vis[i] == 0){
-            total++;
-            queue<int> q;
-            q.push(i);
-            vis[i] = 1;
-            
-            bool flag = true;
-            
-            while(!q.empty()){
-                int node = q.front();
-                q.pop();
-                if(adj[node].size() != 2) {
-                    flag = false;
-                }
-                for(auto it: adj[node]){
-                    if(vis[it] == 0){
-                        vis[it] = 1;
-                        q.push(it);
-                    }
-                }
-            }
-            if(flag) closed++;
+    queue<int> q;
+    q.push(1);
+    while(!q.empty()){
+        int u = q.front(); q.pop();
+        for(int v : g[u]){
+            d[v] = d[u] + 1;
+            q.push(v);
         }
     }
-    int maxi = total;
-    int mini = closed + (total > closed ? 1 : 0);
 
-    cout << mini << " " << maxi << "\n";
+    o.resize(n);
+    iota(all(o), 1);
+    sort(all(o), [&](int a, int b){
+        return d[a] > d[b];
+    });
+
+    int l = 1, r = n, ans = n;
+    while(l <= r){
+        int m = (l + r) / 2;
+        if(check(m))
+            ans = m, r = m - 1;
+        else
+            l = m + 1;
+    }
+
+    cout << ans << '\n';
+
     // Output
 
 

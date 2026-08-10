@@ -232,63 +232,53 @@ void linearSieve(int N, vector<int>& primes, vector<int>& spf) {
 
 */
 
-void solve(){
-    int n; cin >> n;
-    vector<int> a(n);
-    for(int i = 0; i < n; i++) cin >> a[i];
+const ll inf = 1e15; 
 
-    vector<set<int>> adj(n + 1);
-    for(int i = 0; i < n; i++){
-        adj[i + 1].insert(a[i]);
-        adj[a[i]].insert(i + 1);
-    }
+int n, maxH;
+ll x;
+vector<ll> c, h;
+vector<vector<ll>> dp;
 
-    vector<int> vis(n + 1, 0);
-    int total = 0;
-    int closed = 0;
-    
-    for(int i = 1; i <= n; i++){
-        if(vis[i] == 0){
-            total++;
-            queue<int> q;
-            q.push(i);
-            vis[i] = 1;
-            
-            bool flag = true;
-            
-            while(!q.empty()){
-                int node = q.front();
-                q.pop();
-                if(adj[node].size() != 2) {
-                    flag = false;
-                }
-                for(auto it: adj[node]){
-                    if(vis[it] == 0){
-                        vis[it] = 1;
-                        q.push(it);
-                    }
-                }
-            }
-            if(flag) closed++;
-        }
-    }
-    int maxi = total;
-    int mini = closed + (total > closed ? 1 : 0);
+ll solve(int i, int H) {
+		if (i < 0) return (H == 0) ? 0 : -inf;
 
-    cout << mini << " " << maxi << "\n";
-    // Output
+		if (dp[i][H] != -1) return dp[i][H];
 
+		ll money1 = solve(i - 1, H) + x;
+		ll money2 = -inf;
+		if (H >= h[i]) {
+				ll prev_saved = solve(i - 1, H - h[i]); 
+				if (prev_saved >= c[i]) {
+						money2 = prev_saved - c[i] + x;
+				}
+		}
 
+		return dp[i][H] = max(money1, money2);
 }
 
 /*************************************************************************************************** */
 
-int main(){
-    ios::sync_with_stdio(false);
-    cin.tie(nullptr);
-    cout.tie(nullptr);
-    int tc = 1; cin >> tc;
-    while (tc--) solve();
-    return 0;
-}
+int main() {
+		ios::sync_with_stdio(false);
+		cin.tie(nullptr);
 
+		int t;
+		cin >> t;
+		while (t--) {
+				cin >> n >> x;
+				c.assign(n, 0);
+				h.assign(n, 0);
+				for (int i = 0; i < n; ++i) cin >> c[i] >> h[i];
+
+				maxH = accumulate(h.begin(), h.end(), 0LL); 
+				dp.assign(n, vector<ll>(maxH + 1, -1));
+				for (int H = maxH; H >= 0; --H) {
+						ll saved = solve(n - 1, H);
+						if (saved >= 0) {
+								cout << H << '\n';
+								break;
+						}
+				}
+		}
+		return 0;
+}

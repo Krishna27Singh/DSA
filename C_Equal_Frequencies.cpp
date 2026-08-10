@@ -233,49 +233,53 @@ void linearSieve(int N, vector<int>& primes, vector<int>& spf) {
 */
 
 void solve(){
-    int n; cin >> n;
-    vector<int> a(n);
-    for(int i = 0; i < n; i++) cin >> a[i];
-
-    vector<set<int>> adj(n + 1);
-    for(int i = 0; i < n; i++){
-        adj[i + 1].insert(a[i]);
-        adj[a[i]].insert(i + 1);
+    int n;
+    cin >> n;
+    string s;
+    cin >> s;
+    vector<vector<int>> at(26);
+    for (int i = 0; i < n; i++) {
+      at[(int) (s[i] - 'a')].push_back(i);
     }
-
-    vector<int> vis(n + 1, 0);
-    int total = 0;
-    int closed = 0;
-    
-    for(int i = 1; i <= n; i++){
-        if(vis[i] == 0){
-            total++;
-            queue<int> q;
-            q.push(i);
-            vis[i] = 1;
-            
-            bool flag = true;
-            
-            while(!q.empty()){
-                int node = q.front();
-                q.pop();
-                if(adj[node].size() != 2) {
-                    flag = false;
-                }
-                for(auto it: adj[node]){
-                    if(vis[it] == 0){
-                        vis[it] = 1;
-                        q.push(it);
-                    }
-                }
-            }
-            if(flag) closed++;
+    vector<int> order(26);
+    iota(order.begin(), order.end(), 0);
+    sort(order.begin(), order.end(), [&](int i, int j) {
+      return at[i].size() > at[j].size();
+    });
+    string res = "";
+    int best = -1;
+    for (int cnt = 1; cnt <= 26; cnt++) {
+      if (n % cnt == 0) {
+        int cur = 0;
+        for (int i = 0; i < cnt; i++) {
+          cur += min(n / cnt, (int) at[order[i]].size());
         }
+        if (cur > best) {
+          best = cur;
+          res = string(n, ' ');
+          vector<char> extra;
+          for (int it = 0; it < cnt; it++) {
+            int i = order[it];
+            for (int j = 0; j < n / cnt; j++) {
+              if (j < (int) at[i].size()) {
+                res[at[i][j]] = (char) ('a' + i);
+              } else {
+                extra.push_back((char) ('a' + i));
+              }
+            }
+          }
+          for (char& c : res) {
+            if (c == ' ') {
+              c = extra.back();
+              extra.pop_back();
+            }
+          }
+        }
+      }
     }
-    int maxi = total;
-    int mini = closed + (total > closed ? 1 : 0);
+    cout << n - best << '\n';
+    cout << res << '\n';
 
-    cout << mini << " " << maxi << "\n";
     // Output
 
 

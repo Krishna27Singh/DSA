@@ -16,6 +16,7 @@
 #include <cstring>
 #include <chrono>
 #include <random>
+#include<iomanip>
 #include <bitset>
 #include <array>
 #include <climits>
@@ -233,49 +234,61 @@ void linearSieve(int N, vector<int>& primes, vector<int>& spf) {
 */
 
 void solve(){
-    int n; cin >> n;
-    vector<int> a(n);
-    for(int i = 0; i < n; i++) cin >> a[i];
-
-    vector<set<int>> adj(n + 1);
-    for(int i = 0; i < n; i++){
-        adj[i + 1].insert(a[i]);
-        adj[a[i]].insert(i + 1);
-    }
-
-    vector<int> vis(n + 1, 0);
-    int total = 0;
-    int closed = 0;
+    int n, l; cin>>n>>l;
     
-    for(int i = 1; i <= n; i++){
-        if(vis[i] == 0){
-            total++;
-            queue<int> q;
-            q.push(i);
-            vis[i] = 1;
-            
-            bool flag = true;
-            
-            while(!q.empty()){
-                int node = q.front();
-                q.pop();
-                if(adj[node].size() != 2) {
-                    flag = false;
+    ll sa = 0;
+    for (int i = 0; i < n; ++i) {
+        ll a;
+        cin >> a;
+        sa += a;
+    }
+    vector<vector<vector<double>>> dp(n + 1, vector<vector<double>>(n + 1, vector<double>(l + 1, 0.0)));
+
+    for (int n = 1; n <= n; ++n) {
+        for (int l = 1; l <= l; ++l) {
+            for (int k = n; k >= 0; --k) {
+                double pred = 0.0;
+                int ut = 2 * n - k;
+                if (ut == 0) continue; 
+                
+                double p1 = (double)k / ut;
+                double p2 = (double)(2 * n - 2 * k) / ut;
+                if (k > 0) {
+                    pred += p1 * (1.0 + dp[n - 1][k - 1][l]);
                 }
-                for(auto it: adj[node]){
-                    if(vis[it] == 0){
-                        vis[it] = 1;
-                        q.push(it);
+                if (p2 > 0.0) {
+                    double side2 = 0.0;
+                    int left = ut - 1;
+                    if (left > 0) {
+                        double match = 1.0 / left;
+                        side2 += match * (1.0 + dp[n - 1][k][l]);
+
+                        double knp = (double)k / left;
+                        if (l > 1) {
+                            side2 += knp * (1.0 + dp[n - 1][k][l - 1]);
+                        }
+                        double final = (double)(2 * n - 2 * k - 2) / left;
+                        if (l > 1) {
+                            side2 += final * dp[n][k + 2][l - 1];
+                        }
                     }
+                    double side2B = 0.0;
+                    if (k > 0 && l > 1) {
+                        side2B = dp[n][k + 1][l - 1];
+                    }
+                    pred += p2 * max(side2, side2B);
                 }
+                
+                dp[n][k][l] = pred;
             }
-            if(flag) closed++;
         }
     }
-    int maxi = total;
-    int mini = closed + (total > closed ? 1 : 0);
 
-    cout << mini << " " << maxi << "\n";
+    double o1 = dp[n][0][l];
+    double o2 = o1 * ((double)sa / n);
+
+    cout << fixed << setprecision(15) << o2 << "\n";
+
     // Output
 
 
@@ -287,8 +300,7 @@ int main(){
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
     cout.tie(nullptr);
-    int tc = 1; cin >> tc;
-    while (tc--) solve();
+    solve();
     return 0;
 }
 

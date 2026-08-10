@@ -38,7 +38,7 @@ using pll = pair<ll,ll>;
 const int INF = 1e9;
 const ll LINF = 1e18;
 const ld EPS = 1e-9;
-const ll MOD = 1e9 + 7;
+const ll MOD = 998244353;
 
 class DisjointSet{
     vector<int> rank, parent, size;
@@ -232,53 +232,57 @@ void linearSieve(int N, vector<int>& primes, vector<int>& spf) {
 
 */
 
-void solve(){
-    int n; cin >> n;
-    vector<int> a(n);
-    for(int i = 0; i < n; i++) cin >> a[i];
+int fun(int i, int j, const vector<int>& B, const vector<int>& R, vector<vector<int>>& dp) {
+    // base
+    if (i == 0 && j == 0) return 1;
+    if (dp[i][j] != -1) return dp[i][j];
+    long long ans = 0;
 
-    vector<set<int>> adj(n + 1);
-    for(int i = 0; i < n; i++){
-        adj[i + 1].insert(a[i]);
-        adj[a[i]].insert(i + 1);
+    if (i > 0 && j >= B[i]) ans = (ans + fun(i - 1, j, B, R, dp)) % MOD;
+    if (j > 0 && i >= R[j]) ans = (ans + fun(i, j - 1, B, R, dp)) % MOD;
+
+    return dp[i][j] = ans;
+}
+
+void solve() {
+    int n; cin>>n;
+    vector<int> a(n);
+    for (int i = 0; i < n; ++i) cin >> a[i];
+    vector<int> b(n);
+    for (int i = 0; i < n; ++i) {
+        cin >> b[i];
     }
 
-    vector<int> vis(n + 1, 0);
-    int total = 0;
-    int closed = 0;
-    
-    for(int i = 1; i <= n; i++){
-        if(vis[i] == 0){
-            total++;
-            queue<int> q;
-            q.push(i);
-            vis[i] = 1;
-            
-            bool flag = true;
-            
-            while(!q.empty()){
-                int node = q.front();
-                q.pop();
-                if(adj[node].size() != 2) {
-                    flag = false;
-                }
-                for(auto it: adj[node]){
-                    if(vis[it] == 0){
-                        vis[it] = 1;
-                        q.push(it);
-                    }
-                }
+    vector<int> B = {0};
+    vector<int> R = {0};
+
+    vector<int> Red = {0};
+    vector<int> Blue = {0};
+    for (int i = 0; i < n; ++i) {
+        if (b[i] == 0) { 
+            int val = a[i];
+            int mi = 0;
+            for (int j = 1; j < (int)Blue.size(); ++j) {
+                if (Blue[j] > val) mi = j;
             }
-            if(flag) closed++;
+            Red.push_back(val);
+            B.push_back(mi);
+        } else { 
+            int val = a[i];
+            int mi = 0;
+            for (int j = 1; j < (int)Red.size(); ++j) {
+                if (Red[j] < val) mi = j;
+            }
+            Blue.push_back(val);
+            R.push_back(mi);
         }
     }
-    int maxi = total;
-    int mini = closed + (total > closed ? 1 : 0);
 
-    cout << mini << " " << maxi << "\n";
-    // Output
+    int l1 = Red.size() - 1;
+    int l2 = Blue.size() - 1;
+    vector<vector<int>> dp(l1 + 1, vector<int>(l2 + 1, -1));
 
-
+    cout << fun(l1, l2, B, R, dp) << "\n";
 }
 
 /*************************************************************************************************** */

@@ -42,7 +42,7 @@ const ll MOD = 1e9 + 7;
 
 class DisjointSet{
     vector<int> rank, parent, size;
-public: 
+public:
     DisjointSet(int n){
         rank.resize(n+1, 0);
         parent.resize(n+1);
@@ -54,71 +54,57 @@ public:
         return parent[node] = findUltimateParent(parent[node]);
     }
     void unionByRank(int u, int v){
-        int ultimateParentOfU = findUltimateParent(u);
-        int ultimateParentOfV = findUltimateParent(v);
-        if(ultimateParentOfU == ultimateParentOfV) return; 
-        if(rank[ultimateParentOfU] < rank[ultimateParentOfV]) parent[ultimateParentOfU] = ultimateParentOfV;
-        else if(rank[ultimateParentOfV] < rank[ultimateParentOfU]) parent[ultimateParentOfV] = ultimateParentOfU;
+        int pu = findUltimateParent(u);
+        int pv = findUltimateParent(v);
+        if(pu == pv) return;
+        if(rank[pu] < rank[pv]) parent[pu] = pv;
+        else if(rank[pv] < rank[pu]) parent[pv] = pu;
         else{
-            parent[ultimateParentOfV] = ultimateParentOfU; 
-            rank[ultimateParentOfU]++; 
+            parent[pv] = pu;
+            rank[pu]++;
         }
     }
     void unionBySize(int u, int v){
-            int ultimateParentOfU = findUltimateParent(u);
-            int ultimateParentOfV = findUltimateParent(v);
-            if(ultimateParentOfU == ultimateParentOfV) return; 
-            if(size[ultimateParentOfU] < size[ultimateParentOfV]){
-                parent[ultimateParentOfU] = ultimateParentOfV;
-                size[ultimateParentOfV] += size[ultimateParentOfU];
-            }
-            else{ 
-                parent[ultimateParentOfV] = ultimateParentOfU;
-                size[ultimateParentOfU] += size[ultimateParentOfV];
-            }
+        int pu = findUltimateParent(u);
+        int pv = findUltimateParent(v);
+        if(pu == pv) return;
+        if(size[pu] < size[pv]){
+            parent[pu] = pv;
+            size[pv] += size[pu];
         }
+        else{
+            parent[pv] = pu;
+            size[pu] += size[pv];
+        }
+    }
 };
+
 struct FenwickTree {
     int n;
-    std::vector<long long> tree;
+    vector<ll> tree;
+
     FenwickTree(int n) {
         this->n = n;
         tree.assign(n + 1, 0);
     }
-    FenwickTree(const std::vector<long long>& a) : FenwickTree(a.size()) {
-        for (int i = 0; i < n; i++) {
-            tree[i + 1] += a[i];
-            int parent = (i + 1) + ((i + 1) & -(i + 1));
-            if (parent <= n) tree[parent] += tree[i + 1];
+
+    void update(int idx, ll val) {
+        while (idx <= n) {
+            tree[idx] = max(tree[idx], val);
+            idx += idx & (-idx);
         }
     }
-    void add(int i, long long val) {
-        for (i++; i <= n; i += (i & -i)) tree[i] += val;
-    }
-    long long sum(int i) {
-        long long s = 0;
-        for (i++; i > 0; i -= (i & -i)) s += tree[i];
-        return s;
-    }
-    long long sum(int l, int r) {
-        if (l > r) return 0;
-        return sum(r) - sum(l - 1);
-    }
-    int lower_bound(long long k) {
-        int curr = 0;
-        long long prevsum = 0;
-        int logn = 0;
-        while ((1 << (logn + 1)) <= n) logn++;
-        for (int i = logn; i >= 0; i--) {
-            int next_pos = curr + (1 << i);
-            if (next_pos <= n && tree[next_pos] + prevsum < k) {
-                curr = next_pos;
-                prevsum += tree[next_pos];
-            }
+
+    ll query(int idx) {
+        ll ans = 0;
+        while (idx > 0) {
+            ans = max(ans, tree[idx]);
+            idx -= idx & (-idx);
         }
-        return curr; 
+        return ans;
     }
 };
+
 struct SegmentTree {
     int n;
     vector<long long> tree;
@@ -126,10 +112,10 @@ struct SegmentTree {
         this->n = n;
         tree.assign(4 * n, 0);
     }
-    SegmentTree(const std::vector<long long>& a) : SegmentTree(a.size()) {
+    SegmentTree(const vector<long long>& a) : SegmentTree(a.size()) {
         build(a, 1, 0, n - 1);
     }
-    void build(const std::vector<long long>& a, int node, int start, int end) {
+    void build(const vector<long long>& a, int node, int start, int end) {
         if (start == end) {
             tree[node] = a[start];
             return;
@@ -141,7 +127,7 @@ struct SegmentTree {
     }
     void update(int node, int start, int end, int idx, long long val) {
         if (start == end) {
-            tree[node] = val; 
+            tree[node] = val;
             return;
         }
         int mid = start + (end - start) / 2;
@@ -153,18 +139,18 @@ struct SegmentTree {
         update(1, 0, n - 1, idx, val);
     }
     long long query(int node, int start, int end, int l, int r) {
-        if (r < start || end < l) return 0; 
+        if (r < start || end < l) return 0;
         if (l <= start && end <= r) return tree[node];
         int mid = start + (end - start) / 2;
-        long long left_res = query(2 * node, start, mid, l, r);
-        long long right_res = query(2 * node + 1, mid + 1, end, l, r);
-        return left_res + right_res; 
+        return query(2 * node, start, mid, l, r) +
+               query(2 * node + 1, mid + 1, end, l, r);
     }
     long long query(int l, int r) {
         if (l > r) return 0;
         return query(1, 0, n - 1, l, r);
     }
 };
+
 ll binpow(ll a, ll b) {
     a %= MOD;
     ll res = 1;
@@ -175,14 +161,18 @@ ll binpow(ll a, ll b) {
     }
     return res;
 }
+
 ll modInverse(ll a) {
     return binpow(a, MOD - 2);
 }
+
 bool isPrime(ll n) {
     if (n < 2) return false;
-    for (ll i = 2; i * i <= n; i++) if (n % i == 0) return false;
+    for (ll i = 2; i * i <= n; i++)
+        if (n % i == 0) return false;
     return true;
 }
+
 void buildFact(int n, vector<ll> &fact, vector<ll> &invFact) {
     fact.resize(n + 1);
     invFact.resize(n + 1);
@@ -191,10 +181,12 @@ void buildFact(int n, vector<ll> &fact, vector<ll> &invFact) {
     invFact[n] = modInverse(fact[n]);
     for (int i = n; i >= 1; i--) invFact[i - 1] = invFact[i] * i % MOD;
 }
+
 ll nCr(int n, int r, vector<ll> &fact, vector<ll> &invFact) {
     if (r < 0 || r > n) return 0;
     return fact[n] * invFact[r] % MOD * invFact[n - r] % MOD;
 }
+
 ll phi(ll n) {
     ll result = n;
     for (ll p = 2; p * p <= n; p++) {
@@ -206,6 +198,7 @@ ll phi(ll n) {
     if (n > 1) result -= result / n;
     return result;
 }
+
 void linearSieve(int N, vector<int>& primes, vector<int>& spf) {
     primes.clear();
     spf.assign(N + 1, 0);
@@ -225,6 +218,7 @@ void linearSieve(int N, vector<int>& primes, vector<int>& spf) {
 /*
 ****************************************** APPROACH **************************************************
 
+
 */
 
 /*
@@ -232,63 +226,50 @@ void linearSieve(int N, vector<int>& primes, vector<int>& spf) {
 
 */
 
-void solve(){
-    int n; cin >> n;
-    vector<int> a(n);
-    for(int i = 0; i < n; i++) cin >> a[i];
+void solve() {
+    int n;
+    cin >> n;
 
-    vector<set<int>> adj(n + 1);
-    for(int i = 0; i < n; i++){
-        adj[i + 1].insert(a[i]);
-        adj[a[i]].insert(i + 1);
-    }
+    vector<ll> a(n + 1);
+    for (int i = 1; i <= n; i++) cin >> a[i];
 
-    vector<int> vis(n + 1, 0);
-    int total = 0;
-    int closed = 0;
-    
-    for(int i = 1; i <= n; i++){
-        if(vis[i] == 0){
-            total++;
-            queue<int> q;
-            q.push(i);
-            vis[i] = 1;
-            
-            bool flag = true;
-            
-            while(!q.empty()){
-                int node = q.front();
-                q.pop();
-                if(adj[node].size() != 2) {
-                    flag = false;
-                }
-                for(auto it: adj[node]){
-                    if(vis[it] == 0){
-                        vis[it] = 1;
-                        q.push(it);
-                    }
-                }
-            }
-            if(flag) closed++;
+    FenwickTree ft(n);
+    vector<vector<pair<int, ll>>> events(n + 1);
+
+    ll ans = 0;
+
+    for (int i = 1; i <= n; i++) {
+
+        for (auto &e : events[i]) {
+            ft.update(e.first, e.second);
         }
+
+        int lim = i - a[i] - 1;
+
+        ll best = 0;
+        if (lim > 0) best = ft.query(min(n, lim));
+
+        ll dp = a[i] + best;
+        ans = max(ans, dp);
+
+        int activate = i + a[i] + 1;
+        if (activate <= n)
+            events[activate].push_back({i, dp});
     }
-    int maxi = total;
-    int mini = closed + (total > closed ? 1 : 0);
 
-    cout << mini << " " << maxi << "\n";
-    // Output
-
-
+    cout << ans << '\n';
 }
 
 /*************************************************************************************************** */
 
-int main(){
+int main() {
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
     cout.tie(nullptr);
-    int tc = 1; cin >> tc;
+
+    int tc = 1;
+    cin >> tc;
     while (tc--) solve();
+
     return 0;
 }
-

@@ -231,54 +231,49 @@ void linearSieve(int N, vector<int>& primes, vector<int>& spf) {
 ****************************************** Testing ****************************************************
 
 */
-
 void solve(){
-    int n; cin >> n;
-    vector<int> a(n);
-    for(int i = 0; i < n; i++) cin >> a[i];
+    ll n,Q; cin>>n>>Q;
 
-    vector<set<int>> adj(n + 1);
-    for(int i = 0; i < n; i++){
-        adj[i + 1].insert(a[i]);
-        adj[a[i]].insert(i + 1);
-    }
+    vector<int> val(n+1,0), forw(n+1,0), backw(n+1, 0);
+    forw[0] = backw[0] = 0;
 
-    vector<int> vis(n + 1, 0);
-    int total = 0;
-    int closed = 0;
-    
-    for(int i = 1; i <= n; i++){
-        if(vis[i] == 0){
-            total++;
-            queue<int> q;
-            q.push(i);
-            vis[i] = 1;
-            
-            bool flag = true;
-            
-            while(!q.empty()){
-                int node = q.front();
-                q.pop();
-                if(adj[node].size() != 2) {
-                    flag = false;
-                }
-                for(auto it: adj[node]){
-                    if(vis[it] == 0){
-                        vis[it] = 1;
-                        q.push(it);
-                    }
-                }
+    ll txor = 0;
+    string out;
+    for (int q = 0; q < Q; q++) {
+        ll t; cin>>t;
+        if (t == 1) {
+            int x; cin>>x;
+            ll oldV = val[x];
+            ll newV = oldV + 1;
+            val[x] = newV;
+            txor ^= (ll)(oldV ^ newV);
+            if (oldV == 0) {
+                ll h = forw[0];
+                forw[x] = h;
+                backw[x] = 0;
+                backw[h] = x;
+                forw[0] = x;
             }
-            if(flag) closed++;
+        } else {
+            ll cur = forw[0];
+            while (cur != 0) {
+                ll nx = forw[cur];
+                ll oldV = val[cur];
+                ll newV = oldV - 1;
+                val[cur] = newV;
+                txor ^= (ll)(oldV ^ newV);
+                if (newV == 0) {
+                    forw[backw[cur]] = forw[cur];
+                    backw[forw[cur]] = backw[cur];
+                }
+                cur = nx;
+            }
         }
+        out += to_string(txor);
+        out += '\n';
     }
-    int maxi = total;
-    int mini = closed + (total > closed ? 1 : 0);
 
-    cout << mini << " " << maxi << "\n";
-    // Output
-
-
+    cout << out;
 }
 
 /*************************************************************************************************** */
@@ -287,8 +282,7 @@ int main(){
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
     cout.tie(nullptr);
-    int tc = 1; cin >> tc;
-    while (tc--) solve();
+    solve();
     return 0;
 }
 

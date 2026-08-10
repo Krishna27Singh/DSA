@@ -233,49 +233,40 @@ void linearSieve(int N, vector<int>& primes, vector<int>& spf) {
 */
 
 void solve(){
-    int n; cin >> n;
-    vector<int> a(n);
-    for(int i = 0; i < n; i++) cin >> a[i];
+        int n; cin >> n;
+        vector<int> a(n);
+        for (int i = 0; i < n; i++) cin >> a[i];
+        reverse(a.begin(), a.end());
+        vector<int> b = a;
+        b.insert(b.end(), a.begin(), a.end());
+        vector<int> p(1, 0), q(1, 0);
 
-    vector<set<int>> adj(n + 1);
-    for(int i = 0; i < n; i++){
-        adj[i + 1].insert(a[i]);
-        adj[a[i]].insert(i + 1);
-    }
+        for (int i = 0; i < 2 * n - 1; i++) {
+            if (b[i] >= b[i + 1])
+                p.push_back(p.back() + 1);
+            else
+                p.push_back(0);
 
-    vector<int> vis(n + 1, 0);
-    int total = 0;
-    int closed = 0;
-    
-    for(int i = 1; i <= n; i++){
-        if(vis[i] == 0){
-            total++;
-            queue<int> q;
-            q.push(i);
-            vis[i] = 1;
-            
-            bool flag = true;
-            
-            while(!q.empty()){
-                int node = q.front();
-                q.pop();
-                if(adj[node].size() != 2) {
-                    flag = false;
-                }
-                for(auto it: adj[node]){
-                    if(vis[it] == 0){
-                        vis[it] = 1;
-                        q.push(it);
-                    }
-                }
-            }
-            if(flag) closed++;
+            if (b[i] <= b[i + 1])
+                q.push_back(q.back() + 1);
+            else
+                q.push_back(0);
         }
-    }
-    int maxi = total;
-    int mini = closed + (total > closed ? 1 : 0);
+        int ans = INF;
 
-    cout << mini << " " << maxi << "\n";
+        for (int i = n - 1; i < (int)p.size(); i++) {
+            if (p[i] == n - 1) {
+                ans = min(ans, i - n + 1);
+                ans = min(ans, (int)p.size() - i + 1);
+            }
+            if (q[i] == n - 1) {
+                ans = min(ans, (int)p.size() - i);
+                ans = min(ans, i - n + 2);
+            }
+        }
+
+        cout << (ans == INF ? -1 : ans) << '\n';
+
     // Output
 
 

@@ -9,6 +9,7 @@
 #include <unordered_set>
 #include <unordered_map>
 #include <queue>
+#include<stack>
 #include <ctime>
 #include <cassert>
 #include <complex>
@@ -233,49 +234,44 @@ void linearSieve(int N, vector<int>& primes, vector<int>& spf) {
 */
 
 void solve(){
-    int n; cin >> n;
-    vector<int> a(n);
-    for(int i = 0; i < n; i++) cin >> a[i];
-
-    vector<set<int>> adj(n + 1);
-    for(int i = 0; i < n; i++){
-        adj[i + 1].insert(a[i]);
-        adj[a[i]].insert(i + 1);
-    }
-
-    vector<int> vis(n + 1, 0);
-    int total = 0;
-    int closed = 0;
-    
-    for(int i = 1; i <= n; i++){
-        if(vis[i] == 0){
-            total++;
-            queue<int> q;
-            q.push(i);
-            vis[i] = 1;
-            
-            bool flag = true;
-            
-            while(!q.empty()){
-                int node = q.front();
-                q.pop();
-                if(adj[node].size() != 2) {
-                    flag = false;
-                }
-                for(auto it: adj[node]){
-                    if(vis[it] == 0){
-                        vis[it] = 1;
-                        q.push(it);
-                    }
-                }
+        int n;
+        cin >> n;
+        int a[n + 1], b[n + 1];
+        for(int i = 1; i <= n; i++) cin >> a[i];
+        for(int i = 1; i <= n; i++) cin >> b[i];
+        bool val[n + 1];
+        memset(val, false, sizeof(val));
+        for(int t = 0; t < 2; t++){
+            int prvb[n + 1]; 
+            int nxta[n + 1]; 
+            stack<pair<int, int>> s;
+            s.push({INF, n + 1});
+            for(int i = n; i >= 1; i--){
+                while(s.top().first <= a[i]) s.pop();
+                nxta[i] = s.top().second;
+                s.push({a[i], i});
             }
-            if(flag) closed++;
+            while(!s.empty()) s.pop();
+            s.push({0, 0});
+            for(int i = 1; i <= n; i++){
+                while(s.top().first >= b[i]) s.pop();
+                prvb[i] = s.top().second;
+                s.push({b[i], i});
+            }
+            int m[n + 1];
+            memset(m, 0, sizeof(m));
+            for(int i = 1; i <= n; i++){
+                m[a[i]] = i;
+                if(a[i] <= b[i] && m[b[i]]) val[i] |= prvb[i] < m[b[i]] && nxta[m[b[i]]] > i;
+            }
+            reverse(a + 1, a + n + 1);
+            reverse(b + 1, b + n + 1);
+            reverse(val + 1, val + n + 1);
         }
-    }
-    int maxi = total;
-    int mini = closed + (total > closed ? 1 : 0);
+        bool ans = true;
+        for(int i = 1; i <= n; i++) ans &= val[i];
+        cout << (ans ? "YES" : "NO") << endl;
 
-    cout << mini << " " << maxi << "\n";
     // Output
 
 

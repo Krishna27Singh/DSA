@@ -232,53 +232,71 @@ void linearSieve(int N, vector<int>& primes, vector<int>& spf) {
 
 */
 
-void solve(){
-    int n; cin >> n;
-    vector<int> a(n);
-    for(int i = 0; i < n; i++) cin >> a[i];
+vector<pair<int, int>> pm;
+vector<int> dp1;
+vector<int> dp2;
 
-    vector<set<int>> adj(n + 1);
-    for(int i = 0; i < n; i++){
-        adj[i + 1].insert(a[i]);
-        adj[a[i]].insert(i + 1);
-    }
+int maxi(int i);
 
-    vector<int> vis(n + 1, 0);
-    int total = 0;
-    int closed = 0;
+int fun(int i) {
+    if (i < 0) return -1e9;
+    if (dp1[i] != -2) return dp1[i];
     
-    for(int i = 1; i <= n; i++){
-        if(vis[i] == 0){
-            total++;
-            queue<int> q;
-            q.push(i);
-            vis[i] = 1;
-            
-            bool flag = true;
-            
-            while(!q.empty()){
-                int node = q.front();
-                q.pop();
-                if(adj[node].size() != 2) {
-                    flag = false;
-                }
-                for(auto it: adj[node]){
-                    if(vis[it] == 0){
-                        vis[it] = 1;
-                        q.push(it);
-                    }
-                }
+    int ans = -1e9;
+    if (pm[i].first > 1 || pm[i].second == 1) {
+        ans = 1;
+    }
+    
+    if (i > 0) {
+        int past = fun(i - 1);
+        if (past > 0) {
+            bool adjacent = !(pm[i].first - pm[i-1].first == 1 && pm[i].second - pm[i-1].second > 1);
+            if (adjacent) {
+                ans = max(ans, past + 1);
             }
-            if(flag) closed++;
         }
     }
-    int maxi = total;
-    int mini = closed + (total > closed ? 1 : 0);
+    
+    if (i > 1) {
+        int pastm = maxi(i - 2);
+        if (pastm > 0) {
+            ans = max(ans, pastm + 1);
+        }
+    }
+    
+    return dp1[i] = ans;
+}
 
-    cout << mini << " " << maxi << "\n";
-    // Output
+int maxi(int i) {
+    if (i < 0) return -1e9;
+    if (dp2[i] != -2) return dp2[i];
+    return dp2[i] = max(maxi(i - 1), fun(i));
+}
 
-
+void solve() {
+    int n; cin>>n;
+    vector<int> a(n + 1);
+    for (int i = 1; i <= n; i++) {
+        cin >> a[i];
+    }
+    
+    pm.clear();
+    int mx = 0;
+    for (int i = 1; i <= n; i++) {
+        if (a[i] > mx) {
+            pm.push_back({i, a[i]});
+            mx = a[i];
+        }
+    }
+    
+    int len = pm.size();
+    dp1.assign(len, -2);
+    dp2.assign(len, -2);
+    
+    int temp = maxi(len - 1);
+    if (temp < 0) temp = 0;
+    auto ans = n - temp;
+    cout << ans << "\n";
 }
 
 /*************************************************************************************************** */
