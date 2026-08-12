@@ -106,17 +106,22 @@ struct FenwickTree {
     }
     int lower_bound(long long k) {
         int curr = 0;
-        long long prevsum = 0;
+        long long sum = 0;
+
         int logn = 0;
-        while ((1 << (logn + 1)) <= n) logn++;
-        for (int i = logn; i >= 0; i--) {
-            int next_pos = curr + (1 << i);
-            if (next_pos <= n && tree[next_pos] + prevsum < k) {
-                curr = next_pos;
-                prevsum += tree[next_pos];
+        while((1 << (logn + 1)) <= n)
+            logn++;
+
+        for(int i = logn; i >= 0; i--) {
+            int next = curr + (1 << i);
+
+            if(next <= n && sum + tree[next] <= k) {
+                curr = next;
+                sum += tree[next];
             }
         }
-        return curr; 
+
+        return curr;
     }
 };
 struct SegmentTree {
@@ -232,29 +237,54 @@ void linearSieve(int N, vector<int>& primes, vector<int>& spf) {
 
 */
 
+
 void solve(){
-    ll n, c; cin>>n>>c;
-    vector<ll> s(n);
-    ll e = 0, o = 0;
-    ll a = 0, b = 0;
-    for (int i = 0; i<n; i++) {
-        cin>>s[i];
+    int n; cin >> n;
+    vector<char> c(n + 1);
+    vector<ll> x(n + 1);
+
+    c[0] = 's';
+    for(int i = 1; i <= n; i++){
+        cin >> c[i] >> x[i];
     }
-    for(int i = 0; i<n; i++){
-        if (s[i] % 2 == 0) e++;
-        else o++;
-        a += (s[i] / 2 + 1);
-        b += (c - s[i] + 1);
+
+    FenwickTree fen(n + 1);
+    for(int i = 1; i <= n; i++){
+        fen.add(i, 1);
     }
-    ll ans = (c+1)*(c+2) / 2;
-    ll ab = e * (e+1)/2 + o*(o+1)/2;
-    cout << ans-a-b+ab << endl;
 
-    // Output
+    for(int i = n; i >= 1; i--){
+        if(c[i] == 'p'){
+            fen.add(x[i], -1);
+            continue;
+        }
 
+        int j = i - 1;
+        ll res = x[i];
+        while(c[j] == 'p'){
+            res -= fen.sum(x[j] + 1, n);
+            fen.add(x[j], -1);
+            j--;
+        }
 
+        res -= x[j];
+        for(int k = j + 1; k < i; k++){
+            fen.add(x[k], 2);
+        }
+
+        x[i] = fen.lower_bound(i - 1 - res);
+        fen.add(x[i], -1);
+        for(int k = j + 1; k < i; k++){
+            fen.add(x[k], -2);
+        }
+        i = j + 1;
+    }
+
+    for(int i = 1; i <= n; i++){
+        cout << x[i] << " ";
+    }
+    cout<<endl;
 }
-
 /*************************************************************************************************** */
 
 int main(){

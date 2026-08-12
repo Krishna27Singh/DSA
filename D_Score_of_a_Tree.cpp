@@ -233,22 +233,41 @@ void linearSieve(int N, vector<int>& primes, vector<int>& spf) {
 */
 
 void solve(){
-    ll n, c; cin>>n>>c;
-    vector<ll> s(n);
-    ll e = 0, o = 0;
-    ll a = 0, b = 0;
-    for (int i = 0; i<n; i++) {
-        cin>>s[i];
+    int n; cin >> n;
+    vector<vector<int>> g(n + 1);
+    for(int i = 0; i < n - 1; i++){
+        int u, v; cin >> u >> v;
+        g[u].pb(v); g[v].pb(u);
     }
-    for(int i = 0; i<n; i++){
-        if (s[i] % 2 == 0) e++;
-        else o++;
-        a += (s[i] / 2 + 1);
-        b += (c - s[i] + 1);
+
+    vector<int> p(n + 1, 0);
+    vector<int> o;
+
+    queue<int> q;
+    q.push(1);
+    p[1] = -1;
+    while(!q.empty()){
+        int u = q.front(); q.pop();
+        o.pb(u);
+        for(auto v : g[u]){
+            if(v == p[u]) continue;
+            p[v] = u;
+            q.push(v);
+        }
     }
-    ll ans = (c+1)*(c+2) / 2;
-    ll ab = e * (e+1)/2 + o*(o+1)/2;
-    cout << ans-a-b+ab << endl;
+
+    vector<ll> height(n + 1, 1);
+    ll si = 0;
+    for(int i = n - 1; i >= 0; i--){
+        int u = o[i];
+        for(int v : g[u]){
+            if(p[v] == u) height[u] = max(height[u], 1 + height[v]);
+        }
+        si = (si + height[u]) % MOD;
+    }
+
+    ll ans = binpow(2, n - 1) * si % MOD;
+    cout << ans << endl;
 
     // Output
 
