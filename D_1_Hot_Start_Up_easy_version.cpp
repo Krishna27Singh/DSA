@@ -35,10 +35,10 @@ using pll = pair<ll,ll>;
 #define rall(x) (x).rbegin(), (x).rend()
 #define sz(x) (int)(x).size()
 
-const int INF = 1e9;
+long long INF = 4e18;
 const ll LINF = 1e18;
 const ld EPS = 1e-9;
-const ll MOD = 998244353;
+const ll MOD = 1e9 + 7;
 
 class DisjointSet{
     vector<int> rank, parent, size;
@@ -233,52 +233,29 @@ void linearSieve(int N, vector<int>& primes, vector<int>& spf) {
 */
 
 void solve(){
-    int n; cin >> n;
-    int N = 2*n;
-    vector<ll> a(N);
-    unordered_map<ll, int> mpp;
-    for(int i = 0; i < N; i++){
-        cin >> a[i];
-        mpp[a[i]]++;
-    }
+    int n, k; cin>>n>>k;
+    vector<int> a(n+1);
+    for(int i = 1; i<=n; i++) cin>>a[i];
+    vector<ll> cold(k+1), hot(k+1);
+    for(int i = 1; i<=k; i++) cin>>cold[i];
+    for(int i = 1; i<=k; i++) cin>>hot[i];
 
-    vector<int> primes, nonprimes;
-    for(auto &[val, cnt] : mpp){
-        if(isPrime(val)) primes.pb(cnt);
-        else nonprimes.pb(cnt);
+    vector<vector<ll>> dp(n + 1, vector<ll>(k + 1, INF));
+    dp[1][0] = cold[a[1]];
+    for (int i = 2; i <= n; i++) {
+		int x = a[i]; 
+        for (int j = 0; j <= k; j++) {
+			if (dp[i - 1][j] == INF) continue; 
+            ll c1 = (a[i] == a[i - 1] ? hot[x] : cold[x]);
+			dp[i][j] = min(dp[i][j], dp[i - 1][j] + c1);
+            ll c2 = (j == x ? hot[x] : cold[x]);
+			dp[i][a[i - 1]] = min(dp[i][a[i - 1]], dp[i - 1][j] + c2);
+		}
     }
-    if(sz(primes) < n){
-        cout << 0 << '\n';
-        return;
-    }
+    cout << *min_element(dp[n].begin(), dp[n].end()) << endl;
+    // Output
 
-    vector<ll> fact(N + 1), invFact(N + 1);
-    fact[0] = 1;
-    for(int i = 1; i <= N; i++){
-        fact[i] = fact[i - 1] * i % MOD;
-    }
-    invFact[N] = binpow(fact[N], MOD- 2);
-    for(int i = N; i >= 1; i--){
-        invFact[i - 1] = invFact[i] * i % MOD;
-    }
-    int t = sz(primes);
-    vector<vector<ll>> dp(t + 1, vector<ll>(n + 1, 0));
-    dp[t][0] = 1;
-    for(int i = t - 1; i >= 0; i--){
-        for(int j = 0; j <= n; j++){
-            dp[i][j] = invFact[primes[i]] * dp[i + 1][j] % MOD;
-            if(j > 0){
-                dp[i][j] += invFact[primes[i] - 1] * dp[i + 1][j - 1] % MOD;
-                dp[i][j] %= MOD;
-            }
-        }
-    }
 
-    ll common = fact[n];
-    for(auto c : nonprimes){
-        common = common * invFact[c] % MOD;
-    }
-    cout << common * dp[0][n] % MOD << endl;
 }
 
 /*************************************************************************************************** */
@@ -287,7 +264,8 @@ int main(){
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
     cout.tie(nullptr);
-    solve();
+    int tc = 1; cin >> tc;
+    while (tc--) solve();
     return 0;
 }
 

@@ -35,10 +35,10 @@ using pll = pair<ll,ll>;
 #define rall(x) (x).rbegin(), (x).rend()
 #define sz(x) (int)(x).size()
 
-const int INF = 1e9;
+long long INF = 9e18;
 const ll LINF = 1e18;
 const ld EPS = 1e-9;
-const ll MOD = 998244353;
+const ll MOD = 1e9 + 7;
 
 class DisjointSet{
     vector<int> rank, parent, size;
@@ -233,52 +233,42 @@ void linearSieve(int N, vector<int>& primes, vector<int>& spf) {
 */
 
 void solve(){
-    int n; cin >> n;
-    int N = 2*n;
-    vector<ll> a(N);
-    unordered_map<ll, int> mpp;
-    for(int i = 0; i < N; i++){
-        cin >> a[i];
-        mpp[a[i]]++;
+    ll n, m; cin >> n >> m;
+    vector<vector<pair<ll, ll>>> adj(n + 1);
+    for (ll i = 0; i < m; i++) {
+        ll u, v, w; cin >> u >> v >> w;
+        adj[u].push_back({v, w});
+        adj[v].push_back({u, w});
     }
+    vector<ll> s(n + 1);
+    for (ll i = 1; i <= n; i++) cin >> s[i];
 
-    vector<int> primes, nonprimes;
-    for(auto &[val, cnt] : mpp){
-        if(isPrime(val)) primes.pb(cnt);
-        else nonprimes.pb(cnt);
-    }
-    if(sz(primes) < n){
-        cout << 0 << '\n';
-        return;
-    }
+    vector<vector<ll>> dist(n + 1, vector<ll>(1001, INF));
+    vector<vector<bool>> vis(n + 1, vector<bool>(1001, false));
+    set<pair<ll, pair<ll, ll>>> pq;
+    dist[1][s[1]] = 0;
+    pq.insert({0, {1, s[1]}});
 
-    vector<ll> fact(N + 1), invFact(N + 1);
-    fact[0] = 1;
-    for(int i = 1; i <= N; i++){
-        fact[i] = fact[i - 1] * i % MOD;
-    }
-    invFact[N] = binpow(fact[N], MOD- 2);
-    for(int i = N; i >= 1; i--){
-        invFact[i - 1] = invFact[i] * i % MOD;
-    }
-    int t = sz(primes);
-    vector<vector<ll>> dp(t + 1, vector<ll>(n + 1, 0));
-    dp[t][0] = 1;
-    for(int i = t - 1; i >= 0; i--){
-        for(int j = 0; j <= n; j++){
-            dp[i][j] = invFact[primes[i]] * dp[i + 1][j] % MOD;
-            if(j > 0){
-                dp[i][j] += invFact[primes[i] - 1] * dp[i + 1][j - 1] % MOD;
-                dp[i][j] %= MOD;
+    while (!pq.empty()) {
+        auto [time, state] = *pq.begin(); pq.erase(pq.begin());
+        auto [u, spd] = state;
+        if (vis[u][spd]) continue;
+        vis[u][spd] = true;
+        for (auto [v, w] : adj[u]) {
+            ll ntime = time + w * spd;
+            ll nspd = min(spd, s[v]);
+            if (ntime < dist[v][nspd]) {
+                dist[v][nspd] = ntime;
+                pq.insert({ntime, {v, nspd}});
             }
         }
     }
 
-    ll common = fact[n];
-    for(auto c : nonprimes){
-        common = common * invFact[c] % MOD;
-    }
-    cout << common * dp[0][n] % MOD << endl;
+    cout << *min_element(dist[n].begin(), dist[n].end()) << endl;
+
+    // Output
+
+
 }
 
 /*************************************************************************************************** */
@@ -287,7 +277,8 @@ int main(){
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
     cout.tie(nullptr);
-    solve();
+    int tc = 1; cin >> tc;
+    while (tc--) solve();
     return 0;
 }
 
