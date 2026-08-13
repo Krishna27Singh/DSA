@@ -232,8 +232,49 @@ void linearSieve(int N, vector<int>& primes, vector<int>& spf) {
 
 */
 
+bool check(ll h, ll w, vector<pair<ll, ll>> a) {
+    multiset<pair<ll, ll>> sh, sw;
+    for (auto &p : a) {
+        sh.insert({p.first, p.second});
+        sw.insert({p.second, p.first});
+    }
+    while (!sh.empty()) {
+        auto itw = prev(sw.end());
+        auto ith = prev(sh.end());
+        if (itw->first == w) {
+            ll hh = itw->second;
+            sw.erase(itw);
+            sh.erase(sh.find({hh, w}));
+            h -= hh;
+        } 
+        else if (ith->first == h) {
+            ll ww = ith->second;
+            sh.erase(ith);
+            sw.erase(sw.find({ww, h}));
+            w -= ww;
+        }
+        else return false;
+    }
+    return true;
+}
+
 void solve(){
-    
+    int n; cin >> n;
+    vector<pair<ll, ll>> a(n);
+    ll s = 0, mh = 0, mw = 0;
+    for (int i = 0; i < n; i++) {
+        cin >> a[i].first >> a[i].second;
+        s += a[i].first * a[i].second;
+        mh = max(mh, a[i].first);
+        mw = max(mw, a[i].second);
+    }
+    vector<pair<ll, ll>> ans;
+    if (s % mw == 0 && check(s / mw, mw, a)) ans.push_back({s / mw, mw});
+    if (s % mh == 0 && check(mh, s / mh, a)) ans.push_back({mh, s / mh});
+    sort(ans.begin(), ans.end());
+    ans.erase(unique(ans.begin(), ans.end()), ans.end());
+    cout << ans.size() << endl;
+    for (auto &p : ans) cout << p.first << ' ' << p.second << endl;
 
     // Output
 
