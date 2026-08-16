@@ -26,14 +26,27 @@ using ll = long long;
 using uint = unsigned int;
 using ull = unsigned long long;
 using ld = long double;
-using pii = pair<int,int>;
-using pll = pair<ll,ll>;
 
 #define pb push_back
 #define mp make_pair
 #define all(x) (x).begin(), (x).end()
 #define rall(x) (x).rbegin(), (x).rend()
 #define sz(x) (int)(x).size()
+typedef pair<int, int> pii;
+typedef pair<ll, ll> pll;
+typedef vector<int> vi;
+typedef vector<ll> vll;
+typedef vector<ld> vld;
+typedef vector<double> vd;
+typedef vector<bool> vb;
+typedef vector<string> vs;
+typedef vector<char> vc;
+typedef vector<vector<ll>> vvll;
+typedef vector<vector<ld>> vvld;
+typedef vector<pll> vpll;
+typedef vector<vector<int>> vvi;
+typedef priority_queue<ll> mxpq;
+typedef priority_queue<ll, vll, greater<ll>> mnpq;
 
 const int INF = 1e9;
 const ll LINF = 1e18;
@@ -224,10 +237,6 @@ void linearSieve(int N, vector<int>& primes, vector<int>& spf) {
 
 /*
 ****************************************** APPROACH **************************************************
-atmost 10 different characters in string a
-operation : choose i, choose c, push c to Q, replace ai with c
-Q should contain atmost k different characters
-maximize number of pairs l, r such that a[l,r] = b[l,r]
 
 */
 
@@ -236,50 +245,8 @@ maximize number of pairs l, r such that a[l,r] = b[l,r]
 
 */
 
-ll n, k;
-string a, b;
-ll ans = -1e18;
-ll l;
-
-ll findAns(set<char> &q, set<char> &uniqueA, vector<char> &uniqueVA){
-    ll curr = 0;
-    ll len = 0;
-    for(int i = 0; i<n; i++){
-        if(a[i] == b[i] || q.find(a[i]) != q.end()) len++;
-        else{
-            curr += (len*(len+1))/2;
-            len = 0;
-        }
-    }
-    curr += (len*(len+1))/2;
-    return curr;
-}
-
-void backtrack(ll idx, ll &left, set<char> &q, set<char> &uniqueA, vector<char> &uniqueVA){
-    if(left == 0 || idx == l){
-        ans = max(ans, findAns(q, uniqueA, uniqueVA));
-        return;
-    }
-    q.insert(uniqueVA[idx]);
-    left--;
-    backtrack(idx+1, left, q, uniqueA, uniqueVA);
-    q.erase(uniqueVA[idx]);
-    left++;
-    backtrack(idx+1, left, q, uniqueA, uniqueVA);
-}
-
 void solve(){
-    ans = -1e18;
-    cin>>n>>k;
-    cin>>a>>b;
-    set<char> uniqueA(all(a));
-    vector<char> uniqueVA(all(uniqueA));
-    l = uniqueVA.size();
-    ll left = min(k, l);
     
-    set<char> q;
-    backtrack(0, left, q, uniqueA, uniqueVA);
-    cout << ans << endl;
 
     // Output
 
