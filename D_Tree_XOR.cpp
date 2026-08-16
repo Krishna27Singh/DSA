@@ -26,27 +26,14 @@ using ll = long long;
 using uint = unsigned int;
 using ull = unsigned long long;
 using ld = long double;
+using pii = pair<int,int>;
+using pll = pair<ll,ll>;
 
 #define pb push_back
 #define mp make_pair
 #define all(x) (x).begin(), (x).end()
 #define rall(x) (x).rbegin(), (x).rend()
 #define sz(x) (int)(x).size()
-typedef pair<int, int> pii;
-typedef pair<ll, ll> pll;
-typedef vector<int> vi;
-typedef vector<ll> vll;
-typedef vector<ld> vld;
-typedef vector<double> vd;
-typedef vector<bool> vb;
-typedef vector<string> vs;
-typedef vector<char> vc;
-typedef vector<vector<ll>> vvll;
-typedef vector<vector<ld>> vvld;
-typedef vector<pll> vpll;
-typedef vector<vector<int>> vvi;
-typedef priority_queue<ll> mxpq;
-typedef priority_queue<ll, vll, greater<ll>> mnpq;
 
 const int INF = 1e9;
 const ll LINF = 1e18;
@@ -244,9 +231,52 @@ void linearSieve(int N, vector<int>& primes, vector<int>& spf) {
 ****************************************** Testing ****************************************************
 
 */
+vector<int> g[200005];      
+ll a[200005];               
+ll sub[200005];               
+ll dp[200005];                
+ll ans[200005];               
+int n;
+
+void dfs1(int u, int p) {
+	sub[u] = 1;
+	dp[u] = 0;
+	for (auto v : g[u]) {
+		if (v == p) continue;
+		dfs1(v, u);
+		sub[u] += sub[v];
+		dp[u] += dp[v] + sub[v] * (a[u] ^ a[v]);
+	}
+}
+
+void dfs2(int u, int p) {
+	for (auto v : g[u]) {
+		if (v == p) continue;
+		ll w = (a[u] ^ a[v]);
+		ans[v] = ans[u] - sub[v] * w + (n - sub[v]) * w;  
+		dfs2(v, u);
+	}
+}
 
 void solve(){
-    
+    cin>>n;
+    for(int i = 1; i <= n; i++) {
+		cin >> a[i];
+		g[i].clear();
+	}
+
+	for (int i = 0; i < n-1; i++) {
+		int u, v; cin >> u >> v;
+		g[u].push_back(v);
+		g[v].push_back(u);
+	}
+
+	dfs1(1, 0);        
+	ans[1] = dp[1];   
+	dfs2(1, 0);       
+
+	for (int i = 1; i <= n; i++) cout << ans[i] << " ";
+	cout << endl;
 
     // Output
 

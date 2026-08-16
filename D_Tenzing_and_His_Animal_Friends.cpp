@@ -26,30 +26,17 @@ using ll = long long;
 using uint = unsigned int;
 using ull = unsigned long long;
 using ld = long double;
+using pii = pair<int,int>;
+using pll = pair<ll,ll>;
 
 #define pb push_back
 #define mp make_pair
 #define all(x) (x).begin(), (x).end()
 #define rall(x) (x).rbegin(), (x).rend()
 #define sz(x) (int)(x).size()
-typedef pair<int, int> pii;
-typedef pair<ll, ll> pll;
-typedef vector<int> vi;
-typedef vector<ll> vll;
-typedef vector<ld> vld;
-typedef vector<double> vd;
-typedef vector<bool> vb;
-typedef vector<string> vs;
-typedef vector<char> vc;
-typedef vector<vector<ll>> vvll;
-typedef vector<vector<ld>> vvld;
-typedef vector<pll> vpll;
-typedef vector<vector<int>> vvi;
-typedef priority_queue<ll> mxpq;
-typedef priority_queue<ll, vll, greater<ll>> mnpq;
 
 const int INF = 1e9;
-const ll LINF = 1e18;
+ll LINF = 4e18;
 const ld EPS = 1e-9;
 const ll MOD = 1e9 + 7;
 
@@ -245,8 +232,39 @@ void linearSieve(int N, vector<int>& primes, vector<int>& spf) {
 
 */
 
+int n, m;
+vector<vector<ll>> d(100, vector<ll>(100, LINF));
+
 void solve(){
-    
+    cin>>n>>m;
+    while(m--){
+        ll u, v, w; cin >> u >> v >> w; u--; v--;   
+        d[u][v] = d[v][u] = w;
+    }
+    for (int i = 0; i < n; i++) d[i][i] = 0;
+    for (int k = 0; k < n; k++)
+		for (int i = 0; i < n; i++)
+			for (int j = 0; j < n; j++)
+				d[i][j] = min(d[i][j], d[i][k] + d[k][j]);
+
+    if (d[0][n - 1] > (ll)1e18) {
+		cout << "inf";
+		return;
+	} 
+    int p[100];
+    for(int i = 0; i<100; i++) p[i] = i;
+    sort(p + 1, p + n, [](int a, int b) { return d[0][a] < d[0][b]; });
+    string s(n, '0');
+	vector<pair<string, ll>> a;
+    for (int i=0; i<n-1; i++) {
+		int u = p[i], v = p[i + 1];
+		s[u] = '1';
+		a.push_back({s, d[0][v] - d[0][u]});
+		if (v == n-1) break;
+	}
+    cout<<d[0][n - 1]<<' '<< a.size()<<endl;
+
+	for (auto [s, t] : a) cout<<s<<' '<<t<<endl;
 
     // Output
 
@@ -259,8 +277,7 @@ int main(){
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
     cout.tie(nullptr);
-    int tc = 1; cin >> tc;
-    while (tc--) solve();
+    solve();
     return 0;
 }
 

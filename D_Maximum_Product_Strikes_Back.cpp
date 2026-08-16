@@ -26,27 +26,14 @@ using ll = long long;
 using uint = unsigned int;
 using ull = unsigned long long;
 using ld = long double;
+using pii = pair<int,int>;
+using pll = pair<ll,ll>;
 
 #define pb push_back
 #define mp make_pair
 #define all(x) (x).begin(), (x).end()
 #define rall(x) (x).rbegin(), (x).rend()
 #define sz(x) (int)(x).size()
-typedef pair<int, int> pii;
-typedef pair<ll, ll> pll;
-typedef vector<int> vi;
-typedef vector<ll> vll;
-typedef vector<ld> vld;
-typedef vector<double> vd;
-typedef vector<bool> vb;
-typedef vector<string> vs;
-typedef vector<char> vc;
-typedef vector<vector<ll>> vvll;
-typedef vector<vector<ld>> vvld;
-typedef vector<pll> vpll;
-typedef vector<vector<int>> vvi;
-typedef priority_queue<ll> mxpq;
-typedef priority_queue<ll, vll, greater<ll>> mnpq;
 
 const int INF = 1e9;
 const ll LINF = 1e18;
@@ -246,7 +233,57 @@ void linearSieve(int N, vector<int>& primes, vector<int>& spf) {
 */
 
 void solve(){
-    
+    int n; cin >> n;
+	vector<int> a(n);
+	for(int i = 0; i < n; i++) cin >> a[i];
+    int ans = 0, ansl = n, ansr = 0;
+	int l = 0;
+	while (l < n) {
+	if (a[l] == 0) {
+			l++;
+			continue;
+	}
+    int r = l - 1, tc = 0, neg = 1;  
+	while (r + 1 < n && a[r + 1] != 0) {
+		r++;
+		if (abs(a[r]) == 2) tc++;      
+		if (a[r] < 0) neg *= -1;      
+	}
+	if (neg == 1) {  
+		if (tc > ans) {
+			ansl = l;
+			ansr = (n - 1) - r; 
+			ans = tc;
+		}
+		l = r + 1; 
+		continue;
+	}
+    int ntc = tc, nl = l - 1;
+	do{
+		nl++;
+		ntc -= (abs(a[nl]) == 2); 
+	} while (a[nl] > 0);            
+		if (ntc > ans) {
+			ansl = nl + 1;           
+		    ansr = (n - 1) - r;       
+			ans = ntc;
+		}
+        int nr = r + 1;
+		ntc = tc;
+		do {
+			nr--;
+			ntc -= (abs(a[nr]) == 2);  
+		} while (a[nr] > 0);            
+			if (ntc > ans) {
+				ansl = l;              
+				ansr = n - nr;           
+				ans = ntc;
+		    }
+
+		l = r + 1; 
+	}
+
+	cout << ansl << " " << ansr << endl;
 
     // Output
 
