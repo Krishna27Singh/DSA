@@ -6,6 +6,7 @@
 #include <vector>
 #include <set>
 #include <map>
+#include<iomanip>
 #include <unordered_set>
 #include <unordered_map>
 #include <queue>
@@ -237,6 +238,9 @@ void linearSieve(int N, vector<int>& primes, vector<int>& spf) {
 
 /*
 ****************************************** APPROACH **************************************************
+try doing binary search on answer 
+what can you search for
+answer = minimum possible maximum time
 
 */
 
@@ -245,12 +249,46 @@ void linearSieve(int N, vector<int>& primes, vector<int>& spf) {
 
 */
 
-void solve(){
-    
+bool check(int n, double time, const vector<int> &x, const vector<int> &t, double &curAns) {
+    double L = -1e18; 
+    double R = 1e18; 
+    for (int i = 0; i < n; i++) {
+        if (time < t[i]) return false; 
+        double l = x[i] - (time - t[i]);
+        double r = x[i] + (time - t[i]);
+        L = max(L, l);
+        R = min(R, r);
+    }
+    if (L <= R) {
+        curAns = L; 
+        return true;
+    }
+    return false;
+}
 
-    // Output
+void solve() {
+    int n; cin >> n;
+    vector<int> x(n), t(n);
+    for (int i = 0; i < n; i++) cin >> x[i];
+    for (int i = 0; i < n; i++) cin >> t[i];
 
+    double lo = 0, hi = 2e8; 
+    double ans = 0;
 
+    for (int i = 0; i < 100; i++) {
+        double mid = lo + (hi - lo) / 2.0;
+        double curAns = 0;
+        
+        if (check(n, mid, x, t, curAns)) {
+            hi = mid;          
+            ans = curAns; 
+        } else {
+            lo = mid;          
+        }
+    }
+    cout << fixed << setprecision(6) << ans <<endl;
+
+    // Output 
 }
 
 /*************************************************************************************************** */
