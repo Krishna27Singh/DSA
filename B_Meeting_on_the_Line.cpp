@@ -237,14 +237,7 @@ void linearSieve(int N, vector<int>& primes, vector<int>& spf) {
 
 /*
 ****************************************** APPROACH **************************************************
-need to satisfy: n&(n+1)&(n+2)&...&m = x. find minimum m.
-if a bit is 0 int n and that bit is 1 in m, then the answer is -1
-bits that are 1 in n can be 0 in x, we need to check the minimum number of operations to do to make each bit that is 1 in n and 0 int x to make it 0
-if the bit length of n is greater than the bit length in x then also the answer does not exist except in the case when the value of x is 0, then the naswer is simply the next power of 2 greater than n
-if the bit length of x is greater than n then also the answer simply does not exist 
-assume that both of the length is same. now just need to check
-I think the answer only depends on the leftmost bit that is 1 in n and 0 in x. because as we will increase n all the bits to the right of that bit will be 0 at some point and the leftmost bit will be 1 at some point. so we need to find the leftmost bit that is 1 in n and 0 in x and then we need to find the next power of 2 greater than n and then we need to set that bit to 1 and all the bits to the right of it to 0. this will give us the minimum m.
-ad need to handle the base case also  
+
 */
 
 /*
@@ -253,65 +246,7 @@ ad need to handle the base case also
 */
 
 void solve(){
-    ll n, x; cin >> n >> x;
-
-    int lenn = 0, lenx = 0;
-    ll tempn = n, tempx = x;
-    while (tempn > 0) {
-        lenn++;
-        tempn >>= 1;
-    }
-    while (tempx > 0) {
-        lenx++;
-        tempx >>= 1;
-    }
-
-    // edge cases
-    if(lenx > lenn) {
-        cout << -1 << "\n";
-        return;
-    }
-    if(lenx < lenn) {
-        if(x == 0) {
-            ll ans = 1;
-            while(ans <= n) ans <<= 1;
-            cout << ans << "\n";
-            return;
-        } else {
-            cout << -1 << "\n";
-            return;
-        }
-    }
-
-    // check if there is a bit that is 0 in n and 1 in x
-    for(int i = 0; i < lenn; i++) {
-        if(((n >> i) & 1) == 0 && ((x >> i) & 1) == 1) {
-            cout << -1 << "\n";
-            return;
-        }
-    }
-
-    // find the leftmost bit that is 1 in n and 0 in x
-    int leftmost = -1;
-    for(int i = lenn - 1; i >= 0; i--) {
-        if(((n >> i) & 1) == 1 && ((x >> i) & 1) == 0) {
-            leftmost = i;
-            break;
-        }
-    }
-    ll ans = 0;
-    if(leftmost == -1) {
-        ans = n;
-    } else {
-        // answer is simply n with all the bits to and the right of the leftmost bit set to 0 and the leftmost bit + 1 set to 1
-        ans = (n | ((1LL << (leftmost + 1)) - 1)) + 1;
-        if ((n & ans) != x) {
-            cout << -1 << "\n";
-            return;
-        }
-    }
-    cout << ans << "\n";
-
+    
 
     // Output
 
