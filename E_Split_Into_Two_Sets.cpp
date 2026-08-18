@@ -92,6 +92,30 @@ public:
             }
         }
 };
+class dsu {
+ public:
+  vector<int> p;
+  int n;
+ 
+  dsu(int _n) : n(_n) {
+    p.resize(n);
+    iota(p.begin(), p.end(), 0);
+  }
+ 
+  inline int get(int x) {
+    return (x == p[x] ? x : (p[x] = get(p[x])));
+  }
+ 
+  inline bool unite(int x, int y) {
+    x = get(x);
+    y = get(y);
+    if (x != y) {
+      p[x] = y;
+      return true;
+    }
+    return false;
+  }
+};
 struct FenwickTree {
     int n;
     std::vector<long long> tree;
@@ -247,7 +271,38 @@ void linearSieve(int N, vector<int>& primes, vector<int>& spf) {
 */
 
 void solve(){
-    
+    int n; cin>>n;
+    vector<vector<int>> adj(2*n);
+    vector<bool> vis(n, false);
+    vector<bool> check(2, false);
+    for(int i = 0; i<n; i++){
+        int u, v; cin>>u>>v;
+        u--; v--;
+        if(vis[u] && !check[u]){
+            u+=n;
+            check[u] = true;
+        }
+        else vis[u] = true;
+        if(vis[v] && !check[v]){
+            v+=n;
+            check[v] = true;
+        }
+        else vis[v] = true;
+        adj[u].push_back(v);
+        adj[v].push_back(u);
+    }
+    bool flag = true;
+    for(int i = 0; i<2*n; i++){
+        if(adj[i].size() > 1) flag = false;
+    }
+    if(flag) cout<<"YES"<<endl;
+    else cout<<"NO"<<endl;
+
+
+
+
+
+
 
     // Output
 

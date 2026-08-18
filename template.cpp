@@ -54,43 +54,29 @@ const ll LINF = 1e18;
 const ld EPS = 1e-9;
 const ll MOD = 1e9 + 7;
 
-class DisjointSet{
-    vector<int> rank, parent, size;
-public: 
-    DisjointSet(int n){
-        rank.resize(n+1, 0);
-        parent.resize(n+1);
-        size.resize(n+1, 1);
-        for(int i = 0; i<=n; i++) parent[i] = i;
+class dsu {
+ public:
+  vector<int> p;
+  int n;
+ 
+  dsu(int _n) : n(_n) {
+    p.resize(n);
+    iota(p.begin(), p.end(), 0);
+  }
+ 
+  inline int get(int x) {
+    return (x == p[x] ? x : (p[x] = get(p[x])));
+  }
+ 
+  inline bool unite(int x, int y) {
+    x = get(x);
+    y = get(y);
+    if (x != y) {
+      p[x] = y;
+      return true;
     }
-    int findUltimateParent(int node){
-        if(node == parent[node]) return node;
-        return parent[node] = findUltimateParent(parent[node]);
-    }
-    void unionByRank(int u, int v){
-        int ultimateParentOfU = findUltimateParent(u);
-        int ultimateParentOfV = findUltimateParent(v);
-        if(ultimateParentOfU == ultimateParentOfV) return; 
-        if(rank[ultimateParentOfU] < rank[ultimateParentOfV]) parent[ultimateParentOfU] = ultimateParentOfV;
-        else if(rank[ultimateParentOfV] < rank[ultimateParentOfU]) parent[ultimateParentOfV] = ultimateParentOfU;
-        else{
-            parent[ultimateParentOfV] = ultimateParentOfU; 
-            rank[ultimateParentOfU]++; 
-        }
-    }
-    void unionBySize(int u, int v){
-            int ultimateParentOfU = findUltimateParent(u);
-            int ultimateParentOfV = findUltimateParent(v);
-            if(ultimateParentOfU == ultimateParentOfV) return; 
-            if(size[ultimateParentOfU] < size[ultimateParentOfV]){
-                parent[ultimateParentOfU] = ultimateParentOfV;
-                size[ultimateParentOfV] += size[ultimateParentOfU];
-            }
-            else{ 
-                parent[ultimateParentOfV] = ultimateParentOfU;
-                size[ultimateParentOfU] += size[ultimateParentOfV];
-            }
-        }
+    return false;
+  }
 };
 struct FenwickTree {
     int n;
