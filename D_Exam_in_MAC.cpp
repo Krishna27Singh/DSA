@@ -246,6 +246,7 @@ void solve(){
         a += (s[i] / 2 + 1);
         b += (c - s[i] + 1);
     }
+    
     ll ans = (c+1)*(c+2) / 2;
     ll ab = e * (e+1)/2 + o*(o+1)/2;
     cout << ans-a-b+ab << endl;

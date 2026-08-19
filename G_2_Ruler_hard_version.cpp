@@ -238,7 +238,9 @@ void linearSieve(int N, vector<int>& primes, vector<int>& spf) {
 
 /*
 ****************************************** APPROACH **************************************************
-
+some observations:
+if we query a, b and a is greater than b then
+either we will get a*b or (a+1)*b or (a+1)*(b+1)
 */
 
 /*
@@ -247,7 +249,30 @@ void linearSieve(int N, vector<int>& primes, vector<int>& spf) {
 */
 
 void solve(){
-    
+    int lo = 1;
+    int hi = 999;
+    int m1 = lo + (hi - lo) / 3;
+    int m2 = hi - (hi - lo) / 3;
+    while (lo < hi) {
+        cout << "? " << m1 << " " << m2 << endl;
+        cout.flush(); 
+        int x; cin>>x;
+        int exp = m1*m2;
+        if(x == exp){
+            lo = m2+1;
+        }
+        else if(x == m1*(m2+1)){
+            lo = m1+1;
+            hi = m2;
+        }
+        else{
+            hi = m1;
+        }
+        m1 = lo + (hi - lo) / 3;
+        m2 = hi - (hi - lo) / 3;
+    }
+    cout<<"! "<<lo<<endl;
+    cout.flush();
 
     // Output
 
