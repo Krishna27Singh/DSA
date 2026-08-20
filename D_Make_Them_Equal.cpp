@@ -224,7 +224,7 @@ void linearSieve(int N, vector<int>& primes, vector<int>& spf) {
 
 /*
 ****************************************** APPROACH **************************************************
-collapse every string with every other string 
+
 */
 
 /*
@@ -232,134 +232,14 @@ collapse every string with every other string
 
 */
 
-
-struct Node {
-    Node* links[26];
-    int cntEndWith = 0;
-    int cntPrefix = 0;
-
-    bool containsKey(char ch) {
-        if(links[ch - 'a'] != NULL) return true;
-        else return false;
-    }
-
-    Node* get(char ch) {
-        return links[ch - 'a'];
-    }
-
-    void put(char ch, Node* node) {
-        links[ch - 'a'] = node;
-    }
-
-    void increaseEnd() {
-        cntEndWith++;
-    }
-
-    void increasePrefix() {
-        cntPrefix++;
-    }
-
-    void deleteEnd() {
-        cntEndWith--;
-    }
-
-    void reducePrefix() {
-        cntPrefix--;
-    }
-};
-
-class Trie {
-private:
-    Node* root;
-
-public:
-    Trie() {
-        root = new Node();
-    }
-
-    void insert(string word) {
-        Node* node = root;
-        for (int i = 0; i < word.size(); i++) {
-            if (!node->containsKey(word[i])) {
-                node->put(word[i], new Node());
-            }
-            node = node->get(word[i]);
-            node->increasePrefix();
-        }
-        node->increaseEnd();
-    }
-
-    int countWordsEqualTo(string word) {
-        Node* node = root;
-        for (int i = 0; i < word.size(); i++) {
-            if (node->containsKey(word[i])) {
-                node = node->get(word[i]);
-            } else {
-                return 0;
-            }
-        }
-        return node->cntEndWith;
-    }
-
-    int countWordsStartingWith(string word) {
-        Node* node = root;
-        for (int i = 0; i < word.size(); i++) {
-            if (node->containsKey(word[i])) {
-                node = node->get(word[i]);
-            } else {
-                return 0;
-            }
-        }
-        return node->cntPrefix;
-    }
-
-    void erase(string word) {
-        Node* node = root;
-        for (int i = 0; i < word.size(); i++) {
-            if (node->containsKey(word[i])) {
-                node = node->get(word[i]);
-                node->reducePrefix();
-            } else {
-                return;
-            }
-        }
-        node->deleteEnd();
-    }
-
-    ll query(string &s){
-        Node* node = root;
-        ll ans = 0;
-        for(auto c : s){
-            int x = c - 'a';
-            if(!node->containsKey(c)){
-                break;
-            }
-            ans += node->get(c)->cntPrefix;
-            node = node->get(c);
-        }
-        return ans;
-    }
-};
-
 void solve(){
-    int n; cin>>n;
-    vector<string> s(n);
-    Trie trie;
-    ll total = 0;
-    for(int i =0; i<n; i++){
-        cin>>s[i];
-        string temp = s[i];
-        total += temp.size();
-        reverse(temp.begin(), temp.end());
-        trie.insert(temp);
-    }
-    total *= n;
+    int n, k; cin>>n>>k;
+    vector<int> b(n);
+    for(int i = 0; i<n; i++) cin>>b[i];
+    vector<int> c(n);
+    for(int i = 0; i<n; i++) cin>>c[i];
 
-    for(int i = 0; i<n; i++){
-        total -= trie.query(s[i]);
-    }
-
-    cout<<2*total<<endl;
+    
 
     // Output
 
@@ -372,7 +252,8 @@ int main(){
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
     cout.tie(nullptr);
-    solve();
+    int tc = 1; cin >> tc;
+    while (tc--) solve();
     return 0;
 }
 
