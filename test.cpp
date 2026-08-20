@@ -1,29 +1,65 @@
-#include<iostream>
+#include <iostream>
+#include <vector>
+
 using namespace std;
 
-int solve(int n, int t){
-    if(t == 1) return n;
-    vector<int> facts;
-    for(int i = 2; i<=t; i++){
-        if(t%i == 0) facts.push_back(i);
+long long t[400005], lz[400005], h[100005];
+
+void bd(int nd, int l, int r) {
+    if (l == r) {
+        t[nd] = h[l];
+        return;
     }
-    int ans = 0;
-    int len = facts.size();
-    for(auto i: facts) cout<<i<<" ";
-    for(int i = len-1; i>=0; i--){
-        ans += facts[i]*(pow(10, len-i-1));
-    }
-    if(ans < n){
-        if(ans/10) ans += pow(10, 2);
-        else ans += pow(10, 1);
-    }
-    if(ans < n) ans += pow(10, 2);
-    return ans;
+    int m = l + (r - l) / 2;
+    bd(2 * nd, l, m);
+    bd(2 * nd + 1, m + 1, r);
+    t[nd] = min(t[2 * nd], t[2 * nd + 1]);
 }
 
-int main(){
-    int n, t; cin>>n>>t;
-    cout<<solve(n, t)<<"\n";
+void pd(int nd) {
+    if (lz[nd] != 0) {
+        lz[2 * nd] += lz[nd];
+        lz[2 * nd + 1] += lz[nd];
+        t[2 * nd] += lz[nd];
+        t[2 * nd + 1] += lz[nd];
+        lz[nd] = 0;
+    }
+}
 
+void up(int nd, int l, int r, int ql, int qr, long long v) {
+    if (ql <= l && r <= qr) {
+        t[nd] += v;
+        lz[nd] += v;
+        return;
+    }
+    pd(nd);
+    int m = l + (r - l) / 2;
+    if (ql <= m) up(2 * nd, l, m, ql, qr, v);
+    if (qr > m) up(2 * nd + 1, m + 1, r, ql, qr, v);
+    t[nd] = min(t[2 * nd], t[2 * nd + 1]);
+}
+
+int main() {
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    long long n, q, a, b, c;
+    cin >> n >> q >> a >> b >> c;
+    for (int i = 1; i <= n; ++i) cin >> h[i];
+    bd(1, 1, n);
+    while (q--) {
+        int ty;
+        cin >> ty;
+        if (ty == 1) {
+            c -= a;
+        } else if (ty == 2) {
+            int l, r;
+            cin >> l >> r;
+            up(1, 1, n, l, r, -b);
+        } else if (ty == 3) {
+            if (t[1] > c) cout << "JOTARO\n";
+            else if (t[1] == c) cout << "DRAW\n";
+            else cout << "DIO\n";
+        }
+    }
     return 0;
 }
