@@ -224,7 +224,6 @@ void linearSieve(int N, vector<int>& primes, vector<int>& spf) {
 
 /*
 ****************************************** APPROACH **************************************************
-if I apply an operation to an ai then I must make it equal to bi otherwise the operation will be wasted 
 
 */
 
@@ -232,38 +231,60 @@ if I apply an operation to an ai then I must make it equal to bi otherwise the o
 ****************************************** Testing ****************************************************
 
 */
-vector<int> mini(1001, 1e9);
-void precompute(){
-    mini[1] = 0;
-    for(int i = 1; i<=1000; i++){
-        for(int x = 1; x<=i; x++){
-            int j = i + (i/x);
-            if(j<=1000) mini[j] = min(mini[j], mini[i] + 1);
-        }
-    }
+
+vector<int> bfs(int src, const vector<vector<int>> &g) {
+		int n = g.size();
+		vector<int> dist(n, -1);
+		queue<int> q;
+		q.push(src);
+		dist[src] = 0;
+		while (!q.empty()) {
+				int u = q.front();
+				q.pop();
+				for (int v : g[u])
+						if (dist[v] == -1) { 
+								dist[v] = dist[u] + 1;
+								q.push(v);
+						}
+		}
+		return dist;
 }
 
-int f(int idx, int k, vector<int> &b, vector<int> &c, vector<vector<int>> &dp){
-    if(idx == b.size()) return 0;
-    if(dp[idx][k] != -1) return dp[idx][k];
-    int take = 0;
-    if(mini[b[idx]] <= k) take = c[idx] + f(idx + 1, k - mini[b[idx]], b, c, dp);
-    int notTake = f(idx + 1, k, b, c, dp);
-    return dp[idx][k] = max(take, notTake);
+int find(int start, const vector<vector<int>> &g) {
+		auto dist = bfs(start, g);
+		return int(max_element(dist.begin(), dist.end()) - dist.begin());
 }
 
 void solve(){
-    int n, k; cin>>n>>k;
-    vector<int> b(n);
-    for(int i = 0; i<n; i++) cin>>b[i];
-    vector<int> c(n);
-    for(int i = 0; i<n; i++) cin>>c[i];
-    vector<vector<int>> dp(n+1, vector<int>(k+1, -1));
-    int si = 0;
-    for(int i = 0; i<=1000; i++) si += mini[i];
-    k = min(k, si);
+    int n; cin >> n;
+	vector<vector<int>> g(n);
+	for (int i = 0; i < n - 1; i++) {
+		int u, v; cin >> u >> v;
+		--u; --v;
+		g[u].push_back(v);
+		g[v].push_back(u);
+	}
 
-    cout<<f(0, k, b, c, dp)<<endl;
+    int A = find(0, g);
+	int B = find(A, g);
+	auto distA = bfs(A, g);
+	auto distB = bfs(B, g);
+
+    vector<vector<int>> layer(n + 1); 
+	for (int i = 0; i < n; i++) {
+		int d = max(distA[i], distB[i]);
+		layer[d].push_back(i);
+	}
+
+	vector<int> ans(n + 1, 0);
+	vector<int> vis; 
+	for (int k = n; k >= 1; k--) {
+		vis.insert(vis.end(), layer[k].begin(), layer[k].end());
+		ans[k] = min(n, n - int(vis.size()) + 1);
+	}
+
+	for (int k = 1; k <= n; k++) cout << ans[k] << " ";
+	cout << "\n";
 
     // Output
 
@@ -276,9 +297,7 @@ int main(){
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
     cout.tie(nullptr);
-    precompute();
-    int tc = 1; cin >> tc;
-    while (tc--) solve();
+    solve();
     return 0;
 }
 
