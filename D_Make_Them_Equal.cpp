@@ -258,12 +258,22 @@ void solve(){
     for(int i = 0; i<n; i++) cin>>b[i];
     vector<int> c(n);
     for(int i = 0; i<n; i++) cin>>c[i];
-    vector<vector<int>> dp(n+1, vector<int>(k+1, -1));
+    vector<vector<int>> dp(n+1, vector<int>(k+1, 0));
     int si = 0;
-    for(int i = 0; i<=1000; i++) si += mini[i];
+    for(int i = 0; i<n; i++) si += mini[i];
     k = min(k, si);
 
-    cout<<f(0, k, b, c, dp)<<endl;
+    for(int idx = n-1; idx>=0; idx--){
+        for(int kk = 0; kk<=k; kk++){
+            int take = 0;
+            if(mini[b[idx]] <= kk) take = c[idx] + dp[idx +1][kk - mini[b[idx]]];
+            int notTake = dp[idx + 1][kk];
+            dp[idx][kk] = max(take, notTake);
+        }
+    }
+
+    cout<<dp[0][k]<<endl;
+
 
     // Output
 
