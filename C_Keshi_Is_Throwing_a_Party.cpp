@@ -224,7 +224,6 @@ void linearSieve(int N, vector<int>& primes, vector<int>& spf) {
 
 /*
 ****************************************** APPROACH **************************************************
-if I apply an operation to an ai then I must make it equal to bi otherwise the operation will be wasted 
 
 */
 
@@ -232,48 +231,9 @@ if I apply an operation to an ai then I must make it equal to bi otherwise the o
 ****************************************** Testing ****************************************************
 
 */
-vector<int> mini(1001, 1e9);
-void precompute(){
-    mini[1] = 0;
-    for(int i = 1; i<=1000; i++){
-        for(int x = 1; x<=i; x++){
-            int j = i + (i/x);
-            if(j<=1000) mini[j] = min(mini[j], mini[i] + 1);
-        }
-    }
-}
-
-int f(int idx, int k, vector<int> &b, vector<int> &c, vector<vector<int>> &dp){
-    if(idx == b.size()) return 0;
-    if(dp[idx][k] != -1) return dp[idx][k];
-    int take = 0;
-    if(mini[b[idx]] <= k) take = c[idx] + f(idx + 1, k - mini[b[idx]], b, c, dp);
-    int notTake = f(idx + 1, k, b, c, dp);
-    return dp[idx][k] = max(take, notTake);
-}
 
 void solve(){
-    int n, k; cin>>n>>k;
-    vector<int> b(n);
-    for(int i = 0; i<n; i++) cin>>b[i];
-    vector<int> c(n);
-    for(int i = 0; i<n; i++) cin>>c[i];
-    int si = 0;
-    for(int i = 0; i<n; i++) si += mini[b[i]];
-    k = min(k, si);
-    vector<vector<int>> dp(n+1, vector<int>(k+1, 0));
-
-    for(int idx = n-1; idx>=0; idx--){
-        for(int kk = 0; kk<=k; kk++){
-            int take = 0;
-            if(mini[b[idx]] <= kk) take = c[idx] + dp[idx +1][kk - mini[b[idx]]];
-            int notTake = dp[idx + 1][kk];
-            dp[idx][kk] = max(take, notTake);
-        }
-    }
-
-    cout<<dp[0][k]<<endl;
-
+    
 
     // Output
 
@@ -286,7 +246,6 @@ int main(){
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
     cout.tie(nullptr);
-    precompute();
     int tc = 1; cin >> tc;
     while (tc--) solve();
     return 0;
