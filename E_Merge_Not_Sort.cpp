@@ -224,7 +224,6 @@ void linearSieve(int N, vector<int>& primes, vector<int>& spf) {
 
 /*
 ****************************************** APPROACH **************************************************
-maximum number of edges in the graph = n(n-1)
 
 */
 
@@ -233,62 +232,69 @@ maximum number of edges in the graph = n(n-1)
 
 */
 
-vector<int> query(ll k) {
-    cout << "? " << k << endl;
-    cout.flush(); 
-    int q; cin >> q;
-    if(q == 0) return {}; 
-    vector<int> path(q);
-    for(int i = 0; i < q; ++i) cin >> path[i];
-    return path;
+void solve(){
+    int n; cin>>n;
+	vector<int> C(2 * n);
+	for (int &x : C) cin >> x;
+    vector<vector<int>> chunks;
+	chunks.push_back({C[0]});
+	for (int i = 1; i < 2 * n; i++) {
+		if (C[i] < chunks.back()[0]) {
+			chunks.back().push_back(C[i]);  
+		} else {
+			chunks.push_back({C[i]});      
+		}
+	}
+
+	int k = (int)chunks.size();
+	vector<int> len(k);
+	for (int i = 0; i < k; i++) len[i] = (int)chunks[i].size();
+
+    vector<vector<bool>> dp(k + 1, vector<bool>(n + 1, false));
+	vector<vector<bool>> take(k + 1, vector<bool>(n + 1, false)); 
+	dp[0][0] = true;
+	for (int i = 1; i <= k; i++) {
+		for (int s = 0; s <= n; s++) {
+			if (dp[i - 1][s]) dp[i][s] = true;  
+			if (s >= len[i - 1] && dp[i - 1][s - len[i - 1]]) {
+				dp[i][s] = true;
+				take[i][s] = true; 
+			}
+		}
+	}
+
+	if (!dp[k][n]) {  
+		cout << -1 << '\n';
+		return;
+	}
+
+	vector<int> choose(k, 0);
+	int s = n;
+	for (int i = k; i >= 1; i--) {
+		if (take[i][s]) {
+			choose[i - 1] = 1;
+			s -= len[i - 1];
+		}
+	}
+
+	vector<int> A, B;
+	for (int i = 0; i < k; i++) {
+		if (choose[i]) {
+			for (int x : chunks[i]) A.push_back(x);
+		} else {
+			for (int x : chunks[i]) B.push_back(x);
+		}
+	}
+
+	for (int x : A) cout << x << ' ';
+	cout << '\n';
+	for (int x : B) cout << x << ' ';
+	cout << '\n';
+
+    // Output
+
+
 }
-
-void solve() {
-    int n; cin>>n; 
-    vector<ll> idx(n + 2, 0);
-    idx[1] = 1; 
-    for(int v = 2; v <= n + 1; v++) {
-        ll lo = idx[v - 1] + 1;
-        ll hi = (1LL << 30) + 5; 
-        ll ans = hi;
-        while(lo <= hi) {
-            ll mid = lo + (hi - lo) / 2;
-            vector<int> res = query(mid);
-            if(res.empty()) {
-                ans = mid;
-                hi = mid - 1;
-            } 
-            else{
-                int u = res[0]; 
-                if (u >= v) {
-                    ans = mid;
-                    hi = mid - 1;
-                }
-                else lo = mid + 1;
-            }
-        }
-        idx[v] = ans;
-    }
-
-    vector<ll> len(n + 1);
-    for(int u = 1; u <= n; ++u) len[u] = idx[u + 1] - idx[u];
-
-    vector<pair<int, int>> ans;
-    for (int u = 1; u <= n; ++u) {
-        ll i = idx[u] + 1; 
-        while (i < idx[u + 1]) {
-            vector<int> res = query(i);
-            int v = res[1]; 
-            ans.push_back({u, v});
-            i += len[v]; 
-        }
-    }
-
-    cout << "! " << ans.size() << endl;
-    for (auto edge : ans) cout << edge.first << " " << edge.second << endl;
-    cout.flush();
-}
-
 
 /*************************************************************************************************** */
 
@@ -296,8 +302,7 @@ int main(){
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
     cout.tie(nullptr);
-    int tc = 1; cin >> tc;
-    while (tc--) solve();
+    solve();
     return 0;
 }
 
