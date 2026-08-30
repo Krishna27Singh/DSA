@@ -231,9 +231,29 @@ void linearSieve(int N, vector<int>& primes, vector<int>& spf) {
 ****************************************** Testing ****************************************************
 
 */
+int n;
+vector<pair<int, int>> v;
+
+bool check(int x) {
+	int c = 0;
+	for(int i = 0; i < n; i++) {
+		if (v[i].second >= c && v[i].first >= x - c - 1) c++;
+    }
+		return c >= x; 
+}
 
 void solve(){
-    
+    cin >> n; v.resize(n);
+    for(auto &p : v) cin >> p.first >> p.second; 
+    int lo = 1, hi = n, ans = 1; 
+	while (lo <= hi) {
+		int mid = (lo + hi) / 2; 
+		if (check(mid)) {
+			ans = mid; 
+			lo = mid + 1;
+        } else hi = mid - 1;
+	}
+    cout << ans << '\n';
 
     // Output
 
