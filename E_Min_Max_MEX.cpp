@@ -58,7 +58,9 @@ void solve(){
     unordered_map<int, int> mpp;
     for(auto i: a) mpp[i]++;
 
-    
+    int mex = 0;
+
+    vector<pair<int, int>> ranges(k);
 
     // Output
 

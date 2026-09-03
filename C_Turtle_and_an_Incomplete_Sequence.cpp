@@ -233,7 +233,7 @@ void linearSieve(int N, vector<int>& primes, vector<int>& spf) {
 */
 
 void solve(){
-     int n, k;
+        int n, k;
         cin >> n >> k;
         
         string s;

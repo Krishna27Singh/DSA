@@ -232,7 +232,7 @@ void linearSieve(int N, vector<int>& primes, vector<int>& spf) {
 
 */
 
-int fun(int i, int stick, int stickUp, string s1, string s2, int n, vector<vector<vector<int>>> &dp){
+int fun(int i, int stick, int stickUp, string &s1, string &s2, int &n, vector<vector<vector<int>>> &dp){
     if(i == n){
         if(stick == 0) return 0;
         else return -1e9;

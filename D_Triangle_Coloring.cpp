@@ -38,7 +38,7 @@ using pll = pair<ll,ll>;
 const int INF = 1e9;
 const ll LINF = 1e18;
 const ld EPS = 1e-9;
-const ll MOD = 1e9 + 7;
+const ll MOD = 998244353;
 
 class DisjointSet{
     vector<int> rank, parent, size;

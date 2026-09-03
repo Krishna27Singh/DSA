@@ -231,9 +231,9 @@ void linearSieve(int N, vector<int>& primes, vector<int>& spf) {
 ****************************************** Testing ****************************************************
 
 */
+
 int n, m;
 vector<int> a[2005];
-
 bool solve() {
     for (int i = 1; i <= n; i++) {
         for (auto j : a[i]) {

@@ -237,7 +237,9 @@ void solve(){
     vector<pair<int, int>> range(n);
     for(int i = 0; i<n; i++) cin>>range[i].first>>range[i].second;
 
-    
+    sort(range.begin())
+    vector<pair<int, int>> nonOverlapping;
+
 
     // Output
 

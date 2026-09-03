@@ -259,7 +259,7 @@ void linearSieve(int N, vector<int>& primes, vector<int>& spf) {
 //             dfs(cur * 10 + d2, d1, d2);
 //         }
 //     }
-// }
+// }                                                 
 
 // bool check(ll val) {
 //     int m = 0;

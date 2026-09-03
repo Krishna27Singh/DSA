@@ -253,7 +253,7 @@ int dfs(int u, vector<vector<int>>& c, vector<int>& dam, vector<int>& ans){
     for(auto v : c[u]){
         auto adjdams = dfs(v, c, dam, ans);
         if(adjdams > 0) check.pb(v);
-        dams += adjdams;
+        dams += adjdams; 
     }
     
     if(dam[u]){

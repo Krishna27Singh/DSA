@@ -232,24 +232,22 @@ void linearSieve(int N, vector<int>& primes, vector<int>& spf) {
 
 */
 
-int n, m, q;                  // array size, number of segments, number of changes
-vector<pair<int, int>> seg;   // segments [l, r] (0-based)
-vector<int> qry;              // indices to set to 1 (0-based), in order
-
-// Returns true if after applying the first x changes, at least one segment is beautiful
+int n, m, q;                 
+vector<pair<int, int>> seg;   
+vector<int> qry;             
 bool check(int x) {
-	vector<int> a(n, 0);                  // current array (0/1) after first x changes
+	vector<int> a(n, 0);           
 	for (int i = 0; i < x; i++) {
-		a[qry[i]] = 1;                   // apply the i-th change
+		a[qry[i]] = 1;                  
 	}
 
-	for (int i = 1; i < n; i++) a[i] += a[i - 1];  // prefix sums of ones
+	for (int i = 1; i < n; i++) a[i] += a[i - 1];
 
 	for (auto &[l, r] : seg) {
-		int sum = a[r] - (l > 0 ? a[l - 1] : 0);    // number of ones in [l, r]
-		if (sum > (r - l + 1) / 2) return true;     // ones strictly greater than zeros
+		int sum = a[r] - (l > 0 ? a[l - 1] : 0);   
+		if (sum > (r - l + 1) / 2) return true;    
 	}
-	return false;                                   // no segment is beautiful
+	return false;                                   
 }
 
 
@@ -263,17 +261,17 @@ void solve(){
 		cin >> q;
 		qry.resize(q);
 		for (auto &x : qry) {
-			cin >> x; x--;                     // convert to 0-based
+			cin >> x; x--;                     
 		}
 
-		int l = 1, r = q, ans = INT_MAX;      // binary search on number of applied changes
+		int l = 1, r = q, ans = INT_MAX;     
 		while (l <= r) {
-			int mid = (l + r) / 2;            // try applying mid changes
-			if (check(mid)) {                 // some segment becomes beautiful
-				ans = min(ans, mid);          // record minimal so far
-				r = mid - 1;                  // search smaller prefix
+			int mid = (l + r) / 2;           
+			if (check(mid)) {                 
+				ans = min(ans, mid);         
+				r = mid - 1;                 
 			} else {
-				l = mid + 1;                  // need more changes
+				l = mid + 1;                
 			}
 		}
 

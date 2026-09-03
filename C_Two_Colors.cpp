@@ -122,7 +122,6 @@ void solve(){
 
             ans += cnt * (a[i] - n + 1) + sumAj;
 
-            // remove self-pair contribution if counted
             if (a[i] >= need) {
                 ans -= (2 * a[i] - n + 1);
             }

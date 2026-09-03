@@ -48,81 +48,31 @@ const ll MOD = 1e9 + 7;
 /*
 ****************************************** Testing ****************************************************
 
-*/
+*/  
 
 void solve(){
-    int n; cin>>n;
-    string a; cin>>a;
-    string b; cin>>b;
-
-    int o = 0; int c = 0;
-    for(auto i: a){
-        if(i == '(') o++;
-        else c++;
-    }
-    for(auto i: b){
-        if(i == '(') o++;
-        else c++;
-    }
-
-    if(o != c){
-        cout<<"NO"<<endl;
-        return;
-    }
-
-    stack<char> st;
-    for(int i = n-1; i>=0; i--){
-        if(st.empty()){
-            if(a[i] == ')') st.push(a[i]);
-            else{
-                if(b[i] == ')'){
-                    swap(a[i], b[i]);
-                    st.push(a[i]);
-                }
-                else{
-                    cout<<"NO"<<endl;
-                    return;
-                }
-            }
-        }
-        else{
-            if(a[i] == '(') st.pop();
-            else{
-                if(b[i] == '('){
-                    swap(a[i], b[i]);
-                    st.pop();
-                }
-                else{
-                    cout<<"NO"<<endl;
-                    return;
-                }
-            }
-        }
-    }
-
-    cout<<a<<" "<<b<<endl;
-
-    stack<char> st2;
-
-    //check if b is a regular bracket sequence
-
-    for(int i = n-1; i>=0; i--){
-        if(st2.empty()){
-            if(b[i] == ')') st2.push(b[i]);
-            else{
-                cout<<"NO"<<endl;
-                return;
-            }
-        }
-        else{
-            if(b[i] == '(') st2.pop();
-            else st2.push(b[i]);
-        }
-    }
-
-
-
-    cout<<"YES"<<endl;
+        int n; cin >> n;
+		string s, t, r1 = "", r2 = "";
+		cin >> s >> t;
+		bool bj = 1;
+		for (int i = 0; i < n; i++) {
+			if (s[i] == t[i]) r1 += s[i], r2 += t[i];
+			else {
+				if (bj) r1 += '(', r2 += ')';
+				else r1 += ')', r2 += '(';
+				bj ^= 1;
+			}
+		}
+		int t1 = 0, t2 = 0;
+		bj = 1;
+		for (int i = 0; i < n; i++) {
+			if (r1[i] == '(') ++t1; else --t1;
+			if (r2[i] == '(') ++t2; else --t2;
+			if (t1 < 0 || t2 < 0) bj = 0;
+		}
+		if (t1 != 0 || t2 != 0) bj = 0;
+		if (bj) cout << "YES\n";
+		else cout << "NO\n";
 
     // Output
 

@@ -233,6 +233,8 @@ void linearSieve(int N, vector<int>& primes, vector<int>& spf) {
 */
 
 void solve(){
+    int n; cin>>n;
+
     
 
     // Output
@@ -250,4 +252,3 @@ int main(){
     while (tc--) solve();
     return 0;
 }
-

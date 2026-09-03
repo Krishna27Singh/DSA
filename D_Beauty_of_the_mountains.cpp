@@ -17,6 +17,7 @@
 #include <chrono>
 #include <random>
 #include <bitset>
+#include<iomanip>
 #include <array>
 #include <climits>
 #include <numeric>
@@ -26,57 +27,56 @@ using ll = long long;
 using uint = unsigned int;
 using ull = unsigned long long;
 using ld = long double;
-using pii = pair<int,int>;
-using pll = pair<ll,ll>;
 
 #define pb push_back
 #define mp make_pair
 #define all(x) (x).begin(), (x).end()
 #define rall(x) (x).rbegin(), (x).rend()
 #define sz(x) (int)(x).size()
+typedef pair<int, int> pii;
+typedef pair<ll, ll> pll;
+typedef vector<int> vi;
+typedef vector<ll> vll;
+typedef vector<ld> vld;
+typedef vector<double> vd;
+typedef vector<bool> vb;
+typedef vector<string> vs;
+typedef vector<char> vc;
+typedef vector<vector<ll>> vvll;
+typedef vector<vector<ld>> vvld;
+typedef vector<pll> vpll;
+typedef vector<vector<int>> vvi;
+typedef priority_queue<ll> mxpq;
+typedef priority_queue<ll, vll, greater<ll>> mnpq;
 
 const int INF = 1e9;
 const ll LINF = 1e18;
 const ld EPS = 1e-9;
 const ll MOD = 1e9 + 7;
 
-class DisjointSet{
-    vector<int> rank, parent, size;
-public: 
-    DisjointSet(int n){
-        rank.resize(n+1, 0);
-        parent.resize(n+1);
-        size.resize(n+1, 1);
-        for(int i = 0; i<=n; i++) parent[i] = i;
+class dsu {
+ public:
+  vector<int> p;
+  int n;
+ 
+  dsu(int _n) : n(_n) {
+    p.resize(n);
+    iota(p.begin(), p.end(), 0);
+  }
+ 
+  inline int get(int x) {
+    return (x == p[x] ? x : (p[x] = get(p[x])));
+  }
+ 
+  inline bool unite(int x, int y) {
+    x = get(x);
+    y = get(y);
+    if (x != y) {
+      p[x] = y;
+      return true;
     }
-    int findUltimateParent(int node){
-        if(node == parent[node]) return node;
-        return parent[node] = findUltimateParent(parent[node]);
-    }
-    void unionByRank(int u, int v){
-        int ultimateParentOfU = findUltimateParent(u);
-        int ultimateParentOfV = findUltimateParent(v);
-        if(ultimateParentOfU == ultimateParentOfV) return; 
-        if(rank[ultimateParentOfU] < rank[ultimateParentOfV]) parent[ultimateParentOfU] = ultimateParentOfV;
-        else if(rank[ultimateParentOfV] < rank[ultimateParentOfU]) parent[ultimateParentOfV] = ultimateParentOfU;
-        else{
-            parent[ultimateParentOfV] = ultimateParentOfU; 
-            rank[ultimateParentOfU]++; 
-        }
-    }
-    void unionBySize(int u, int v){
-            int ultimateParentOfU = findUltimateParent(u);
-            int ultimateParentOfV = findUltimateParent(v);
-            if(ultimateParentOfU == ultimateParentOfV) return; 
-            if(size[ultimateParentOfU] < size[ultimateParentOfV]){
-                parent[ultimateParentOfU] = ultimateParentOfV;
-                size[ultimateParentOfV] += size[ultimateParentOfU];
-            }
-            else{ 
-                parent[ultimateParentOfV] = ultimateParentOfU;
-                size[ultimateParentOfU] += size[ultimateParentOfV];
-            }
-        }
+    return false;
+  }
 };
 struct FenwickTree {
     int n;
@@ -232,68 +232,61 @@ void linearSieve(int N, vector<int>& primes, vector<int>& spf) {
 
 */
 
-void solve(){
-    int n; cin>>n;
-    vector<ll> a(n + 1); ll si = 0;
-    for (int i = 1; i <= n; i++) {
-        cin >> a[i]; si += a[i];
-    }
-
-    vector<int> check;
-    ll tm = 0;
-    vector<bool> flag(n + 1, false);
-    vector<ll> m(n + 1, 0);
-
-    for (int i = 1; i <= n; i++) {
-        m[i] = max(m[i - 1], a[i]);
-        tm += m[i];
-        if (a[i] > m[i - 1]) {
-            flag[i] = true;
-            check.push_back(i);
+void solve() {
+    int n, m, k; cin>>n>>m>>k;
+    vector<vector<int>> a(n, vector<int>(m));
+    for(int i=0;i<n;i++){
+        for(int j=0;j<m;j++){
+            cin>>a[i][j];
         }
     }
-    check.push_back(n + 1); 
-
-    vector<ll> b(n + 1, 0);
-    vector<ll> bm(n + 1, 0);
-    vector<ll> mpm(n + 1, 0);
-
-    for (int i = 1; i <= n; i++) {
-        if (!flag[i]) {
-            b[i] = a[i];
-        } else {
-            b[i] = 0;
-        }
-        bm[i] = max(bm[i - 1], b[i]);
-        mpm[i] = mpm[i - 1] + bm[i];
-    }
-
-    int i = 0;
-    m[0] = 1; 
-    ll del = 0;
-    ll temp = tm - si;
-    for (int k = 1; k <= n; k++) {
-        if (!flag[k]) {
-            ll delta = a[k] - m[k - 1];
-            del = min(del, delta); 
-        } else {
-            int kr = check[i + 1];
-            ll p = m[k - 1];
-            auto it = upper_bound(bm.begin() + k, bm.begin() + kr, p);
-            int idx = distance(bm.begin(), it);
-            long long ss = 1LL * (idx - k) * p + (mpm[kr - 1] - mpm[idx - 1]);
-            long long delta = ss - 1LL * (kr - k - 1) * a[k] - p;
-            del = min(del, delta);
-
-            i++;
+    vector<vector<int>> flag(n, vector<int>(m));
+    ll d = 0;
+    for(int i = 0 ; i<n; i++){
+        for(int j = 0; j<m; j++){
+            char ch; cin>>ch;
+            if(ch == '0'){
+                flag[i][j] = 0;
+                d += a[i][j];
+            }
+            else{
+                flag[i][j] = 1;
+                d -= a[i][j];
+            }
         }
     }
 
-    cout << temp + del << "\n";
-
-    // Output
-
-
+    d = abs(d);
+    if(d == 0){
+        cout<<"YES"<<endl;
+        return;
+    }
+    int g = 0;
+    for(int i = 0; i<=n-k; i++){
+        int sz = 0;
+        for(int x = i; x<i+k; x++){
+            for(int y = 0; y<k; y++){
+                if(flag[x][y] == 0) sz++;
+                else sz--;
+            }
+        }
+        g = gcd(g, abs(sz));
+        for(int y = 1; y<=m-k; y++){
+            for(int x = i; x<i+k; x++){
+                if(flag[x][y-1] == 0) sz--;
+                else sz++;
+                if(flag[x][y+k-1] == 0) sz++;
+                else sz--;
+            }
+            g = gcd(g, abs(sz));
+        }
+    }
+    if(g!=0 && d%g == 0){
+        cout<<"YES"<<endl;
+    }
+    else{
+        cout<<"NO"<<endl;
+    }
 }
 
 /*************************************************************************************************** */
