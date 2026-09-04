@@ -232,30 +232,36 @@ void linearSieve(int N, vector<int>& primes, vector<int>& spf) {
 
 */
 
+vi a(500001);
+vi pref(500001);
+vi suf(500001);
+vi dpvl(500001);
+
 void solve(){
     int n, m; cin>>n>>m;
-    vi a(n), b(m);
-    for(int i = 0; i<n; i++) cin>>a[i];
-    for(int i = 0; i<m; i++) cin>>b[i];
-    sort(b.rbegin(), b.rend());
-
-    vi c;
-    for(int i = 0, j = 0; (i<n || j<m);){
-        if(i == n){
-            c.pb(b[j++]);
-            continue;
-        }
-        if(j == m){
-            c.pb(a[i++]);
-            continue;
-        }
-        if(b[j] >= a[i]) c.pb(b[j++]);
-        else c.pb(a[i++]);
+    for(int i = 0; i<n; i++){
+        cin>>a[i]; a[i]--;
     }
 
-    for(auto i: c) cout<<i<<" ";
-    cout<<endl;
+    for(int i = 0; i<=n; i++){
+        pref[i] = INF;
+        suf[i] = -INF;
+        dpvl[i] = -INF;
+    }
+    pref[0] = 0;
 
+    for(int i = 0; i<n; i++){
+        int temp = suf[i];
+        if(i - a[i] >= 0){
+            temp = max(temp, dpvl[i-a[i]]);
+            temp = max(temp, pref[i-a[i]]);
+        } temp++;
+        pref[i+1] = max(pref[i], temp);
+        suf[i+1] = max(suf[i+1], suf[i]);
+        if(i - a[i] >= 0) dpvl[i-a[i]] = max(dpvl[i-a[i]], temp);
+        if(i - a[i] + m <= n) suf[i-a[i]+m] = max(suf[i-a[i]+m], temp);
+    }
+    cout<<n-max(suf[n], 0)<<endl;
     // Output
 
 
