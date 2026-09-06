@@ -33,6 +33,7 @@ using ld = long double;
 #define all(x) (x).begin(), (x).end()
 #define rall(x) (x).rbegin(), (x).rend()
 #define sz(x) (int)(x).size()
+#define rep(i, a, b) for(int i = a; i < b; i++)
 typedef pair<int, int> pii;
 typedef pair<ll, ll> pll;
 typedef vector<int> vi;
@@ -48,6 +49,9 @@ typedef vector<pll> vpll;
 typedef vector<vector<int>> vvi;
 typedef priority_queue<ll> mxpq;
 typedef priority_queue<ll, vll, greater<ll>> mnpq;
+typedef unordered_map<int, int> umapii;
+typedef vector<pair<int, int>> vpii;
+
 
 const int INF = 1e9;
 const ll LINF = 1e18;
@@ -233,7 +237,74 @@ void linearSieve(int N, vector<int>& primes, vector<int>& spf) {
 */
 
 void solve(){
-    
+    int n; cin>>n;
+    vi a(n); rep(i, 0, n) cin>>a[i];
+    vector<int> mpp(n + 1, 0);
+    rep(i, 0, n){
+        if(a[i]<=n) mpp[a[i]]++;
+    }
+
+    if(mpp[0] == 0){
+        cout<<"YES"<<endl;
+        rep(i, 0, n) cout<<"A";
+        cout<<endl;
+        return;
+    }
+
+    if(mpp[0] == 1){
+        cout<<"NO"<<endl;
+        return;
+    }
+
+    int i = 0;
+    int fm = 0;
+    while(i<n && mpp[i] >= 3){
+        fm++; i++;
+    }
+
+    vpii temp;
+    rep(i, 0, n) temp.pb({a[i], i});
+    sort(all(temp));
+
+    vector<pair<int, char>> ans(n);
+    rep(i, 0, n){
+        ans[i].first = temp[i].second;
+        ans[i].second = 'X';
+    }
+
+    int j = 0;
+    int mex = 0;
+    for(int k = 0; k<fm; k++){
+        ans[j].second = 'A';
+        ans[j+1].second = 'B';
+        ans[j+2].second = 'C';
+        j+= mpp[mex]; mex++;
+    }
+
+    int sm = 0;
+    while(i<n && mpp[i] >= 2){
+        sm++; i++;
+    }
+
+    for(int k = 0; k<sm; k++){
+        ans[j].second = 'B';
+        ans[j+1].second = 'C';
+        j+= mpp[mex]; mex++;
+    }
+
+    for(int k = 0; k<n; k++){
+        if(ans[k].second == 'X'){
+            if(sm == 0 && temp[k].first == fm) ans[k].second = 'B';
+            else ans[k].second = 'A';
+        }
+    }
+
+    sort(all(ans));
+    cout<<"YES"<<endl;
+    for(int k = 0; k<n; k++){
+        cout<<ans[k].second;
+    }
+    cout<<endl;
 
     // Output
 
