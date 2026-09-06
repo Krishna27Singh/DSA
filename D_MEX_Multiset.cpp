@@ -48,8 +48,6 @@ typedef vector<pll> vpll;
 typedef vector<vector<int>> vvi;
 typedef priority_queue<ll> mxpq;
 typedef priority_queue<ll, vll, greater<ll>> mnpq;
-typedef unordered_map<int, int> umapii;
-typedef unordered_map<ll, ll> umapll;
 
 const int INF = 1e9;
 const ll LINF = 1e18;
@@ -235,36 +233,7 @@ void linearSieve(int N, vector<int>& primes, vector<int>& spf) {
 */
 
 void solve(){
-    int n; cin>>n;
-    vi a(n);
-    for(int i=0; i<n; i++) cin>>a[i];
-
-    int e =0; int o = 0;
-    for(auto i: a){
-        if(i&1) o++;
-        else e++;
-    }
-
-    if(e == 0){
-        cout<<o<<endl;
-        return;
-    }
-
-    int ans = o;
-    int mine = INF;
-    for(auto i: a){
-        if(i%2 == 0) mine = min(mine, i);
-    }
     
-    int cnt = 0;
-    for(auto i: a){
-        if(i&1) continue;
-        if(abs(i/2-mine/2) % 2 == 0) cnt++;
-    }   
-
-    ans = max(ans, cnt);
-    ans = max(ans, e - cnt);
-    cout<<ans<<endl;
 
     // Output
 
