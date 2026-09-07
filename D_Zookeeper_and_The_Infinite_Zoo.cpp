@@ -238,41 +238,21 @@ void linearSieve(int N, vector<int>& primes, vector<int>& spf) {
 
 */
 
+bool chk(ll x, ll y){
+    if(y<x) return false;
+    if(__builtin_popcountll(y) > __builtin_popcountll(x)) return false;
+    while(y != 0){
+        if(__builtin_ctzll(y) < __builtin_ctzll(x)) return false;
+        y &= (y - 1);
+        x &= (x - 1);
+    }
+    return true;
+}
+
 void solve(){
-    int n; cin>>n;
-    vi a(n); rep(i, 0, n) cin>>a[i];
-
-    int dist = -1;
-    vb dn(n, false);
-    for(int i = 0; i<n; i++){
-        if(a[i] == 0) dist = 0;
-        if(a[i] != -1 && a[i] != 0 && a[i] == dist) dn[i] = true;
-        if(dist != -1) dist++;
-    }
-    dist = -1;
-    for(int i = n-1; i>=0; i--){
-        if(a[i] == 0) dist = 0;
-        if(a[i] != -1 && a[i] != 0 && !dn[i] && a[i] != dist){
-            cout<<-1<<endl;
-            return;
-        }
-        if(dist != -1) dist++;
-    }
-
-    bool has0 = false;
-    bool hasm1 = false;
-    for(auto i: a){
-        if(i == 0) has0 = true;
-        if(i == -1) hasm1 = true;
-    }
-
-    if(!has0 && !hasm1){
-        cout<<-1<<endl;
-        return; 
-    }
-
-    
-    
+    ll u, v; cin>>u>>v;
+    if(chk(u, v)) cout<<"YES"<<endl;
+    else cout<<"NO"<<endl;
 
     // Output
 

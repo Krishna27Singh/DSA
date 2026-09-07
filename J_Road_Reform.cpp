@@ -239,39 +239,6 @@ void linearSieve(int N, vector<int>& primes, vector<int>& spf) {
 */
 
 void solve(){
-    int n; cin>>n;
-    vi a(n); rep(i, 0, n) cin>>a[i];
-
-    int dist = -1;
-    vb dn(n, false);
-    for(int i = 0; i<n; i++){
-        if(a[i] == 0) dist = 0;
-        if(a[i] != -1 && a[i] != 0 && a[i] == dist) dn[i] = true;
-        if(dist != -1) dist++;
-    }
-    dist = -1;
-    for(int i = n-1; i>=0; i--){
-        if(a[i] == 0) dist = 0;
-        if(a[i] != -1 && a[i] != 0 && !dn[i] && a[i] != dist){
-            cout<<-1<<endl;
-            return;
-        }
-        if(dist != -1) dist++;
-    }
-
-    bool has0 = false;
-    bool hasm1 = false;
-    for(auto i: a){
-        if(i == 0) has0 = true;
-        if(i == -1) hasm1 = true;
-    }
-
-    if(!has0 && !hasm1){
-        cout<<-1<<endl;
-        return; 
-    }
-
-    
     
 
     // Output

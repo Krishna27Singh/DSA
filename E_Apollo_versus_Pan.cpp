@@ -239,40 +239,36 @@ void linearSieve(int N, vector<int>& primes, vector<int>& spf) {
 */
 
 void solve(){
-    int n; cin>>n;
-    vi a(n); rep(i, 0, n) cin>>a[i];
-
-    int dist = -1;
-    vb dn(n, false);
+    ll n; cin>>n;
+    vector<ll> v(n);
+    vector<ll> cnt(60, 0);
     for(int i = 0; i<n; i++){
-        if(a[i] == 0) dist = 0;
-        if(a[i] != -1 && a[i] != 0 && a[i] == dist) dn[i] = true;
-        if(dist != -1) dist++;
-    }
-    dist = -1;
-    for(int i = n-1; i>=0; i--){
-        if(a[i] == 0) dist = 0;
-        if(a[i] != -1 && a[i] != 0 && !dn[i] && a[i] != dist){
-            cout<<-1<<endl;
-            return;
+        cin>>v[i];
+        for(int j = 0; j<60; j++){
+            if(v[i] & (1LL << j)){
+                cnt[j]++;
+                cnt[j] %= MOD;
+            }
         }
-        if(dist != -1) dist++;
     }
 
-    bool has0 = false;
-    bool hasm1 = false;
-    for(auto i: a){
-        if(i == 0) has0 = true;
-        if(i == -1) hasm1 = true;
+    ll ans = 0;
+    for(int i =0; i<n; i++){
+        ll si = 0; ll s2 = 0;
+        for(int j = 0; j<60; j++){
+            if(v[i] & (1LL << j)){
+                si += ((1LL << j) % MOD * cnt[j]) % MOD;
+                s2 += ((1LL << j) % MOD * n) % MOD;
+            }
+            else{
+                s2 += ((1LL << j) % MOD * cnt[j]) % MOD;
+            }
+            si %= MOD; s2 %= MOD;
+        }
+        ans = (ans + (si*s2)) % MOD;
+        ans %= MOD;
     }
-
-    if(!has0 && !hasm1){
-        cout<<-1<<endl;
-        return; 
-    }
-
-    
-    
+    cout<<ans%MOD<<endl;
 
     // Output
 
