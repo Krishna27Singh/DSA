@@ -33,6 +33,7 @@ using ld = long double;
 #define all(x) (x).begin(), (x).end()
 #define rall(x) (x).rbegin(), (x).rend()
 #define sz(x) (int)(x).size()
+#define rep(i, a, b) for(int i = a; i < b; i++)
 typedef pair<int, int> pii;
 typedef pair<ll, ll> pll;
 typedef vector<int> vi;
@@ -44,11 +45,16 @@ typedef vector<string> vs;
 typedef vector<char> vc;
 typedef vector<vector<ll>> vvll;
 typedef vector<vector<ld>> vvld;
-typedef vector<pll> vpll;
+typedef vector<pair<ll, ll>> vpll;
+typedef vector<pair<int, int>> vpii;
 typedef vector<vector<int>> vvi;
 typedef priority_queue<ll> mxpq;
 typedef priority_queue<ll, vll, greater<ll>> mnpq;
-
+typedef unordered_map<int, int> umapii;
+typedef unordered_map<ll, ll> umapll;
+typedef vector<vector<pair<ll, ll>>> vvpll;
+typedef vector<vector<pair<int, int>>> vvpii;
+typedef vector<vector<int>> vvi;
 const int INF = 1e9;
 const ll LINF = 1e18;
 const ld EPS = 1e-9;
@@ -233,22 +239,19 @@ void linearSieve(int N, vector<int>& primes, vector<int>& spf) {
 */
 
 void solve(){
+    int n, k; cin>>n>>k;
     string s; cin>>s;
-    int n = s.size();
 
-    int ans = 0;
-    for(int d = 1; d<=n/2; d++){
-        int cnt = 0;
-        for(int i = 0; i<d; i++) if(s[i] == '?' || s[i+d] == '?' || s[i] == s[i+d]) cnt++;
-        if(cnt == d) ans = max(ans, d);
-        for(int j = 0; j<n-2*d; j++){
-            if(s[j] == '?' || s[j+d] == '?' || s[j] == s[j+d]) cnt--;
-            if(s[j+d] == '?' || s[j+2*d] == '?' || s[j+d] == s[j+2*d]) cnt++;
-            if(cnt == d) ans = max(ans, d);
-        }
+    string ans(k, 'z');
+    for(int i = 1; i<=n; i++){
+        string t = s.substr(0, i);
+        while(t.size() < k) t += t;
+        t = t.substr(0, k);
+        ans = min(ans, t);
     }
 
-    cout<<2*ans<<"\n";
+    cout<<ans<<endl;
+
     // Output
 
 
@@ -260,8 +263,7 @@ int main(){
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
     cout.tie(nullptr);
-    int tc = 1; cin >> tc;
-    while (tc--) solve();
+    solve();
     return 0;
 }
 

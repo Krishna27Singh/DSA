@@ -242,36 +242,42 @@ void solve(){
     int n; cin>>n;
     vi a(n); rep(i, 0, n) cin>>a[i];
 
-    int dist = -1;
-    vb dn(n, false);
-    for(int i = 0; i<n; i++){
-        if(a[i] == 0) dist = 0;
-        if(a[i] != -1 && a[i] != 0 && a[i] == dist) dn[i] = true;
-        if(dist != -1) dist++;
-    }
-    dist = -1;
-    for(int i = n-1; i>=0; i--){
-        if(a[i] == 0) dist = 0;
-        if(a[i] != -1 && a[i] != 0 && !dn[i] && a[i] != dist){
-            cout<<-1<<endl;
-            return;
+    vi del(n+1, 0);
+    rep(i, 0, n){
+        if(a[i] > 0){
+            if(max(0, i-a[i] + 1) <= min(n-1, i+a[i] - 1)){
+                del[max(0, i-a[i] + 1)]++;
+                del[min(n-1, i+a[i] - 1) + 1]--;
+            }
         }
-        if(dist != -1) dist++;
     }
 
-    bool has0 = false;
-    bool hasm1 = false;
-    for(auto i: a){
-        if(i == 0) has0 = true;
-        if(i == -1) hasm1 = true;
+    vi mpp(n, 0);
+    int sum=0, cnt = 0;
+    rep(i, 0, n){
+        sum += del[i];
+        if(sum == 0){
+            mpp[i] = 1;
+            cnt++;
+        }
     }
 
-    if(!has0 && !hasm1){
+    if(!cnt){
         cout<<-1<<endl;
-        return; 
+        return;
     }
 
-    
+    rep(i, 0, n){
+        if(a[i] != -1){
+            if(!(i-a[i] >= 0 && mpp[i-a[i]] == 1) && !(i+a[i] < n && mpp[i+a[i]] == 1)){
+                cout<<-1<<endl;
+                return;
+            }
+        }
+    }
+
+    rep(i, 0, n) cout<<mpp[i];
+    cout<<endl;
     
 
     // Output

@@ -241,6 +241,7 @@ void linearSieve(int N, vector<int>& primes, vector<int>& spf) {
 bool chk(ll x, ll y){
     if(y<x) return false;
     if(__builtin_popcountll(y) > __builtin_popcountll(x)) return false;
+    
     while(y != 0){
         if(__builtin_ctzll(y) < __builtin_ctzll(x)) return false;
         y &= (y - 1);
